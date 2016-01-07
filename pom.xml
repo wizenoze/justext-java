@@ -13,12 +13,16 @@
 
     <properties>
         <build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
+        <checkstyle.version>6.14.1</checkstyle.version>
+        <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
         <groovy.eclipse.compiler.version>2.9.2-01</groovy.eclipse.compiler.version>
         <groovy.eclipse.batch.version>2.4.3-01</groovy.eclipse.batch.version>
         <groovy.version>2.4.3</groovy.version>
         <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
         <maven-compiler-plugin.source.version>1.8</maven-compiler-plugin.source.version>
         <maven-compiler-plugin.target.version>1.8</maven-compiler-plugin.target.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spock-core.version>1.0-groovy-2.4</spock-core.version>
     </properties>
 
@@ -52,6 +56,34 @@
                         <!-- <version>1.7.10-06</version> -->
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <configLocation>sun_checks.xml</configLocation>
+                            <encoding>UTF-8</encoding>
+                            <consoleOutput>true</consoleOutput>
+                            <failsOnError>true</failsOnError>
+                            <linkXRef>false</linkXRef>
+                        </configuration>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 
