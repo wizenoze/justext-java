@@ -18,6 +18,7 @@
         <groovy.eclipse.compiler.version>2.9.2-01</groovy.eclipse.compiler.version>
         <groovy.eclipse.batch.version>2.4.3-01</groovy.eclipse.batch.version>
         <groovy.version>2.4.3</groovy.version>
+        <jsoup.version>1.8.3</jsoup.version>
         <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
         <maven-compiler-plugin.source.version>1.8</maven-compiler-plugin.source.version>
         <maven-compiler-plugin.target.version>1.8</maven-compiler-plugin.target.version>
@@ -135,8 +136,15 @@
         </pluginManagement>
     </build>
 
-    <!-- Test framework dependency references -->
     <dependencies>
+        <!-- Normal dependency references -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+        </dependency>
+
+        <!-- Test framework dependency references -->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
