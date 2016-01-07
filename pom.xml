@@ -12,15 +12,14 @@
     <url>https://github.com/wizenoze/justext-java</url>
 
     <properties>
+        <build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
         <groovy.eclipse.compiler.version>2.9.2-01</groovy.eclipse.compiler.version>
         <groovy.eclipse.batch.version>2.4.3-01</groovy.eclipse.batch.version>
         <groovy.version>2.4.3</groovy.version>
-        <gson.version>2.2</gson.version>
-        <guice.version>4.0</guice.version>
-        <junit.version>4.11</junit.version>
-        <logback.version>1.1.2</logback.version>
-        <mangold.version>0.1.1-SNAPSHOT</mangold.version>
-        <mockito.version>1.10.19</mockito.version>
+        <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
+        <maven-compiler-plugin.source.version>1.8</maven-compiler-plugin.source.version>
+        <maven-compiler-plugin.target.version>1.8</maven-compiler-plugin.target.version>
+        <spock-core.version>1.0-groovy-2.4</spock-core.version>
     </properties>
 
     <build>
@@ -28,13 +27,13 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <!-- 2.8.0-01 and later require maven-compiler-plugin 3.0 or higher -->
-                <version>3.2</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <compilerId>groovy-eclipse-compiler</compilerId>
                     <!-- set verbose to be true if you want lots of uninteresting messages -->
                     <!-- <verbose>true</verbose> -->
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>${maven-compiler-plugin.source.version}</source>
+                    <target>${maven-compiler-plugin.target.version}</target>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -72,7 +71,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>1.8</version>
+                    <version>${build-helper-maven-plugin.version}</version>
                     <executions>
                         <execution>
                             <id>add-source</id>
@@ -104,30 +103,20 @@
         </pluginManagement>
     </build>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- Test framework dependency references -->
-            <dependency>
-                <groupId>org.spockframework</groupId>
-                <artifactId>spock-core</artifactId>
-                <version>1.0-groovy-2.4</version>
-                <scope>test</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <!-- Global dependencies -->
+    <!-- Test framework dependency references -->
     <dependencies>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>${spock-core.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
