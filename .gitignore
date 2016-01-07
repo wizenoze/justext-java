@@ -1,0 +1,10 @@
+/.idea
+**/*.iml
+**/target/
+.settings
+.classpath
+.project
+dependency-reduced-pom.xml
+fs.log.dir_IS_UNDEFINED/
+logs
+build

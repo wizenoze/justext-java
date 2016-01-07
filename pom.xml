@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>nl.wizenoze</groupId>
+    <artifactId>justext</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>justext</name>
+    <url>https://github.com/wizenoze/justext-java</url>
+
+    <properties>
+        <groovy.eclipse.compiler.version>2.9.2-01</groovy.eclipse.compiler.version>
+        <groovy.eclipse.batch.version>2.4.3-01</groovy.eclipse.batch.version>
+        <groovy.version>2.4.3</groovy.version>
+        <gson.version>2.2</gson.version>
+        <guice.version>4.0</guice.version>
+        <junit.version>4.11</junit.version>
+        <logback.version>1.1.2</logback.version>
+        <mangold.version>0.1.1-SNAPSHOT</mangold.version>
+        <mockito.version>1.10.19</mockito.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <!-- 2.8.0-01 and later require maven-compiler-plugin 3.0 or higher -->
+                <version>3.2</version>
+                <configuration>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
+                    <!-- set verbose to be true if you want lots of uninteresting messages -->
+                    <!-- <verbose>true</verbose> -->
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-compiler</artifactId>
+                        <version>${groovy.eclipse.compiler.version}</version>
+                    </dependency>
+                    <!-- for 2.8.0-01 and later you must have an explicit dependency on
+                        groovy-eclipse-batch -->
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <version>${groovy.eclipse.batch.version}</version>
+                        <!-- or choose a different compiler version -->
+                        <!-- <version>1.8.6-01</version> -->
+                        <!-- <version>1.7.10-06</version> -->
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/groovy</testSourceDirectory>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+                <!-- Adds src/main/groovy and src/test/groovy as resource folders to the project. -->
+                <!-- See http://keaplogik.blogspot.nl/2013/02/adding-groovy-to-your-maven-class-path.html -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>1.8</version>
+                    <executions>
+                        <execution>
+                            <id>add-source</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>add-source</goal>
+                            </goals>
+                            <configuration>
+                                <sources>
+                                    <source>src/main/groovy</source>
+                                </sources>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>add-test-source</id>
+                            <phase>generate-test-sources</phase>
+                            <goals>
+                                <goal>add-test-source</goal>
+                            </goals>
+                            <configuration>
+                                <sources>
+                                    <source>src/test/groovy</source>
+                                </sources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Test framework dependency references -->
+            <dependency>
+                <groupId>org.spockframework</groupId>
+                <artifactId>spock-core</artifactId>
+                <version>1.0-groovy-2.4</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- Global dependencies -->
+    <dependencies>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>${groovy.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+    </dependencies>
+</project>
