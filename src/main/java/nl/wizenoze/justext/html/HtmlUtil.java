@@ -17,10 +17,15 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nl.wizenoze.justext;
+package nl.wizenoze.justext.html;
 
 /**
  * Created by lcsontos on 1/7/16.
  */
-public class JusTextUtil {
+public class HtmlUtil {
+
+    public static String clean(String html) {
+        return null;
+    }
+
 }
