@@ -19,13 +19,94 @@
 
 package nl.wizenoze.justext.html;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.htmlcleaner.BrowserCompactXmlSerializer;
+import org.htmlcleaner.CleanerProperties;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.Serializer;
+import org.htmlcleaner.TagNode;
+
+import java.io.IOException;
+import java.io.StringWriter;
+
 /**
  * Created by lcsontos on 1/7/16.
  */
-public class HtmlUtil {
+public final class HtmlUtil {
 
-    public static String clean(String html) {
-        return null;
+    private static final Log LOG = LogFactory.getLog(HtmlUtil.class);
+
+    private static final CleanerProperties CLEANER_PROPERTIES;
+    private static final HtmlCleaner HTML_CLEANER;
+    private static final Serializer SERIALIZER;
+
+    static {
+        CLEANER_PROPERTIES = createCleanerProperties();
+        HTML_CLEANER = new HtmlCleaner(CLEANER_PROPERTIES);
+        SERIALIZER = new BrowserCompactXmlSerializer(CLEANER_PROPERTIES);
+    }
+
+    /**
+     *
+     */
+    private HtmlUtil() {
+    }
+
+    /**
+     * Cleans the given HTML document.
+     *
+     * @param html HTML document to clean.
+     * @return Root node of the cleaned HTML tree.
+     */
+    public static TagNode clean(String html) {
+        return HTML_CLEANER.clean(html);
+
+    }
+
+    /**
+     * Cleans the given HTML document.
+     *
+     * @param html HTML document to clean.
+     * @return Cleaned HTML document as a string.
+     */
+    public static String cleanHtml(String html) {
+        TagNode tagNode = clean(html);
+
+        StringWriter tagNodeWriter = new StringWriter();
+
+        try {
+            SERIALIZER.write(tagNode, tagNodeWriter, "utf-8");
+        } catch (IOException ioe) {
+            LOG.error(ioe.getMessage(), ioe);
+            return null;
+        }
+
+        String serializedHtml = tagNodeWriter.toString();
+
+        serializedHtml = StringUtils.remove(serializedHtml, '\n');
+        serializedHtml = StringUtils.remove(serializedHtml, "<head />");
+
+        return serializedHtml;
+    }
+
+    private static CleanerProperties createCleanerProperties() {
+        CleanerProperties cleanerProperties = new CleanerProperties();
+
+        cleanerProperties.setAllowHtmlInsideAttributes(false);
+        cleanerProperties.setAllowMultiWordAttributes(false);
+        cleanerProperties.setAddNewlineToHeadAndBody(false);
+        cleanerProperties.setKeepWhitespaceAndCommentsInHead(false);
+        cleanerProperties.setNamespacesAware(true);
+        cleanerProperties.setOmitComments(true);
+        cleanerProperties.setOmitDoctypeDeclaration(true);
+        cleanerProperties.setOmitXmlDeclaration(true);
+        cleanerProperties.setPruneTags("head,meta,title,script,style");
+        cleanerProperties.setRecognizeUnicodeChars(true);
+
+        return cleanerProperties;
     }
 
 }
