@@ -42,6 +42,15 @@ public final class Paragraph {
     }
 
     /**
+     * Creates a paragraph with the given text nodes.
+     * @param textNodes text nodes.
+     */
+    public Paragraph(String[] textNodes) {
+        this.textNodes = textNodes;
+        this.charsInLinksCount = charsInLinksCount;
+    }
+
+    /**
      * Creates a paragraph with the given text nodes and character count in links.
      * @param textNodes text nodes.
      * @param charsInLinksCount count of characters in links.
