@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Created by lcsontos on 1/8/16.
  */
-public class Paragraph {
+public final class Paragraph {
 
     private int charsInLinksCount = 0;
     private Classification classification;
