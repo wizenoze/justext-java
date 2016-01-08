@@ -21,6 +21,8 @@ package nl.wizenoze.justext;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Set;
+
 /**
  * Created by lcsontos on 1/8/16.
  */
@@ -32,7 +34,9 @@ public final class Paragraph {
     private boolean isBoilerplace = false;
     private boolean isHeading = false;
     private int tagsCount = 0;
+    private String text;
     private String[] textNodes;
+    private String[] words;
     private String xpath;
 
     /**
@@ -47,7 +51,6 @@ public final class Paragraph {
      */
     public Paragraph(String[] textNodes) {
         this.textNodes = textNodes;
-        this.charsInLinksCount = charsInLinksCount;
     }
 
     /**
@@ -85,12 +88,51 @@ public final class Paragraph {
     }
 
     /**
+     * Gets link density.
+     * @return link density.
+     */
+    public float getLinkDensity() {
+        int textLength = length();
+
+        if (textLength == 0) {
+            return 0;
+        }
+
+        return 1.0f * charsInLinksCount / textLength;
+    }
+
+    /**
      * Gets stop words count.
      * @param stopWords words.
      * @return stop words count.
      */
-    public int getStopWordsCount(String[] stopWords) {
-        return 0;
+    public int getStopWordsCount(Set<String> stopWords) {
+        int stopWordsCount = 0;
+
+        for (String word : words()) {
+            if (stopWords.contains(word.toLowerCase())) {
+                stopWordsCount++;
+            }
+        }
+
+        return stopWordsCount;
+    }
+
+    /**
+     * Gets stop words density.
+     * @param stopWords words.
+     * @return stop words density.
+     */
+    public float getStopWordsDensity(Set<String> stopWords) {
+        int wordsCount = getWordsCount();
+
+        if (wordsCount == 0) {
+            return 0;
+        }
+
+        float stopWordsDensity = 1.0f * getStopWordsCount(stopWords) / wordsCount;
+
+        return stopWordsDensity;
     }
 
     /**
@@ -106,7 +148,11 @@ public final class Paragraph {
      * @return Concatenated text of nodes.
      */
     public String getText() {
-        return StringUtils.join(textNodes, StringUtils.SPACE);
+        if (text == null) {
+            text = StringUtils.join(textNodes, StringUtils.SPACE);
+        }
+
+        return text;
     }
 
     /**
@@ -122,7 +168,7 @@ public final class Paragraph {
      * @return word count.
      */
     public int getWordsCount() {
-        return getText().split(" ").length;
+        return words().length;
     }
 
     /**
@@ -147,6 +193,14 @@ public final class Paragraph {
      */
     public boolean isHeading() {
         return isHeading;
+    }
+
+    /**
+     * Returns the full length of this paragraph.
+     * @return length of this paragraph.
+     */
+    public int length() {
+        return getText().length();
     }
 
     /**
@@ -202,6 +256,9 @@ public final class Paragraph {
      * @param textNodes text nodes.
      */
     public void setTextNodes(String[] textNodes) {
+        text = null;
+        words = null;
+
         this.textNodes = textNodes;
     }
 
@@ -211,6 +268,14 @@ public final class Paragraph {
      */
     public void setXpath(String xpath) {
         this.xpath = xpath;
+    }
+
+    private String[] words() {
+        if (words == null) {
+            words = StringUtils.split(getText());
+        }
+
+        return words;
     }
 
 }

@@ -86,7 +86,6 @@ class ClassifierTest extends Specification {
                 .setLengthLow(0)
                 .setStopwordsLow(0.2)
                 .setStopwordsHigh(1000)
-                .setLengthHigh(20)
                 .build()
 
         when:
@@ -94,8 +93,8 @@ class ClassifierTest extends Specification {
 
         then:
         paragraphs[0].classification.equals(NEAR_GOOD)
-        paragraphs[1].classification.equals(GOOD)
-        paragraphs[2].classification.equals(GOOD)
+        paragraphs[1].classification.equals(NEAR_GOOD)
+        paragraphs[2].classification.equals(BAD)
     }
 
 }

@@ -19,6 +19,9 @@
 
 package nl.wizenoze.justext;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,6 +32,9 @@ import java.util.Set;
  * @see http://corpus.tools/wiki/Justext/Algorithm
  */
 public final class Classifier {
+
+    private static final char COPYRIGHT_CHAR = '\u00a9';
+    private static final String COPYRIGHT_CODE = "&copy;";
 
     private Classifier() {
     }
@@ -52,6 +58,48 @@ public final class Classifier {
      */
     public static void classifyParagraphs(
             List<Paragraph> paragraphs, Set<String> stopWords, ClassifierProperties classifierProperties) {
+
+        Set<String> lowerCaseStopWords = new HashSet<>(stopWords.size());
+
+        for (String stopWord : stopWords) {
+            lowerCaseStopWords.add(stopWord.toLowerCase());
+        }
+
+        for (Paragraph paragraph : paragraphs) {
+            int length = paragraph.length();
+            float linkDensity = paragraph.getLinkDensity();
+            float stopWordsDensity = paragraph.getStopWordsDensity(stopWords);
+            String text = paragraph.getText();
+
+            Classification classification = null;
+
+            if (linkDensity > classifierProperties.getMaxLinkDensity()) {
+                classification = Classification.BAD;
+            } else if (StringUtils.contains(text, COPYRIGHT_CHAR) || StringUtils.contains(text, COPYRIGHT_CODE)) {
+                classification = Classification.BAD;
+            // TODO add regex search for SELECT elements here
+            } else if (false/*regsearch*/) {
+                classification = Classification.BAD;
+            } else if (length < classifierProperties.getLengthLow()) {
+                if (paragraph.getCharsInLinksCount() > 0) {
+                    classification = Classification.BAD;
+                } else {
+                    classification = Classification.SHORT;
+                }
+            } else if (stopWordsDensity >= classifierProperties.getStopwordsHigh()) {
+                if (length > classifierProperties.getLengthHigh()) {
+                    classification = Classification.GOOD;
+                } else {
+                    classification = Classification.NEAR_GOOD;
+                }
+            } else if (stopWordsDensity >= classifierProperties.getStopwordsLow()) {
+                classification = Classification.NEAR_GOOD;
+            } else {
+                classification = Classification.BAD;
+            }
+
+            paragraph.setClassification(classification);
+        }
     }
 
 }
