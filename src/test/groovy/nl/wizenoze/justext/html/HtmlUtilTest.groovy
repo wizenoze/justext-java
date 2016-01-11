@@ -1,11 +1,29 @@
 package nl.wizenoze.justext.html
 
+import org.w3c.dom.Document
+import org.w3c.dom.Node
+import org.w3c.dom.NodeList
 import spock.lang.Specification
+
+import javax.xml.xpath.XPathConstants
+import javax.xml.xpath.XPathFactory
 
 /**
  * Created by lcsontos on 1/7/16.
  */
 class HtmlUtilTest extends Specification {
+
+    def testCleanDom() {
+        def dirtyHtml = "<html><!-- comment --><body><h1>Header</h1><!-- comment --> text<p>footer</body></html>"
+        def xpath = XPathFactory.newInstance().newXPath()
+        when:
+        def cleanedDom = HtmlUtil.cleanDom(dirtyHtml);
+        def nodes = xpath.evaluate("/html/body/h1/text()", cleanedDom.documentElement, XPathConstants.NODESET)
+        then:
+        nodes.length == 1
+        nodes.item(0).nodeType == Node.TEXT_NODE
+        nodes.item(0).textContent == "Header"
+    }
 
     def testRemoveComments() {
         def dirtyHtml = "<html><!-- comment --><body><h1>Header</h1><!-- comment --> text<p>footer</body></html>"

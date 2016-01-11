@@ -19,18 +19,22 @@
 
 package nl.wizenoze.justext.html;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.htmlcleaner.BrowserCompactXmlSerializer;
 import org.htmlcleaner.CleanerProperties;
+import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.Serializer;
 import org.htmlcleaner.TagNode;
 
-import java.io.IOException;
-import java.io.StringWriter;
+import org.w3c.dom.Document;
 
 /**
  * Created by lcsontos on 1/7/16.
@@ -64,6 +68,25 @@ public final class HtmlUtil {
     public static TagNode clean(String html) {
         return HTML_CLEANER.clean(html);
 
+    }
+
+    /**
+     * Cleans the given HTML document.
+     *
+     * @param html HTML document to clean.
+     * @return Cleaned HTML document as a DOM {@link Document}.
+     */
+    public static Document cleanDom(String html) {
+        TagNode tagNode = clean(html);
+
+        DomSerializer domSerializer = new DomSerializer(CLEANER_PROPERTIES);
+
+        try {
+            return domSerializer.createDOM(tagNode);
+        } catch (ParserConfigurationException pce) {
+            LOG.error(pce.getMessage(), pce);
+            return null;
+        }
     }
 
     /**
