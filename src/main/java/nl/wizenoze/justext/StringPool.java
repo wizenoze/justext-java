@@ -30,6 +30,16 @@ public final class StringPool {
     }
 
     /**
+     * Represents the A element.
+     */
+    public static final String A = "A";
+
+    /**
+     * Represents the BR element.
+     */
+    public static final String BR = "BR";
+
+    /**
      * Empty string.
      */
     public static final String EMPTY = "";

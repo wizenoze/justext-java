@@ -21,6 +21,8 @@ package nl.wizenoze.justext;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,22 +37,47 @@ public final class Paragraph {
     private boolean isHeading = false;
     private int tagsCount = 0;
     private String text;
-    private String[] textNodes;
+    private List<String> textNodes;
     private String[] words;
     private String xpath;
 
     /**
-     * Creates an empty paragraph.
+     * Creates an empty paragraph with the given path info.
+     * @param pathInfo path info.
      */
-    public Paragraph() {
+    public Paragraph(PathInfo pathInfo) {
+        this(pathInfo, null, 0, 0);
+    }
+
+    /**
+     * Creates a paragraph with the given path info, text nodes, character count in links and tags count.
+     * @param pathInfo path info
+     * @param textNodes text nodes
+     * @param charsInLinksCount character count in links
+     * @param tagsCount tags count
+     */
+    public Paragraph(PathInfo pathInfo, List<String> textNodes, int charsInLinksCount, int tagsCount) {
+        if (pathInfo != null) {
+            domPath = pathInfo.dom();
+            xpath = pathInfo.xpath();
+        }
+
+        this.charsInLinksCount = charsInLinksCount;
+        this.tagsCount = tagsCount;
+
+        if (textNodes == null) {
+            textNodes = new ArrayList<>();
+        }
+
+        this.textNodes = textNodes;
     }
 
     /**
      * Creates a paragraph with the given text nodes.
      * @param textNodes text nodes.
      */
-    public Paragraph(String[] textNodes) {
-        this.textNodes = textNodes;
+    public Paragraph(List<String> textNodes) {
+        this(null, textNodes, 0, 0);
     }
 
     /**
@@ -58,9 +85,28 @@ public final class Paragraph {
      * @param textNodes text nodes.
      * @param charsInLinksCount count of characters in links.
      */
-    public Paragraph(String[] textNodes, int charsInLinksCount) {
-        this.textNodes = textNodes;
-        this.charsInLinksCount = charsInLinksCount;
+    public Paragraph(List<String> textNodes, int charsInLinksCount) {
+        this(null, textNodes, charsInLinksCount, 0);
+    }
+
+    /**
+     * Add the given text to the existing text nodes.
+     * @param text text to be added.
+     * @return full texts of this paragraph.
+     */
+    public String appendText(String text) {
+        reset();
+
+        textNodes.add(text);
+
+        return getText();
+    }
+
+    /**
+     * Decrements tags count.
+     */
+    public void decrementTagsCount() {
+        tagsCount--;
     }
 
     /**
@@ -159,7 +205,7 @@ public final class Paragraph {
      * Gets text nodes.
      * @return text nodes.
      */
-    public String[] getTextNodes() {
+    public List<String> getTextNodes() {
         return textNodes;
     }
 
@@ -177,6 +223,30 @@ public final class Paragraph {
      */
     public String getXpath() {
         return xpath;
+    }
+
+    /**
+     * Returns if this paragraph contains text.
+     *
+     * @return true if this paragraph contains text.
+     */
+    public boolean hasText() {
+        return !textNodes.isEmpty();
+    }
+
+    /**
+     * Increments character count in links.
+     * @param delta delta
+     */
+    public void incrementCharsInLinksCount(int delta) {
+        charsInLinksCount += delta;
+    }
+
+    /**
+     * Increments tags count.
+     */
+    public void incrementTagsCount() {
+        tagsCount++;
     }
 
     /**
@@ -255,9 +325,8 @@ public final class Paragraph {
      * Sets text nodes.
      * @param textNodes text nodes.
      */
-    public void setTextNodes(String[] textNodes) {
-        text = null;
-        words = null;
+    public void setTextNodes(List<String> textNodes) {
+        reset();
 
         this.textNodes = textNodes;
     }
@@ -268,6 +337,11 @@ public final class Paragraph {
      */
     public void setXpath(String xpath) {
         this.xpath = xpath;
+    }
+
+    private void reset() {
+        text = null;
+        words = null;
     }
 
     private String[] words() {

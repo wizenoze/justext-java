@@ -14,8 +14,8 @@ class ClassifierTest extends Specification {
 
     def testLengthLow() {
         def paragraphs = [
-                new Paragraph(["0 1 2 3 4 5 6 7 8 9"] * 2 as String[], 0),
-                new Paragraph(["0 1 2 3 4 5 6 7 8 9"] * 2 as String[], 20),
+                new Paragraph(["0 1 2 3 4 5 6 7 8 9"] * 2, 0),
+                new Paragraph(["0 1 2 3 4 5 6 7 8 9"] * 2, 20),
         ]
 
         def classifierProperties = new ClassifierProperties.Builder()
@@ -33,11 +33,11 @@ class ClassifierTest extends Specification {
 
     def testMaxLinkDensity() {
         def paragraphs = [
-                new Paragraph(["0123456789"] * 2 as String[], 0),
-                new Paragraph(["0123456789"] * 2 as String[], 20),
-                new Paragraph(["0123456789"] * 8 as String[], 40),
-                new Paragraph(["0123456789"] * 8 as String[], 39),
-                new Paragraph(["0123456789"] * 8 as String[], 41),
+                new Paragraph(["0123456789"] * 2, 0),
+                new Paragraph(["0123456789"] * 2, 20),
+                new Paragraph(["0123456789"] * 8, 40),
+                new Paragraph(["0123456789"] * 8, 39),
+                new Paragraph(["0123456789"] * 8, 41),
         ]
 
         def classifierProperties = new ClassifierProperties.Builder().setMaxLinkDensity(0.5).build()
@@ -55,8 +55,8 @@ class ClassifierTest extends Specification {
 
     def testStopwordsHigh() {
         def paragraphs = [
-                new Paragraph(["0 1 2 3 4 5 6 7 8 9"] as String[]),
-                new Paragraph(["0 1 2 3 4 5 6 7 8 9"] * 2 as String[]),
+                new Paragraph(["0 1 2 3 4 5 6 7 8 9"]),
+                new Paragraph(["0 1 2 3 4 5 6 7 8 9"] * 2),
         ]
 
         def classifierProperties = new ClassifierProperties.Builder()
@@ -76,9 +76,9 @@ class ClassifierTest extends Specification {
 
     def testStopwordsLow() {
         def paragraphs = [
-                new Paragraph(["0 0 0 0 1 2 3 4 5 6 7 8 9"] as String[]),
-                new Paragraph(["0 1 2 3 4 5 6 7 8 9"] as String[]),
-                new Paragraph(["1 2 3 4 5 6 7 8 9"] as String[]),
+                new Paragraph(["0 0 0 0 1 2 3 4 5 6 7 8 9"]),
+                new Paragraph(["0 1 2 3 4 5 6 7 8 9"]),
+                new Paragraph(["1 2 3 4 5 6 7 8 9"]),
         ]
 
         def classifierProperties = new ClassifierProperties.Builder()

@@ -19,59 +19,150 @@
 
 package nl.wizenoze.justext;
 
+import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Deque;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
-import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 
-import org.w3c.dom.Document;
+import org.apache.commons.lang3.StringUtils;
 
 import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
+import static javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+
+import static nl.wizenoze.justext.StringPool.A;
+import static nl.wizenoze.justext.StringPool.BR;
 
 /**
  * Created by lcsontos on 1/11/16.
  */
 public class ParagraphMaker {
 
+    private static final Set<String> TEXTUAL_TAGS;
+
+    private final List<Paragraph> paragraphs;
+    private final PathInfo pathInfo;
     private final XMLStreamReader streamReader;
-    private Deque<String> path;
+
+    private boolean isLink = false;
+    private boolean isBreak = false;
+    private Paragraph lastParagraph;
+
+    static {
+        Stream<String> textualTagsStream = Arrays.stream(TextualTag.values()).map(Enum::name);
+        TEXTUAL_TAGS = textualTagsStream.collect(Collectors.toSet());
+    }
 
     /**
      * Create a paragraph maker.
-     * @param document document.
+     * @param reader XML document reader.
      * @throws Exception upon error.
      */
-    public ParagraphMaker(Document document) throws Exception {
+    public ParagraphMaker(Reader reader) throws Exception {
+        paragraphs = new ArrayList<>();
+        pathInfo = new PathInfo();
+
         XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-        streamReader = inputFactory.createXMLStreamReader(new DOMSource(document));
+        streamReader = inputFactory.createXMLStreamReader(new StreamSource(reader));
     }
 
     /**
      * Traverses the document hierarchy.
-     * @param document document.
      * @return list of paragraphs.
      * @throws Exception upon error.
      */
-    public final List<Paragraph> traverse(Document document) throws Exception {
-        List<Paragraph> paragraphs = new ArrayList<>();
+    public final List<Paragraph> traverse() throws Exception {
+        if (!streamReader.hasNext()) {
+            return Collections.unmodifiableList(paragraphs);
+        }
 
         while (streamReader.hasNext()) {
             int event = streamReader.next();
 
+            String tagName = null;
+
             switch (event) {
                 case START_ELEMENT:
+                    tagName = streamReader.getLocalName().toUpperCase();
+
+                    pathInfo.append(tagName);
+
+                    boolean tagNameIsBR = BR.equals(tagName);
+
+                    if (TEXTUAL_TAGS.contains(tagName) || (tagNameIsBR && isBreak)) {
+                        if (tagNameIsBR) {
+                            lastParagraph.decrementTagsCount();
+                        }
+
+                        startNewParagraph();
+                    } else {
+                        isBreak = tagNameIsBR;
+
+                        if (A.equals(tagName)) {
+                            isLink = true;
+                        }
+
+                        if (lastParagraph != null) {
+                            lastParagraph.incrementTagsCount();
+                        }
+                    }
+
+                    break;
+                case END_DOCUMENT:
+                    startNewParagraph();
+
+                    break;
                 case END_ELEMENT:
+                    tagName = streamReader.getLocalName().toUpperCase();
+
+                    pathInfo.pop();
+
+                    if (TEXTUAL_TAGS.contains(tagName)) {
+                        startNewParagraph();
+                    }
+
+                    if (A.equals(tagName)) {
+                        isLink = false;
+                    }
+
+                    break;
                 case CHARACTERS:
+                    String text = streamReader.getText().trim();
+
+                    if (StringUtils.isNotBlank(text)) {
+                        text = lastParagraph.appendText(text);
+
+                        if (isLink) {
+                            lastParagraph.incrementCharsInLinksCount(text.length());
+                        }
+
+                        isBreak = false;
+                    }
+
+                    break;
                 default:
+                    // Ignore other XML stream events.
             }
         }
 
-        return paragraphs;
+        return Collections.unmodifiableList(paragraphs);
+    }
+
+    private void startNewParagraph() {
+        if ((lastParagraph != null) && lastParagraph.hasText()) {
+            paragraphs.add(lastParagraph);
+        }
+
+        lastParagraph = new Paragraph(pathInfo);
     }
 
 }
