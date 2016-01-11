@@ -1,0 +1,57 @@
+/**
+ * Copyright (c) 2016-present WizeNoze B.V. All rights reserved.
+ *
+ * This file is part of justext-java.
+ *
+ * justext-java is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * justext-java is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package nl.wizenoze.justext;
+
+/**
+ * Pool of common strings.
+ *
+ * @author László Csontos
+ */
+public final class StringPool {
+
+    private StringPool() {
+    }
+
+    /**
+     * Empty string.
+     */
+    public static final String EMPTY = "";
+
+    /**
+     * Closing bracket.
+     */
+    public static final String CLOSING_BRACKET = "]";
+
+    /**
+     * Opening bracket.
+     */
+    public static final String OPENING_BRACKET = "[";
+
+    /**
+     * Period.
+     */
+    public static final String PERIOD = ".";
+
+    /**
+     * Single slash.
+     */
+    public static final String SLASH = "/";
+
+}
