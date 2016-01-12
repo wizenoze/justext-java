@@ -60,7 +60,7 @@ public final class StringPool {
     public static final String OPENING_BRACKET = "[";
 
     /**
-     * New line
+     * New line.
      */
     public static final String NEW_LINE = "\n";
 
