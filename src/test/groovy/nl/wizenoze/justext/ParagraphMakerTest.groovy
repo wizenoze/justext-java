@@ -1,6 +1,6 @@
 package nl.wizenoze.justext
 
-import nl.wizenoze.justext.html.HtmlUtil
+import nl.wizenoze.justext.util.HtmlUtil
 
 import spock.lang.Specification
 

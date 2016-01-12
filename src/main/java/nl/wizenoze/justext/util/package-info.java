@@ -18,6 +18,6 @@
  */
 
 /**
- * Created by lcsontos on 1/8/16.
+ * Utilities of the jusText algorithm.
  */
-package nl.wizenoze.justext.html;
+package nl.wizenoze.justext.util;

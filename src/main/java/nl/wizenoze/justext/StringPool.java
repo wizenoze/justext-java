@@ -40,6 +40,11 @@ public final class StringPool {
     public static final String BR = "BR";
 
     /**
+     * Carriage return.
+     */
+    public static final String CARRIAGE_RETURN = "\r";
+
+    /**
      * Empty string.
      */
     public static final String EMPTY = "";
@@ -55,6 +60,11 @@ public final class StringPool {
     public static final String OPENING_BRACKET = "[";
 
     /**
+     * New line
+     */
+    public static final String NEW_LINE = "\n";
+
+    /**
      * Period.
      */
     public static final String PERIOD = ".";
@@ -63,5 +73,10 @@ public final class StringPool {
      * Single slash.
      */
     public static final String SLASH = "/";
+
+    /**
+     * Space.
+     */
+    public static final String SPACE = " ";
 
 }
