@@ -136,7 +136,7 @@ public class ParagraphMaker {
 
                     break;
                 case CHARACTERS:
-                    String text = streamReader.getText().trim();
+                    String text = streamReader.getText();
 
                     if (StringUtils.isNotBlank(text)) {
                         text = lastParagraph.appendText(text);

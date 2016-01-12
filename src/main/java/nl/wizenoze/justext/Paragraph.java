@@ -19,11 +19,13 @@
 
 package nl.wizenoze.justext;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import nl.wizenoze.justext.util.TextUtil;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by lcsontos on 1/8/16.
@@ -195,7 +197,8 @@ public final class Paragraph {
      */
     public String getText() {
         if (text == null) {
-            text = StringUtils.join(textNodes, StringUtils.SPACE);
+            text = StringUtils.join(textNodes, StringPool.EMPTY);
+            text = TextUtil.normalizeWhiteSpaces(text);
         }
 
         return text;
