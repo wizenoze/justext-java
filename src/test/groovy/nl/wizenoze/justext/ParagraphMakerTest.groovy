@@ -9,6 +9,8 @@ import spock.lang.Specification
  */
 class ParagraphMakerTest extends Specification {
 
+    private final HtmlBeautifier htmlBeautifier = new HtmlBeautifier()
+
     void assertParagraphEqual(Paragraph paragraph, String text, int wordsCount, int tagsCount) {
         assert paragraph.text == text
         assert paragraph.wordsCount == wordsCount
@@ -16,7 +18,7 @@ class ParagraphMakerTest extends Specification {
     }
 
     def createParagraphs(String html) {
-        html = HtmlBeautifier.cleanHtml(html)
+        html = htmlBeautifier.cleanHtml(html)
         def reader = new StringReader(html)
         def paragraphMaker = new ParagraphMaker(reader)
 
