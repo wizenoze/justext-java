@@ -1,5 +1,6 @@
 package nl.wizenoze.justext
 
+import nl.wizenoze.justext.util.StringPool
 import spock.lang.Specification
 
 /**

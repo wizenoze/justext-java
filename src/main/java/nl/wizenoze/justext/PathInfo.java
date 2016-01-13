@@ -19,6 +19,8 @@
 
 package nl.wizenoze.justext;
 
+import nl.wizenoze.justext.util.StringPool;
+
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;

@@ -39,8 +39,8 @@ import static javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
-import static nl.wizenoze.justext.StringPool.A;
-import static nl.wizenoze.justext.StringPool.BR;
+import static nl.wizenoze.justext.util.StringPool.A;
+import static nl.wizenoze.justext.util.StringPool.BR;
 
 /**
  * Created by lcsontos on 1/11/16.

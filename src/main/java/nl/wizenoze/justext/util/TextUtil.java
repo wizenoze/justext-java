@@ -26,9 +26,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import static java.util.regex.Pattern.UNICODE_CHARACTER_CLASS;
 
-import static nl.wizenoze.justext.StringPool.CARRIAGE_RETURN;
-import static nl.wizenoze.justext.StringPool.NEW_LINE;
-import static nl.wizenoze.justext.StringPool.SPACE;
+import static nl.wizenoze.justext.util.StringPool.CARRIAGE_RETURN;
+import static nl.wizenoze.justext.util.StringPool.NEW_LINE;
+import static nl.wizenoze.justext.util.StringPool.SPACE;
 
 /**
  * @author László Csontos

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import nl.wizenoze.justext.util.StringPool;
 import nl.wizenoze.justext.util.TextUtil;
 
 import org.apache.commons.lang3.StringUtils;
