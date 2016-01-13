@@ -17,7 +17,7 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nl.wizenoze.justext.util;
+package nl.wizenoze.justext.html;
 
 import java.io.IOException;
 import java.io.StringWriter;

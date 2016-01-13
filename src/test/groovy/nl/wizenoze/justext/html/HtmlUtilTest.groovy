@@ -1,6 +1,6 @@
-package nl.wizenoze.justext.util
+package nl.wizenoze.justext.html
 
-import nl.wizenoze.justext.util.HtmlUtil
+import nl.wizenoze.justext.html.HtmlUtil
 import spock.lang.Specification
 
 import javax.xml.xpath.XPathConstants
