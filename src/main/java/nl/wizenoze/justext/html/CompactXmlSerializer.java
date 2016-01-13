@@ -32,15 +32,8 @@ class CompactXmlSerializer extends XmlSerializer {
                 Object item = childrenIt.next();
                 if (item != null) {
                     if ( item instanceof ContentNode) {
-                        String content = ((ContentNode) item).getContent().trim();
+                        String content = ((ContentNode) item).getContent();
                         writer.write( dontEscape(tagNode) ? content.replaceAll("]]>", "]]&gt;") : escapeXml(content) );
-
-                        if (childrenIt.hasNext()) {
-                            if ( !isWhitespaceString(childrenIt.next()) ) {
-                                writer.write("\n");
-                            }
-                            childrenIt.previous();
-                        }
                     } else if (item instanceof CommentNode) {
                         String content = ((CommentNode) item).getCommentedContent().trim();
                         writer.write(content);
