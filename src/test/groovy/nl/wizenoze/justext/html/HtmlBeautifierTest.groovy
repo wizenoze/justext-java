@@ -17,9 +17,11 @@ class HtmlBeautifierTest extends Specification {
     def testCleanDom() {
         def dirtyHtml = "<html><!-- comment --><body><h1>Header</h1><!-- comment --> text<p>footer</body></html>"
         def xpath = XPathFactory.newInstance().newXPath()
+
         when:
         def cleanedDom = htmlBeautifier.cleanDom(dirtyHtml);
         def nodes = xpath.evaluate("/html/body/h1/text()", cleanedDom.documentElement, XPathConstants.NODESET)
+
         then:
         nodes.length == 1
         nodes.item(0).nodeType == TEXT_NODE
@@ -28,8 +30,10 @@ class HtmlBeautifierTest extends Specification {
 
     def testRemoveComments() {
         def dirtyHtml = "<html><!-- comment --><body><h1>Header</h1><!-- comment --> text<p>footer</body></html>"
+
         when:
         def cleanedHtml = htmlBeautifier.cleanHtml(dirtyHtml)
+
         then:
         cleanedHtml.equals("<html><body><h1>Header</h1> text<p>footer</p></body></html>")
     }
@@ -42,9 +46,11 @@ class HtmlBeautifierTest extends Specification {
             "<p>footer <em>like</em> a boss</p>",
             "</body></html>"
         ].join()
+
         when:
         def cleanedHtml = htmlBeautifier.cleanHtml(dirtyHtml)
         println(cleanedHtml)
+
         then:
         cleanedHtml.equals(
                 "<html><body><h1>Header</h1><p><span>text</span></p><p>footer <em>like</em> a boss</p></body></html>")
@@ -64,9 +70,11 @@ class HtmlBeautifierTest extends Specification {
             '</body>',
             '</html>'
         ].join()
+
         when:
         def cleanedHtml = htmlBeautifier.cleanHtml(dirtyHtml)
         println(cleanedHtml)
+
         then:
         cleanedHtml.equals([
             '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sk" lang="sk">',
