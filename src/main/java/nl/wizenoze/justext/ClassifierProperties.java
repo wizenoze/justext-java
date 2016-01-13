@@ -65,17 +65,19 @@ public final class ClassifierProperties {
 
     private final int lengthHigh;
     private final int lengthLow;
+    private final int maxHeadingDistance;
     private final float maxLinkDensity;
     private final boolean noHeadings;
     private final float stopwordsHigh;
     private final float stopwordsLow;
 
     private ClassifierProperties(
-            int lengthHigh, int lengthLow, float maxLinkDensity, boolean noHeadings, float stopwordsHigh,
-            float stopwordsLow) {
+            int lengthHigh, int lengthLow, int maxHeadingDistance, float maxLinkDensity, boolean noHeadings,
+            float stopwordsHigh, float stopwordsLow) {
 
         this.lengthHigh = lengthHigh;
         this.lengthLow = lengthLow;
+        this.maxHeadingDistance = maxHeadingDistance;
         this.maxLinkDensity = maxLinkDensity;
         this.noHeadings = noHeadings;
         this.stopwordsHigh = stopwordsHigh;
@@ -104,6 +106,14 @@ public final class ClassifierProperties {
      */
     public int getLengthLow() {
         return lengthLow;
+    }
+
+    /**
+     * Gets maximum heading distance.
+     * @return  maximum heading distance.
+     */
+    public int getMaxHeadingDistance() {
+        return maxHeadingDistance;
     }
 
     /**
@@ -145,6 +155,7 @@ public final class ClassifierProperties {
 
         private int lengthHigh;
         private int lengthLow;
+        private int maxHeadingDistance;
         private float maxLinkDensity;
         private boolean noHeadings;
         private float stopwordsHigh;
@@ -156,6 +167,7 @@ public final class ClassifierProperties {
         public Builder() {
             lengthHigh = LENGTH_HIGH_DEFAULT;
             lengthLow = LENGTH_LOW_DEFAULT;
+            maxHeadingDistance = MAX_HEADING_DISTANCE_DEFAULT;
             maxLinkDensity = MAX_LINK_DENSITY_DEFAULT;
             noHeadings = NO_HEADINGS_DEFAULT;
             stopwordsHigh = STOPWORDS_HIGH_DEFAULT;
@@ -168,7 +180,7 @@ public final class ClassifierProperties {
          */
         public ClassifierProperties build() {
             return new ClassifierProperties(
-                    lengthHigh, lengthLow, maxLinkDensity, noHeadings, stopwordsHigh, stopwordsLow);
+                lengthHigh, lengthLow, maxHeadingDistance, maxLinkDensity, noHeadings, stopwordsHigh, stopwordsLow);
         }
 
         /**
@@ -188,6 +200,16 @@ public final class ClassifierProperties {
          */
         public Builder setLengthLow(int lengthLow) {
             this.lengthLow = lengthLow;
+            return this;
+        }
+
+        /**
+         * Sets maximum heading distance.
+         * @param  maxHeadingDistance maximum heading distance.
+         * @return builder.
+         */
+        public Builder setMaxHeadingDistance(int maxHeadingDistance) {
+            this.maxHeadingDistance = maxHeadingDistance;
             return this;
         }
 
