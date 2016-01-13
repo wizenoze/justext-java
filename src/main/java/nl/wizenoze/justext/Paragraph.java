@@ -198,7 +198,7 @@ public final class Paragraph {
     public String getText() {
         if (text == null) {
             text = StringUtils.join(textNodes, StringPool.EMPTY);
-            text = TextUtil.normalizeWhiteSpaces(text);
+            text = TextUtil.normalizeWhiteSpaces(text.trim());
         }
 
         return text;
