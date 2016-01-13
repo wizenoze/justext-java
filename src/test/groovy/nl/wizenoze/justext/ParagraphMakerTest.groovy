@@ -26,13 +26,13 @@ class ParagraphMakerTest extends Specification {
     }
 
     def testBasic() {
-        def html = """
-            <html><body>
-            <h1>Header</h1>
-            <p>text and some <em>other</em> words <span class="class">that I</span> have in my head now</p>
-            <p>footer</p>
-            </body></html>
-        """
+        def html = [
+            '<html><body>',
+            '<h1>Header</h1>',
+            '<p>text and some <em>other</em> words <span class="class">that I</span> have in my head now</p>',
+            '<p>footer</p>',
+            '</body></html>'
+        ].join()
 
         when:
         def paragraphs = createParagraphs(html)
@@ -55,14 +55,14 @@ class ParagraphMakerTest extends Specification {
     }
 
     def testWhitespaceHandling() {
-        def html = """
-            <html><body>
-            <p>pre<em>in</em>post \t pre  <span class="class"> in </span>  post</p>
-            <div>pre<em> in </em>post</div>
-            <pre>pre<em>in </em>post</pre>
-            <blockquote>pre<em> in</em>post</blockquote>
-            </body></html>
-        """
+        def html = [
+            '<html><body>',
+            '<p>pre<em>in</em>post \t pre  <span class="class"> in </span>  post</p>',
+            '<div>pre<em> in </em>post</div>',
+            '<pre>pre<em>in </em>post</pre>',
+            '<blockquote>pre<em> in</em>post</blockquote>',
+            '</body></html>'
+        ].join()
 
         when:
         def paragraphs = createParagraphs(html)
@@ -76,11 +76,11 @@ class ParagraphMakerTest extends Specification {
     }
 
     def testMultipleLineBreak() {
-        def html = """
-            <html><body>
-              normal text   <br><br> another   text
-            </body></html>
-        """
+        def html = [
+            '<html><body>',
+            '  normal text   <br><br> another   text',
+            '</body></html>'
+        ].join()
 
         when:
         def paragraphs = createParagraphs(html)
@@ -93,15 +93,15 @@ class ParagraphMakerTest extends Specification {
     }
 
     def testInlineTextInBody() {
-        def html = """
-            <html><body>
-            <sup>I am <strong>top</strong>-inline\n\n\n\n and I am happy \n</sup>
-            <p>normal text</p>
-            <code>\nvar i = -INFINITY;\n</code>
-            <div>after text with variable <var>N</var> </div>
-               I am inline\n\n\n\n and I am happy \n
-            </body></html>
-        """
+        def html = [
+            '<html><body>',
+            '<sup>I am <strong>top</strong>-inline\n\n\n\n and I am happy \n</sup>',
+            '<p>normal text</p>',
+            '<code>\nvar i = -INFINITY;\n</code>',
+            '<div>after text with variable <var>N</var> </div>',
+            '   I am inline\n\n\n\n and I am happy \n',
+            '</body></html>'
+        ].join()
 
         when:
         def paragraphs = createParagraphs(html)
@@ -116,15 +116,15 @@ class ParagraphMakerTest extends Specification {
     }
 
     def testLinks() {
-        def html = """
-                <html><body>
-                <a>I am <strong>top</strong>-inline\n\n\n\n and I am happy \n</a>
-                <p>normal text</p>
-                <code>\nvar i = -INFINITY;\n</code>
-                <div>after <a>text</a> with variable <var>N</var> </div>
-                   I am inline\n\n\n\n and I am happy \n
-                </body></html>
-        """
+        def html = [
+            '<html><body>',
+            '<a>I am <strong>top</strong>-inline\n\n\n\n and I am happy \n</a>',
+            '<p>normal text</p>',
+            '<code>\nvar i = -INFINITY;\n</code>',
+            '<div>after <a>text</a> with variable <var>N</var> </div>',
+            '   I am inline\n\n\n\n and I am happy \n',
+            '</body></html>'
+        ].join()
 
         when:
         def paragraphs = createParagraphs(html)
