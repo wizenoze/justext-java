@@ -1,6 +1,5 @@
 package nl.wizenoze.justext.html
 
-import nl.wizenoze.justext.html.HtmlUtil
 import spock.lang.Specification
 
 import javax.xml.xpath.XPathConstants
@@ -11,13 +10,15 @@ import static org.w3c.dom.Node.TEXT_NODE
 /**
  * Created by lcsontos on 1/7/16.
  */
-class HtmlUtilTest extends Specification {
+class HtmlBeautifierTest extends Specification {
+
+    private final HtmlBeautifier htmlBeautifier = new HtmlBeautifier();
 
     def testCleanDom() {
         def dirtyHtml = "<html><!-- comment --><body><h1>Header</h1><!-- comment --> text<p>footer</body></html>"
         def xpath = XPathFactory.newInstance().newXPath()
         when:
-        def cleanedDom = HtmlUtil.cleanDom(dirtyHtml);
+        def cleanedDom = htmlBeautifier.cleanDom(dirtyHtml);
         def nodes = xpath.evaluate("/html/body/h1/text()", cleanedDom.documentElement, XPathConstants.NODESET)
         then:
         nodes.length == 1
@@ -28,7 +29,7 @@ class HtmlUtilTest extends Specification {
     def testRemoveComments() {
         def dirtyHtml = "<html><!-- comment --><body><h1>Header</h1><!-- comment --> text<p>footer</body></html>"
         when:
-        def cleanedHtml = HtmlUtil.cleanHtml(dirtyHtml)
+        def cleanedHtml = htmlBeautifier.cleanHtml(dirtyHtml)
         then:
         cleanedHtml.equals("<html><body><h1>Header</h1>text<p>footer</p></body></html>")
     }
@@ -42,7 +43,7 @@ class HtmlUtilTest extends Specification {
             </body></html>
         """
         when:
-        def cleanedHtml = HtmlUtil.cleanHtml(dirtyHtml)
+        def cleanedHtml = htmlBeautifier.cleanHtml(dirtyHtml)
         println(cleanedHtml)
         then:
         cleanedHtml.equals(
@@ -64,7 +65,7 @@ class HtmlUtilTest extends Specification {
             </html>
         """
         when:
-        def cleanedHtml = HtmlUtil.cleanHtml(dirtyHtml)
+        def cleanedHtml = htmlBeautifier.cleanHtml(dirtyHtml)
         println(cleanedHtml)
         then:
         cleanedHtml.equals(

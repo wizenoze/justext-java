@@ -1,6 +1,6 @@
 package nl.wizenoze.justext
 
-import nl.wizenoze.justext.html.HtmlUtil
+import nl.wizenoze.justext.html.HtmlBeautifier
 
 import spock.lang.Specification
 
@@ -16,7 +16,7 @@ class ParagraphMakerTest extends Specification {
     }
 
     def createParagraphs(String html) {
-        html = HtmlUtil.cleanHtml(html)
+        html = HtmlBeautifier.cleanHtml(html)
         def reader = new StringReader(html)
         def paragraphMaker = new ParagraphMaker(reader)
 
