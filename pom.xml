@@ -16,7 +16,6 @@
         <checkstyle.version>6.14.1</checkstyle.version>
         <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
         <commons-lang3.version>3.4</commons-lang3.version>
-        <commons-logging.version>1.2</commons-logging.version>
         <groovy.eclipse.compiler.version>2.9.2-01</groovy.eclipse.compiler.version>
         <groovy.eclipse.batch.version>2.4.3-01</groovy.eclipse.batch.version>
         <groovy.version>2.4.3</groovy.version>
@@ -26,6 +25,7 @@
         <maven-compiler-plugin.target.version>1.8</maven-compiler-plugin.target.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <slf4j-api.version>1.7.13</slf4j-api.version>
         <spock-core.version>1.0-groovy-2.4</spock-core.version>
     </properties>
 
@@ -152,9 +152,9 @@
         </dependency>
 
         <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>${commons-logging.version}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-api.version}</version>
         </dependency>
 
         <!-- Test framework dependency references -->

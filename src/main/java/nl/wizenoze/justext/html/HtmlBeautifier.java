@@ -23,15 +23,15 @@ import java.io.IOException;
 import java.io.StringWriter;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.CompactXmlSerializer;
 import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.Serializer;
 import org.htmlcleaner.TagNode;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.w3c.dom.Document;
 
@@ -40,7 +40,7 @@ import org.w3c.dom.Document;
  */
 public final class HtmlBeautifier {
 
-    private static final Log LOG = LogFactory.getLog(HtmlBeautifier.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HtmlBeautificationLogger.class);
 
     private final CleanerProperties cleanerProperties;
     private final HtmlCleaner htmlCleaner;

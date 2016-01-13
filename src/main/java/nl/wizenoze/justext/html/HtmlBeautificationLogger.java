@@ -19,20 +19,20 @@
 
 package nl.wizenoze.justext.html;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.audit.ErrorType;
 import org.htmlcleaner.audit.HtmlModificationListener;
 import org.htmlcleaner.conditional.ITagNodeCondition;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by lcsontos on 1/13/16.
  */
 class HtmlBeautificationLogger implements HtmlModificationListener {
 
-    private static final Log LOG = LogFactory.getLog(HtmlBeautificationLogger.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HtmlBeautificationLogger.class);
 
     public void fireConditionModification(ITagNodeCondition condition, TagNode tagNode) {
         LOG.info("fireConditionModification:" + condition + " at " + tagNode);
