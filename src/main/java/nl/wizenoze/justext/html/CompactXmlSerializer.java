@@ -49,28 +49,30 @@ class CompactXmlSerializer extends XmlSerializer {
             Iterator<? extends BaseToken> childrenIterator = tagChildren.listIterator();
 
             while (childrenIterator.hasNext()) {
-                Object item = childrenIterator.next();
+                BaseToken node = childrenIterator.next();
 
-                if (item != null) {
-                    if (item instanceof ContentNode) {
-                        String content = ((ContentNode) item).getContent();
+                if (node == null) {
+                    continue;
+                }
 
-                        if (dontEscape(tagNode)) {
-                            content = content.replaceAll("]]>", "]]&gt;");
-                        } else {
-                            content = escapeXml(content);
-                        }
+                if (node instanceof ContentNode) {
+                    String content = ((ContentNode) node).getContent();
 
-                        writer.write(content);
-                    } else if (item instanceof TagNode) {
-                        TagNode tagNodeItem = (TagNode) item;
-
-                        if (!"head".equalsIgnoreCase(tagNodeItem.getName())) {
-                            tagNodeItem.serialize(this, writer);
-                        }
+                    if (dontEscape(tagNode)) {
+                        content = content.replaceAll("]]>", "]]&gt;");
                     } else {
-                        ((BaseToken) item).serialize(this, writer);
+                        content = escapeXml(content);
                     }
+
+                    writer.write(content);
+                } else if (node instanceof TagNode) {
+                    TagNode tagNodeItem = (TagNode) node;
+
+                    if (!"head".equalsIgnoreCase(tagNodeItem.getName())) {
+                        tagNodeItem.serialize(this, writer);
+                    }
+                } else {
+                    node.serialize(this, writer);
                 }
             }
 
