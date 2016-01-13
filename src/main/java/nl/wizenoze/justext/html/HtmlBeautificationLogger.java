@@ -35,19 +35,33 @@ class HtmlBeautificationLogger implements HtmlModificationListener {
     private static final Logger LOG = LoggerFactory.getLogger(HtmlBeautificationLogger.class);
 
     public void fireConditionModification(ITagNodeCondition condition, TagNode tagNode) {
-        LOG.info("fireConditionModification:" + condition + " at " + tagNode);
+        log("fireConditionModification", false, condition, tagNode, null);
     }
 
     public void fireHtmlError(boolean safety, TagNode tagNode, ErrorType errorType) {
-        LOG.info("fireHtmlError:" + errorType + "(" + safety + ") at " + tagNode);
+        log("fireHtmlError", safety, null, tagNode, errorType);
     }
 
     public void fireUglyHtml(boolean safety, TagNode tagNode, ErrorType errorType) {
-        LOG.info("fireConditionModification:" + errorType + "(" + safety + ") at " + tagNode);
+        log("fireUglyHtml", safety, null, tagNode, errorType);
     }
 
     public void fireUserDefinedModification(boolean safety, TagNode tagNode, ErrorType errorType) {
-        LOG.info("fireConditionModification" + errorType + "(" + safety + ") at " + tagNode);
+        log("fireUserDefinedModification", safety, null, tagNode, errorType);
+    }
+
+    private void log(
+            String evenName, boolean safety, ITagNodeCondition condition, TagNode tagNode, ErrorType errorType) {
+
+        if (!LOG.isDebugEnabled()) {
+            return;
+        }
+
+        if ("fireConditionModification".equals(evenName)) {
+            LOG.debug("{}: {} at {}", evenName, condition, tagNode);
+        } else {
+            LOG.debug("{}: {} ({}) at {}", evenName, errorType, safety, tagNode);
+        }
     }
 
 }
