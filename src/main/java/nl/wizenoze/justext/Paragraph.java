@@ -94,14 +94,16 @@ public final class Paragraph {
     /**
      * Add the given text to the existing text nodes.
      * @param text text to be added.
-     * @return full texts of this paragraph.
+     * @return normalized text of the input which has just been added to the paragraph.
      */
     public String appendText(String text) {
         reset();
 
+        text = TextUtil.normalizeWhiteSpaces(text);
+
         textNodes.add(text);
 
-        return getText();
+        return text;
     }
 
     /**

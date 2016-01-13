@@ -11,10 +11,15 @@ class ParagraphMakerTest extends Specification {
 
     private final HtmlBeautifier htmlBeautifier = new HtmlBeautifier()
 
-    void assertParagraphEqual(Paragraph paragraph, String text, int wordsCount, int tagsCount) {
+    void assertParagraphEqual(
+            Paragraph paragraph, String text, int wordsCount, int tagsCount, Integer charsInLinksCount=null) {
         assert paragraph.text == text
         assert paragraph.wordsCount == wordsCount
         assert paragraph.tagsCount == tagsCount
+
+        if (charsInLinksCount != null) {
+            assert paragraph.charsInLinksCount == charsInLinksCount
+        }
     }
 
     def createParagraphs(String html) {
@@ -131,10 +136,10 @@ class ParagraphMakerTest extends Specification {
 
         then:
         paragraphs.size() == 5
-        assertParagraphEqual(paragraphs[0], "I am top-inline\nand I am happy", 7, 2)
+        assertParagraphEqual(paragraphs[0], "I am top-inline\nand I am happy", 7, 2, 31)
         assertParagraphEqual(paragraphs[1], "normal text", 2, 0)
         assertParagraphEqual(paragraphs[2], "var i = -INFINITY;", 4, 1)
-        assertParagraphEqual(paragraphs[3], "after text with variable N", 5, 2)
+        assertParagraphEqual(paragraphs[3], "after text with variable N", 5, 2, 4)
         assertParagraphEqual(paragraphs[4], "I am inline\nand I am happy", 7, 0)
     }
 
