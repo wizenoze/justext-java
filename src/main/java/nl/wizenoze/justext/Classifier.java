@@ -73,6 +73,27 @@ public final class Classifier {
         }
     }
 
+    /**
+     * Performs context sensitive classification. Assumes that {@link #classifyParagraphs(List, Set)} has already been
+     * called.
+     *
+     * @param paragraphs List of paragraphs.
+     */
+    public static void reviseParagraphs(List<Paragraph> paragraphs) {
+        reviseParagraphs(paragraphs, CLASSIFIER_PROPERTIES_DEFAULT);
+    }
+
+    /**
+     * Performs context sensitive classification. Assumes that {@link #classifyParagraphs(List, Set)} has already been
+     * called.
+     *
+     * @param paragraphs List of paragraphs.
+     * @param classifierProperties Properties.
+     */
+    public static void reviseParagraphs(List<Paragraph> paragraphs, ClassifierProperties classifierProperties) {
+
+    }
+
     private static Classification classify(
             Paragraph paragraph, Set<String> stopWords, ClassifierProperties classifierProperties) {
 
