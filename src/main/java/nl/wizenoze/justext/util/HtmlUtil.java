@@ -23,16 +23,18 @@ import java.io.IOException;
 import java.io.StringWriter;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.htmlcleaner.BrowserCompactXmlSerializer;
 import org.htmlcleaner.CleanerProperties;
+import org.htmlcleaner.CompactXmlSerializer;
 import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.Serializer;
 import org.htmlcleaner.TagNode;
+import org.htmlcleaner.audit.ErrorType;
+import org.htmlcleaner.audit.HtmlModificationListener;
+import org.htmlcleaner.conditional.ITagNodeCondition;
 
 import org.w3c.dom.Document;
 
@@ -50,7 +52,7 @@ public final class HtmlUtil {
     static {
         CLEANER_PROPERTIES = createCleanerProperties();
         HTML_CLEANER = new HtmlCleaner(CLEANER_PROPERTIES);
-        SERIALIZER = new BrowserCompactXmlSerializer(CLEANER_PROPERTIES);
+        SERIALIZER = new CompactXmlSerializer(CLEANER_PROPERTIES);
     }
 
     /**
@@ -107,16 +109,15 @@ public final class HtmlUtil {
             return null;
         }
 
-        String serializedHtml = tagNodeWriter.toString();
+        String cleanHtml = tagNodeWriter.toString();
 
-        serializedHtml = StringUtils.remove(serializedHtml, '\n');
-        serializedHtml = StringUtils.remove(serializedHtml, "<head />");
-
-        return serializedHtml;
+        return cleanHtml;
     }
 
     private static CleanerProperties createCleanerProperties() {
         CleanerProperties cleanerProperties = new CleanerProperties();
+
+        cleanerProperties.addHtmlModificationListener(new HtmlModificationListenerLogger());
 
         cleanerProperties.setAllowHtmlInsideAttributes(false);
         cleanerProperties.setAllowMultiWordAttributes(false);
@@ -130,6 +131,26 @@ public final class HtmlUtil {
         cleanerProperties.setRecognizeUnicodeChars(true);
 
         return cleanerProperties;
+    }
+
+    private static class HtmlModificationListenerLogger implements HtmlModificationListener {
+
+        public void fireConditionModification(ITagNodeCondition condition, TagNode tagNode) {
+            LOG.info("fireConditionModification:" + condition + " at " + tagNode);
+        }
+
+        public void fireHtmlError(boolean safety, TagNode tagNode, ErrorType errorType) {
+            LOG.info("fireHtmlError:" + errorType + "(" + safety + ") at " + tagNode);
+        }
+
+        public void fireUglyHtml(boolean safety, TagNode tagNode, ErrorType errorType) {
+            LOG.info("fireConditionModification:" + errorType + "(" + safety + ") at " + tagNode);
+        }
+
+        public void fireUserDefinedModification(boolean safety, TagNode tagNode, ErrorType errorType) {
+            LOG.info("fireConditionModification" + errorType + "(" + safety + ") at " + tagNode);
+        }
+
     }
 
 }
