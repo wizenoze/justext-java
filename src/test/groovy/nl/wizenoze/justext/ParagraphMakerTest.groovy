@@ -134,7 +134,7 @@ class ParagraphMakerTest extends Specification {
         assertParagraphEqual(paragraphs[0], "I am top-inline\nand I am happy", 7, 2)
         assertParagraphEqual(paragraphs[1], "normal text", 2, 0)
         assertParagraphEqual(paragraphs[2], "var i = -INFINITY;", 4, 1)
-        assertParagraphEqual(paragraphs[3], "after text with variable N", 5, 1)
+        assertParagraphEqual(paragraphs[3], "after text with variable N", 5, 2)
         assertParagraphEqual(paragraphs[4], "I am inline\nand I am happy", 7, 0)
     }
 
