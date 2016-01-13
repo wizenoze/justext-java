@@ -35,6 +35,7 @@ public final class Classifier {
 
     private static final char COPYRIGHT_CHAR = '\u00a9';
     private static final String COPYRIGHT_CODE = "&copy;";
+    private static final ClassifierProperties CLASSIFIER_PROPERTIES_DEFAULT = ClassifierProperties.getDefault();
 
     private Classifier() {
     }
@@ -46,7 +47,7 @@ public final class Classifier {
      * @param stopWords Set of stop words.
      */
     public static void classifyParagraphs(List<Paragraph> paragraphs, Set<String> stopWords) {
-        classifyParagraphs(paragraphs, stopWords, ClassifierProperties.getDefault());
+        classifyParagraphs(paragraphs, stopWords, CLASSIFIER_PROPERTIES_DEFAULT);
     }
 
     /**
@@ -66,40 +67,48 @@ public final class Classifier {
         }
 
         for (Paragraph paragraph : paragraphs) {
-            int length = paragraph.length();
-            float linkDensity = paragraph.getLinkDensity();
-            float stopWordsDensity = paragraph.getStopWordsDensity(stopWords);
-            String text = paragraph.getText();
-
-            Classification classification = null;
-
-            if (linkDensity > classifierProperties.getMaxLinkDensity()) {
-                classification = Classification.BAD;
-            } else if (StringUtils.contains(text, COPYRIGHT_CHAR) || StringUtils.contains(text, COPYRIGHT_CODE)) {
-                classification = Classification.BAD;
-            // TODO add regex search for SELECT elements here
-            } else if (false/*regsearch*/) {
-                classification = Classification.BAD;
-            } else if (length < classifierProperties.getLengthLow()) {
-                if (paragraph.getCharsInLinksCount() > 0) {
-                    classification = Classification.BAD;
-                } else {
-                    classification = Classification.SHORT;
-                }
-            } else if (stopWordsDensity >= classifierProperties.getStopwordsHigh()) {
-                if (length > classifierProperties.getLengthHigh()) {
-                    classification = Classification.GOOD;
-                } else {
-                    classification = Classification.NEAR_GOOD;
-                }
-            } else if (stopWordsDensity >= classifierProperties.getStopwordsLow()) {
-                classification = Classification.NEAR_GOOD;
-            } else {
-                classification = Classification.BAD;
-            }
+            Classification classification = classify(paragraph, stopWords, classifierProperties);
 
             paragraph.setClassification(classification);
         }
+    }
+
+    private static Classification classify(
+            Paragraph paragraph, Set<String> stopWords, ClassifierProperties classifierProperties) {
+
+        int length = paragraph.length();
+        float linkDensity = paragraph.getLinkDensity();
+        float stopWordsDensity = paragraph.getStopWordsDensity(stopWords);
+        String text = paragraph.getText();
+
+        Classification classification = null;
+
+        if (linkDensity > classifierProperties.getMaxLinkDensity()) {
+            classification = Classification.BAD;
+        } else if (StringUtils.contains(text, COPYRIGHT_CHAR) || StringUtils.contains(text, COPYRIGHT_CODE)) {
+            classification = Classification.BAD;
+            // TODO add regex search for SELECT elements here
+        } else if (false/*regsearch*/) {
+            classification = Classification.BAD;
+        } else if (length < classifierProperties.getLengthLow()) {
+            if (paragraph.getCharsInLinksCount() > 0) {
+                classification = Classification.BAD;
+            } else {
+                classification = Classification.SHORT;
+            }
+        } else if (stopWordsDensity >= classifierProperties.getStopwordsHigh()) {
+            if (length > classifierProperties.getLengthHigh()) {
+                classification = Classification.GOOD;
+            } else {
+                classification = Classification.NEAR_GOOD;
+            }
+        } else if (stopWordsDensity >= classifierProperties.getStopwordsLow()) {
+            classification = Classification.NEAR_GOOD;
+        } else {
+            classification = Classification.BAD;
+        }
+
+        return classification;
     }
 
 }
