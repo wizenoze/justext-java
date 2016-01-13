@@ -20,6 +20,7 @@
         <groovy.eclipse.batch.version>2.4.3-01</groovy.eclipse.batch.version>
         <groovy.version>2.4.3</groovy.version>
         <htmlcleaner.version>2.16</htmlcleaner.version>
+        <logback.version>1.1.2</logback.version>
         <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
         <maven-compiler-plugin.source.version>1.8</maven-compiler-plugin.source.version>
         <maven-compiler-plugin.target.version>1.8</maven-compiler-plugin.target.version>
@@ -158,6 +159,13 @@
         </dependency>
 
         <!-- Test framework dependency references -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
