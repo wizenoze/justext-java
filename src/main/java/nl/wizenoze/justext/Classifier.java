@@ -31,6 +31,11 @@ import nl.wizenoze.justext.paragraph.Paragraph;
 
 import org.apache.commons.lang3.StringUtils;
 
+import static nl.wizenoze.justext.Classification.BAD;
+import static nl.wizenoze.justext.Classification.GOOD;
+import static nl.wizenoze.justext.Classification.NEAR_GOOD;
+import static nl.wizenoze.justext.Classification.SHORT;
+
 /**
  * This is the implementation of the following context free classification algorithm.
  *
@@ -39,8 +44,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public final class Classifier {
 
-    private static final Set<Classification> BAD_GOOD = EnumSet.of(Classification.BAD, Classification.GOOD);
-    private static final Set<Classification> BAD_GOOD_NEAR_GOOD = EnumSet.of(Classification.BAD, Classification.GOOD, Classification.NEAR_GOOD);
+    private static final Set<Classification> BAD_GOOD_SET = EnumSet.of(BAD, GOOD);
+    private static final Set<Classification> BAD_GOOD_NEAR_GOOD_SET = EnumSet.of(BAD, GOOD, NEAR_GOOD);
     private static final char COPYRIGHT_CHAR = '\u00a9';
     private static final String COPYRIGHT_CODE = "&copy;";
     private static final ClassifierProperties CLASSIFIER_PROPERTIES_DEFAULT = ClassifierProperties.getDefault();
@@ -125,12 +130,12 @@ public final class Classifier {
 
             Classification classification = paragraph.getClassification();
 
-            if (BAD_GOOD.contains(classification)) {
+            if (BAD_GOOD_SET.contains(classification)) {
                 return classification;
             }
         }
 
-        return Classification.BAD;
+        return BAD;
     }
 
     private static Classification classify(
@@ -144,28 +149,28 @@ public final class Classifier {
         Classification classification = null;
 
         if (linkDensity > classifierProperties.getMaxLinkDensity()) {
-            classification = Classification.BAD;
+            classification = BAD;
         } else if (StringUtils.contains(text, COPYRIGHT_CHAR) || StringUtils.contains(text, COPYRIGHT_CODE)) {
-            classification = Classification.BAD;
+            classification = BAD;
             // TODO add regex search for SELECT elements here
         } else if (false/*regsearch*/) {
-            classification = Classification.BAD;
+            classification = BAD;
         } else if (length < classifierProperties.getLengthLow()) {
             if (paragraph.getCharsInLinksCount() > 0) {
-                classification = Classification.BAD;
+                classification = BAD;
             } else {
-                classification = Classification.SHORT;
+                classification = SHORT;
             }
         } else if (stopWordsDensity >= classifierProperties.getStopwordsHigh()) {
             if (length > classifierProperties.getLengthHigh()) {
-                classification = Classification.GOOD;
+                classification = GOOD;
             } else {
-                classification = Classification.NEAR_GOOD;
+                classification = NEAR_GOOD;
             }
         } else if (stopWordsDensity >= classifierProperties.getStopwordsLow()) {
-            classification = Classification.NEAR_GOOD;
+            classification = NEAR_GOOD;
         } else {
-            classification = Classification.BAD;
+            classification = BAD;
         }
 
         return classification;
