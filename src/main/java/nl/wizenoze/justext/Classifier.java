@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 import nl.wizenoze.justext.paragraph.MutableParagraph;
+import nl.wizenoze.justext.paragraph.Paragraph;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -97,7 +98,7 @@ public final class Classifier {
     }
 
     private static Classification classify(
-            MutableParagraph paragraph, Set<String> stopWords, ClassifierProperties classifierProperties) {
+            Paragraph paragraph, Set<String> stopWords, ClassifierProperties classifierProperties) {
 
         int length = paragraph.length();
         float linkDensity = paragraph.getLinkDensity();

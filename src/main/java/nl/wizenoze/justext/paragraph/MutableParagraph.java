@@ -20,14 +20,13 @@
 package nl.wizenoze.justext.paragraph;
 
 import java.util.List;
-import java.util.Set;
 
 import nl.wizenoze.justext.Classification;
 
 /**
  * Created by lcsontos on 1/14/16.
  */
-public interface MutableParagraph {
+public interface MutableParagraph extends Paragraph {
 
     /**
      * Add the given text to the existing text nodes.
@@ -42,79 +41,10 @@ public interface MutableParagraph {
     void decrementTagsCount();
 
     /**
-     * Gets count of characters in links.
-     * @return count of characters in links.
-     */
-    int getCharsInLinksCount();
-
-    /**
-     * Gets classification.
-     * @return classification.
-     */
-    Classification getClassification();
-
-    /**
-     * Gets DOM path.
-     * @return DOM path.
-     */
-    String getDomPath();
-
-    /**
-     * Gets link density.
-     * @return link density.
-     */
-    float getLinkDensity();
-
-    /**
-     * Gets stop words count.
-     * @param stopWords words.
-     * @return stop words count.
-     */
-    int getStopWordsCount(Set<String> stopWords);
-
-    /**
-     * Gets stop words density.
-     * @param stopWords words.
-     * @return stop words density.
-     */
-    float getStopWordsDensity(Set<String> stopWords);
-
-    /**
-     * Gets tags count.
-     * @return tags count.
-     */
-    int getTagsCount();
-
-    /**
-     * Concatenates text nodes into a single text.
-     * @return Concatenated text of nodes.
-     */
-    String getText();
-
-    /**
      * Gets text nodes.
      * @return text nodes.
      */
     List<String> getTextNodes();
-
-    /**
-     * Gets word count.
-     * @return word count.
-     */
-    int getWordsCount();
-
-    /**
-     * Gets XPath.
-     * @return xpath.
-     */
-    String getXpath();
-
-    /**
-     * Returns if this paragraph contains text.
-     *
-     * @return true if this paragraph contains text.
-     */
-    boolean hasText();
 
     /**
      * Increments character count in links.
@@ -126,24 +56,6 @@ public interface MutableParagraph {
      * Increments tags count.
      */
     void incrementTagsCount();
-
-    /**
-     * Returns if this paragraph is boilerplate.
-     * @return true if boilerplate, false otherwise.
-     */
-    boolean isBoilerplace();
-
-    /**
-     * Returns if this paragraph is heading.
-     * @return true if heading, false otherwise.
-     */
-    boolean isHeading();
-
-    /**
-     * Returns the full length of this paragraph.
-     * @return length of this paragraph.
-     */
-    int length();
 
     /**
      * Sets classification.
