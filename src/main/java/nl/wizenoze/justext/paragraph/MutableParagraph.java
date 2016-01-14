@@ -19,349 +19,136 @@
 
 package nl.wizenoze.justext.paragraph;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import nl.wizenoze.justext.Classification;
-import nl.wizenoze.justext.util.StringPool;
-import nl.wizenoze.justext.util.TextUtil;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
- * Created by lcsontos on 1/8/16.
+ * Created by lcsontos on 1/14/16.
  */
-public final class MutableParagraph {
-
-    private int charsInLinksCount = 0;
-    private Classification classification;
-    private String domPath;
-    private boolean isBoilerplace = false;
-    private boolean isHeading = false;
-    private int tagsCount = 0;
-    private String text;
-    private List<String> textNodes;
-    private String[] words;
-    private String xpath;
-
-    /**
-     * Creates an empty paragraph with the given path info.
-     * @param pathInfo path info.
-     */
-    public MutableParagraph(PathInfo pathInfo) {
-        this(pathInfo, null, 0, 0);
-    }
-
-    /**
-     * Creates a paragraph with the given path info, text nodes, character count in links and tags count.
-     * @param pathInfo path info
-     * @param textNodes text nodes
-     * @param charsInLinksCount character count in links
-     * @param tagsCount tags count
-     */
-    public MutableParagraph(PathInfo pathInfo, List<String> textNodes, int charsInLinksCount, int tagsCount) {
-        if (pathInfo != null) {
-            domPath = pathInfo.dom();
-            xpath = pathInfo.xpath();
-        }
-
-        this.charsInLinksCount = charsInLinksCount;
-        this.tagsCount = tagsCount;
-
-        if (textNodes == null) {
-            textNodes = new ArrayList<>();
-        }
-
-        this.textNodes = textNodes;
-    }
-
-    /**
-     * Creates a paragraph with the given text nodes.
-     * @param textNodes text nodes.
-     */
-    public MutableParagraph(List<String> textNodes) {
-        this(null, textNodes, 0, 0);
-    }
-
-    /**
-     * Creates a paragraph with the given text nodes and character count in links.
-     * @param textNodes text nodes.
-     * @param charsInLinksCount count of characters in links.
-     */
-    public MutableParagraph(List<String> textNodes, int charsInLinksCount) {
-        this(null, textNodes, charsInLinksCount, 0);
-    }
-
-    MutableParagraph(Classification classification) {
-        this(null, null, 0, 0);
-        this.classification = classification;
-    }
+public interface MutableParagraph {
 
     /**
      * Add the given text to the existing text nodes.
      * @param text text to be added.
      * @return normalized text of the input which has just been added to the paragraph.
      */
-    public String appendText(String text) {
-        reset();
-
-        text = TextUtil.normalizeWhiteSpaces(text);
-
-        textNodes.add(text);
-
-        return text;
-    }
+    String appendText(String text);
 
     /**
      * Decrements tags count.
      */
-    public void decrementTagsCount() {
-        tagsCount--;
-    }
+    void decrementTagsCount();
 
     /**
      * Gets count of characters in links.
      * @return count of characters in links.
      */
-    public int getCharsInLinksCount() {
-        return charsInLinksCount;
-    }
+    int getCharsInLinksCount();
 
     /**
      * Gets classification.
      * @return classification.
      */
-    public Classification getClassification() {
-        return classification;
-    }
+    Classification getClassification();
 
     /**
      * Gets DOM path.
      * @return DOM path.
      */
-    public String getDomPath() {
-        return domPath;
-    }
+    String getDomPath();
 
     /**
      * Gets link density.
      * @return link density.
      */
-    public float getLinkDensity() {
-        int textLength = length();
-
-        if (textLength == 0) {
-            return 0;
-        }
-
-        return 1.0f * charsInLinksCount / textLength;
-    }
+    float getLinkDensity();
 
     /**
      * Gets stop words count.
      * @param stopWords words.
      * @return stop words count.
      */
-    public int getStopWordsCount(Set<String> stopWords) {
-        int stopWordsCount = 0;
-
-        for (String word : words()) {
-            if (stopWords.contains(word.toLowerCase())) {
-                stopWordsCount++;
-            }
-        }
-
-        return stopWordsCount;
-    }
+    int getStopWordsCount(Set<String> stopWords);
 
     /**
      * Gets stop words density.
      * @param stopWords words.
      * @return stop words density.
      */
-    public float getStopWordsDensity(Set<String> stopWords) {
-        int wordsCount = getWordsCount();
-
-        if (wordsCount == 0) {
-            return 0;
-        }
-
-        float stopWordsDensity = 1.0f * getStopWordsCount(stopWords) / wordsCount;
-
-        return stopWordsDensity;
-    }
+    float getStopWordsDensity(Set<String> stopWords);
 
     /**
      * Gets tags count.
      * @return tags count.
      */
-    public int getTagsCount() {
-        return tagsCount;
-    }
+    int getTagsCount();
 
     /**
      * Concatenates text nodes into a single text.
      * @return Concatenated text of nodes.
      */
-    public String getText() {
-        if (text == null) {
-            text = StringUtils.join(textNodes, StringPool.EMPTY);
-            text = TextUtil.normalizeWhiteSpaces(text.trim());
-        }
-
-        return text;
-    }
+    String getText();
 
     /**
      * Gets text nodes.
      * @return text nodes.
      */
-    public List<String> getTextNodes() {
-        return textNodes;
-    }
+    List<String> getTextNodes();
 
     /**
      * Gets word count.
      * @return word count.
      */
-    public int getWordsCount() {
-        return words().length;
-    }
+    int getWordsCount();
 
     /**
      * Gets XPath.
      * @return xpath.
      */
-    public String getXpath() {
-        return xpath;
-    }
+    String getXpath();
 
     /**
      * Returns if this paragraph contains text.
      *
      * @return true if this paragraph contains text.
      */
-    public boolean hasText() {
-        return !textNodes.isEmpty();
-    }
+    boolean hasText();
 
     /**
      * Increments character count in links.
      * @param delta delta
      */
-    public void incrementCharsInLinksCount(int delta) {
-        charsInLinksCount += delta;
-    }
+    void incrementCharsInLinksCount(int delta);
 
     /**
      * Increments tags count.
      */
-    public void incrementTagsCount() {
-        tagsCount++;
-    }
+    void incrementTagsCount();
 
     /**
      * Returns if this paragraph is boilerplate.
      * @return true if boilerplate, false otherwise.
      */
-    public boolean isBoilerplace() {
-        return isBoilerplace;
-    }
+    boolean isBoilerplace();
 
     /**
      * Returns if this paragraph is heading.
      * @return true if heading, false otherwise.
      */
-    public boolean isHeading() {
-        return isHeading;
-    }
+    boolean isHeading();
 
     /**
      * Returns the full length of this paragraph.
      * @return length of this paragraph.
      */
-    public int length() {
-        return getText().length();
-    }
-
-    /**
-     * Sets count of characters in links.
-     * @param charsInLinksCount count of characters in links.
-     */
-    public void setCharsInLinksCount(int charsInLinksCount) {
-        this.charsInLinksCount = charsInLinksCount;
-    }
+    int length();
 
     /**
      * Sets classification.
      * @param classification classification.
      */
-    public void setClassification(Classification classification) {
-        this.classification = classification;
-    }
-
-    /**
-     * Sets DOM path.
-     * @param domPath DOM path.
-     */
-    public void setDomPath(String domPath) {
-        this.domPath = domPath;
-    }
-
-    /**
-     * Sets if this paragraph is boilerplate.
-     * @param isBoilerplace true if boilerplate, false otherwise.
-     */
-    public void setIsBoilerplace(boolean isBoilerplace) {
-        this.isBoilerplace = isBoilerplace;
-    }
-
-    /**
-     * Sets if this paragraph is heading.
-     * @param isHeading true if heading, false otherwise.
-     */
-    public void setIsHeading(boolean isHeading) {
-        this.isHeading = isHeading;
-    }
-
-    /**
-     * Sets tags count.
-     * @param tagsCount tags count.
-     */
-    public void setTagsCount(int tagsCount) {
-        this.tagsCount = tagsCount;
-    }
-
-    /**
-     * Sets text nodes.
-     * @param textNodes text nodes.
-     */
-    public void setTextNodes(List<String> textNodes) {
-        reset();
-
-        this.textNodes = textNodes;
-    }
-
-    /**
-     * Sets XPath.
-     * @param xpath xpath.
-     */
-    public void setXpath(String xpath) {
-        this.xpath = xpath;
-    }
-
-    private void reset() {
-        text = null;
-        words = null;
-    }
-
-    private String[] words() {
-        if (words == null) {
-            words = StringUtils.split(getText());
-        }
-
-        return words;
-    }
+    void setClassification(Classification classification);
 
 }

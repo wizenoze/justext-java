@@ -1,6 +1,6 @@
 package nl.wizenoze.justext
 
-import nl.wizenoze.justext.paragraph.MutableParagraph
+import nl.wizenoze.justext.paragraph.MutableParagraphImpl
 
 import spock.lang.Specification
 
@@ -16,8 +16,8 @@ class ContextFreeClassifierTest extends Specification {
 
     def testLengthLow() {
         def paragraphs = [
-                new MutableParagraph(["0 1 2 3 4 5 6 7 8 9"] * 2, 0),
-                new MutableParagraph(["0 1 2 3 4 5 6 7 8 9"] * 2, 20),
+                new MutableParagraphImpl(["0 1 2 3 4 5 6 7 8 9"] * 2, 0),
+                new MutableParagraphImpl(["0 1 2 3 4 5 6 7 8 9"] * 2, 20),
         ]
 
         def classifierProperties = new ClassifierProperties.Builder()
@@ -35,11 +35,11 @@ class ContextFreeClassifierTest extends Specification {
 
     def testMaxLinkDensity() {
         def paragraphs = [
-                new MutableParagraph(["0123456789"] * 2, 0),
-                new MutableParagraph(["0123456789"] * 2, 20),
-                new MutableParagraph(["0123456789"] * 8, 40),
-                new MutableParagraph(["0123456789"] * 8, 39),
-                new MutableParagraph(["0123456789"] * 8, 41),
+                new MutableParagraphImpl(["0123456789"] * 2, 0),
+                new MutableParagraphImpl(["0123456789"] * 2, 20),
+                new MutableParagraphImpl(["0123456789"] * 8, 40),
+                new MutableParagraphImpl(["0123456789"] * 8, 39),
+                new MutableParagraphImpl(["0123456789"] * 8, 41),
         ]
 
         def classifierProperties = new ClassifierProperties.Builder().setMaxLinkDensity(0.5).build()
@@ -57,8 +57,8 @@ class ContextFreeClassifierTest extends Specification {
 
     def testStopwordsHigh() {
         def paragraphs = [
-                new MutableParagraph(["0 1 2 3 4 5 6 7 8 9"]),
-                new MutableParagraph(["0 1 2 3 4 5 6 7 8 9"] * 2),
+                new MutableParagraphImpl(["0 1 2 3 4 5 6 7 8 9"]),
+                new MutableParagraphImpl(["0 1 2 3 4 5 6 7 8 9"] * 2),
         ]
 
         def classifierProperties = new ClassifierProperties.Builder()
@@ -78,9 +78,9 @@ class ContextFreeClassifierTest extends Specification {
 
     def testStopwordsLow() {
         def paragraphs = [
-                new MutableParagraph(["0 0 0 0 1 2 3 4 5 6 7 8 9"]),
-                new MutableParagraph(["0 1 2 3 4 5 6 7 8 9"]),
-                new MutableParagraph(["1 2 3 4 5 6 7 8 9"]),
+                new MutableParagraphImpl(["0 0 0 0 1 2 3 4 5 6 7 8 9"]),
+                new MutableParagraphImpl(["0 1 2 3 4 5 6 7 8 9"]),
+                new MutableParagraphImpl(["1 2 3 4 5 6 7 8 9"]),
         ]
 
         def classifierProperties = new ClassifierProperties.Builder()

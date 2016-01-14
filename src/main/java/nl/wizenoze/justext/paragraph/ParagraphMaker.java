@@ -162,7 +162,7 @@ public class ParagraphMaker {
             paragraphs.add(lastParagraph);
         }
 
-        lastParagraph = new MutableParagraph(pathInfo);
+        lastParagraph = new MutableParagraphImpl(pathInfo);
     }
 
 }

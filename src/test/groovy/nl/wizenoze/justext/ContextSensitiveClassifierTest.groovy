@@ -1,6 +1,7 @@
 package nl.wizenoze.justext
 
 import nl.wizenoze.justext.paragraph.MutableParagraph
+import nl.wizenoze.justext.paragraph.MutableParagraphImpl
 
 import spock.lang.Specification
 
@@ -20,18 +21,18 @@ class ContextSensitiveClassifierTest extends Specification {
 
     def testBadAndGoodRemain() {
         def paragraphs = [
-                new MutableParagraph(BAD),
-                new MutableParagraph(BAD),
-                new MutableParagraph(BAD),
-                new MutableParagraph(BAD),
-                new MutableParagraph(GOOD),
-                new MutableParagraph(BAD),
-                new MutableParagraph(GOOD),
-                new MutableParagraph(BAD),
-                new MutableParagraph(GOOD),
-                new MutableParagraph(GOOD),
-                new MutableParagraph(GOOD),
-                new MutableParagraph(GOOD)
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(GOOD),
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(GOOD),
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(GOOD),
+                new MutableParagraphImpl(GOOD),
+                new MutableParagraphImpl(GOOD),
+                new MutableParagraphImpl(GOOD)
         ]
 
         when:
@@ -54,12 +55,12 @@ class ContextSensitiveClassifierTest extends Specification {
 
     def testBadAndNearGoodBetweenBadAndGood() {
         def paragraphs = [
-                new MutableParagraph(BAD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(NEAR_GOOD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(GOOD)
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(NEAR_GOOD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(GOOD)
         ]
 
         when:
@@ -76,12 +77,12 @@ class ContextSensitiveClassifierTest extends Specification {
 
     def testBadAndNearGoodBetweenGoodAndBad() {
         def paragraphs = [
-                new MutableParagraph(GOOD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(NEAR_GOOD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(BAD)
+                new MutableParagraphImpl(GOOD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(NEAR_GOOD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(BAD)
         ]
 
         when:
@@ -98,10 +99,10 @@ class ContextSensitiveClassifierTest extends Specification {
 
     def testBadAndNearGoodBetweenTwoBad() {
         def paragraphs = [
-                new MutableParagraph(BAD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(NEAR_GOOD),
-                new MutableParagraph(BAD)
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(NEAR_GOOD),
+                new MutableParagraphImpl(BAD)
         ]
 
         when:
@@ -116,10 +117,10 @@ class ContextSensitiveClassifierTest extends Specification {
 
     def testBadAndNearGoodBetweenTwoGood() {
         def paragraphs = [
-                new MutableParagraph(GOOD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(NEAR_GOOD),
-                new MutableParagraph(GOOD)
+                new MutableParagraphImpl(GOOD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(NEAR_GOOD),
+                new MutableParagraphImpl(GOOD)
         ]
 
         when:
@@ -137,22 +138,22 @@ class ContextSensitiveClassifierTest extends Specification {
      */
     def testComplexExample() {
         def paragraphs = [
-                new MutableParagraph(BAD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(BAD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(NEAR_GOOD),
-                new MutableParagraph(BAD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(GOOD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(GOOD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(NEAR_GOOD),
-                new MutableParagraph(SHORT),
-                new MutableParagraph(BAD),
-                new MutableParagraph(NEAR_GOOD)
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(NEAR_GOOD),
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(GOOD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(GOOD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(NEAR_GOOD),
+                new MutableParagraphImpl(SHORT),
+                new MutableParagraphImpl(BAD),
+                new MutableParagraphImpl(NEAR_GOOD)
         ]
 
         when:
