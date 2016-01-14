@@ -19,11 +19,13 @@
 
 package nl.wizenoze.justext;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import nl.wizenoze.justext.paragraph.Paragraph;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This is the implementation of the following context free classification algorithm.

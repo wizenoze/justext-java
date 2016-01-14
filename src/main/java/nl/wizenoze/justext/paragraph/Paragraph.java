@@ -17,12 +17,13 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nl.wizenoze.justext;
+package nl.wizenoze.justext.paragraph;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import nl.wizenoze.justext.Classification;
 import nl.wizenoze.justext.util.StringPool;
 import nl.wizenoze.justext.util.TextUtil;
 

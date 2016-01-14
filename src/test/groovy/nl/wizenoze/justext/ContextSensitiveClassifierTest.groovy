@@ -1,5 +1,7 @@
 package nl.wizenoze.justext
 
+import nl.wizenoze.justext.paragraph.Paragraph
+
 import spock.lang.Specification
 
 import static nl.wizenoze.justext.Classification.BAD

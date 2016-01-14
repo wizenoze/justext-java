@@ -1,6 +1,7 @@
-package nl.wizenoze.justext
+package nl.wizenoze.justext.paragraph
 
 import nl.wizenoze.justext.util.StringPool
+
 import spock.lang.Specification
 
 /**

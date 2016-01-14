@@ -17,7 +17,7 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nl.wizenoze.justext;
+package nl.wizenoze.justext.paragraph;
 
 /**
  * The algorithm uses a simple way of segmentation. The contents of some HTML tags are (by default) visually formatted

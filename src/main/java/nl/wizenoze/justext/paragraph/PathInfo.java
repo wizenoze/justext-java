@@ -17,7 +17,7 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nl.wizenoze.justext;
+package nl.wizenoze.justext.paragraph;
 
 import nl.wizenoze.justext.util.StringPool;
 
