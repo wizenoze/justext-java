@@ -19,8 +19,11 @@
 
 package nl.wizenoze.justext;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import nl.wizenoze.justext.paragraph.MutableParagraph;
@@ -36,6 +39,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public final class Classifier {
 
+    private static final Set<Classification> BAD_GOOD = EnumSet.of(Classification.BAD, Classification.GOOD);
+    private static final Set<Classification> BAD_GOOD_NEAR_GOOD = EnumSet.of(Classification.BAD, Classification.GOOD, Classification.NEAR_GOOD);
     private static final char COPYRIGHT_CHAR = '\u00a9';
     private static final String COPYRIGHT_CODE = "&copy;";
     private static final ClassifierProperties CLASSIFIER_PROPERTIES_DEFAULT = ClassifierProperties.getDefault();
@@ -94,7 +99,38 @@ public final class Classifier {
      * @param classifierProperties Properties.
      */
     public static void reviseParagraphs(List<MutableParagraph> paragraphs, ClassifierProperties classifierProperties) {
+        if (paragraphs.isEmpty()) {
+            return;
+        }
 
+        // Copy old classifications
+
+        List<Classification> oldClassifications = new ArrayList<>(paragraphs.size());
+        paragraphs.forEach((Paragraph paragraph) -> oldClassifications.add(paragraph.getClassification()));
+
+        // Classify short paragraphs
+    }
+
+    private static Classification getNeighbourClassification(
+            ListIterator<MutableParagraph> paragraphIterator, boolean forward, boolean ignoreNearGood) {
+
+        while ((forward && paragraphIterator.hasNext()) || (!forward && paragraphIterator.hasPrevious())) {
+            MutableParagraph paragraph = null;
+
+            if (forward) {
+                paragraph = paragraphIterator.next();
+            } else {
+                paragraph = paragraphIterator.previous();
+            }
+
+            Classification classification = paragraph.getClassification();
+
+            if (BAD_GOOD.contains(classification)) {
+                return classification;
+            }
+        }
+
+        return Classification.BAD;
     }
 
     private static Classification classify(
