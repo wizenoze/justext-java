@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Created by lcsontos on 1/8/16.
  */
-public final class MutableParagraphImpl implements MutableParagraph {
+final class MutableParagraphImpl implements MutableParagraph {
 
     private int charsInLinksCount = 0;
     private Classification classification;
@@ -49,7 +49,7 @@ public final class MutableParagraphImpl implements MutableParagraph {
      * Creates an empty paragraph with the given path info.
      * @param pathInfo path info.
      */
-    public MutableParagraphImpl(PathInfo pathInfo) {
+    MutableParagraphImpl(PathInfo pathInfo) {
         this(pathInfo, null, 0, 0);
     }
 
@@ -60,7 +60,7 @@ public final class MutableParagraphImpl implements MutableParagraph {
      * @param charsInLinksCount character count in links
      * @param tagsCount tags count
      */
-    public MutableParagraphImpl(PathInfo pathInfo, List<String> textNodes, int charsInLinksCount, int tagsCount) {
+    MutableParagraphImpl(PathInfo pathInfo, List<String> textNodes, int charsInLinksCount, int tagsCount) {
         if (pathInfo != null) {
             domPath = pathInfo.dom();
             xpath = pathInfo.xpath();
@@ -80,7 +80,7 @@ public final class MutableParagraphImpl implements MutableParagraph {
      * Creates a paragraph with the given text nodes.
      * @param textNodes text nodes.
      */
-    public MutableParagraphImpl(List<String> textNodes) {
+    MutableParagraphImpl(List<String> textNodes) {
         this(null, textNodes, 0, 0);
     }
 
@@ -89,7 +89,7 @@ public final class MutableParagraphImpl implements MutableParagraph {
      * @param textNodes text nodes.
      * @param charsInLinksCount count of characters in links.
      */
-    public MutableParagraphImpl(List<String> textNodes, int charsInLinksCount) {
+    MutableParagraphImpl(List<String> textNodes, int charsInLinksCount) {
         this(null, textNodes, charsInLinksCount, 0);
     }
 
