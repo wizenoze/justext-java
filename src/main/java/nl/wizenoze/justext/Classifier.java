@@ -19,7 +19,6 @@
 
 package nl.wizenoze.justext;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -44,8 +43,10 @@ import static nl.wizenoze.justext.Classification.SHORT;
  */
 public final class Classifier {
 
+    private static final Set<Classification> BAD_SET = EnumSet.of(BAD);
     private static final Set<Classification> BAD_GOOD_SET = EnumSet.of(BAD, GOOD);
     private static final Set<Classification> BAD_GOOD_NEAR_GOOD_SET = EnumSet.of(BAD, GOOD, NEAR_GOOD);
+    private static final Set<Classification> GOOD_SET = EnumSet.of(GOOD);
     private static final char COPYRIGHT_CHAR = '\u00a9';
     private static final String COPYRIGHT_CODE = "&copy;";
     private static final ClassifierProperties CLASSIFIER_PROPERTIES_DEFAULT = ClassifierProperties.getDefault();
@@ -108,34 +109,78 @@ public final class Classifier {
             return;
         }
 
-        // Copy old classifications
-
-        List<Classification> oldClassifications = new ArrayList<>(paragraphs.size());
-        paragraphs.forEach((Paragraph paragraph) -> oldClassifications.add(paragraph.getClassification()));
+        ListIterator<MutableParagraph> paragraphIterator = paragraphs.listIterator();
 
         // Classify short paragraphs
-    }
 
-    private static Classification getNeighbourClassification(
-            ListIterator<MutableParagraph> paragraphIterator, boolean forward, boolean ignoreNearGood) {
+        while (paragraphIterator.hasNext()) {
+            MutableParagraph paragraph = paragraphIterator.next();
 
-        while ((forward && paragraphIterator.hasNext()) || (!forward && paragraphIterator.hasPrevious())) {
-            MutableParagraph paragraph = null;
+            if (!SHORT.equals(paragraph.getClassification())) {
+                continue;
+            }
 
-            if (forward) {
-                paragraph = paragraphIterator.next();
+            int nextIndex = paragraphIterator.nextIndex();
+
+            Classification previousBoundaryClassification = getPrevBoundaryClassification(paragraphs, nextIndex, true);
+            Classification nextBoundaryClassification = getNextBoundaryClassification(paragraphs, nextIndex, true);
+
+            Set<Classification> neighbourClassifications = EnumSet.of(
+                    previousBoundaryClassification, nextBoundaryClassification);
+
+            Classification newClassification = null;
+
+            if (GOOD_SET.equals(neighbourClassifications)) {
+                newClassification = GOOD;
+            } else if (BAD_SET.equals(neighbourClassifications)) {
+                newClassification = BAD;
             } else {
-                paragraph = paragraphIterator.previous();
+                if (BAD.equals(previousBoundaryClassification)) {
+                    previousBoundaryClassification = getPrevBoundaryClassification(paragraphs, nextIndex, false);
+                }
+
+                if (BAD.equals(nextBoundaryClassification)) {
+                    nextBoundaryClassification = getNextBoundaryClassification(paragraphs, nextIndex, false);
+                }
+
+                if (NEAR_GOOD.equals(previousBoundaryClassification) || NEAR_GOOD.equals(nextBoundaryClassification)) {
+                    newClassification = GOOD;
+                } else {
+                    newClassification = BAD;
+                }
             }
 
-            Classification classification = paragraph.getClassification();
-
-            if (BAD_GOOD_SET.contains(classification)) {
-                return classification;
-            }
+            paragraph.setClassification(newClassification);
         }
 
-        return BAD;
+        // Classify near good paragraphs
+
+        paragraphIterator = paragraphs.listIterator();
+
+        while (paragraphIterator.hasNext()) {
+            MutableParagraph paragraph = paragraphIterator.next();
+
+            if (!NEAR_GOOD.equals(paragraph.getClassification())) {
+                continue;
+            }
+
+            int nextIndex = paragraphIterator.nextIndex();
+
+            Classification previousNeighbourClassification = getPrevBoundaryClassification(
+                    paragraphs, nextIndex, true);
+            Classification nextNeighbourClassification = getNextBoundaryClassification(
+                    paragraphs, nextIndex, true);
+
+            Classification newClassification = null;
+
+            if (BAD.equals(previousNeighbourClassification) && BAD.equals(nextNeighbourClassification)) {
+                newClassification = BAD;
+            } else {
+                newClassification = GOOD;
+            }
+
+            paragraph.setClassification(newClassification);
+        }
     }
 
     private static Classification classify(
@@ -174,6 +219,54 @@ public final class Classifier {
         }
 
         return classification;
+    }
+
+    private static Classification getBoundaryClassification(
+            List<MutableParagraph> paragraphs, int startIndex, boolean forward, boolean ignoreNearGood) {
+
+        ListIterator<MutableParagraph> paragraphIterator = null;
+
+        try {
+            paragraphIterator = paragraphs.listIterator(startIndex);
+        } catch (IndexOutOfBoundsException ioobe) {
+            return BAD;
+        }
+
+        Set<Classification> classificationSet = BAD_GOOD_NEAR_GOOD_SET;
+
+        if (ignoreNearGood) {
+            classificationSet = BAD_GOOD_SET;
+        }
+
+        while ((forward && paragraphIterator.hasNext()) || (!forward && paragraphIterator.hasPrevious())) {
+            MutableParagraph paragraph = null;
+
+            if (forward) {
+                paragraph = paragraphIterator.next();
+            } else {
+                paragraph = paragraphIterator.previous();
+            }
+
+            Classification classification = paragraph.getClassification();
+
+            if (classificationSet.contains(classification)) {
+                return classification;
+            }
+        }
+
+        return BAD;
+    }
+
+    private static Classification getNextBoundaryClassification(
+            List<MutableParagraph> paragraphs, int startIndex, boolean ignoreNearGood) {
+
+        return getBoundaryClassification(paragraphs, startIndex, true, ignoreNearGood);
+    }
+
+    private static Classification getPrevBoundaryClassification(
+            List<MutableParagraph> paragraphs, int startIndex, boolean ignoreNearGood) {
+
+        return getBoundaryClassification(paragraphs, startIndex, false, ignoreNearGood);
     }
 
 }
