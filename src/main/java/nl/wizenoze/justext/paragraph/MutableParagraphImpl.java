@@ -20,6 +20,8 @@
 package nl.wizenoze.justext.paragraph;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Created by lcsontos on 1/8/16.
  */
-final class MutableParagraphImpl implements MutableParagraph {
+final class MutableParagraphImpl extends BaseParagraph implements MutableParagraph {
 
     private int charsInLinksCount = 0;
     private Classification classification;
@@ -142,28 +144,12 @@ final class MutableParagraphImpl implements MutableParagraph {
 
     @Override
     public int getStopWordsCount(Set<String> stopWords) {
-        int stopWordsCount = 0;
-
-        for (String word : words()) {
-            if (stopWords.contains(word.toLowerCase())) {
-                stopWordsCount++;
-            }
-        }
-
-        return stopWordsCount;
+        return getStopWordsCount(words(), stopWords);
     }
 
     @Override
     public float getStopWordsDensity(Set<String> stopWords) {
-        int wordsCount = getWordsCount();
-
-        if (wordsCount == 0) {
-            return 0;
-        }
-
-        float stopWordsDensity = 1.0f * getStopWordsCount(stopWords) / wordsCount;
-
-        return stopWordsDensity;
+        return getStopWordsDensity(words(), stopWords);
     }
 
     @Override
@@ -187,6 +173,11 @@ final class MutableParagraphImpl implements MutableParagraph {
     }
 
     @Override
+    public List<String> getWords() {
+        return Collections.unmodifiableList(Arrays.asList(words()));
+    }
+
+    @Override
     public int getWordsCount() {
         return words().length;
     }
@@ -198,7 +189,7 @@ final class MutableParagraphImpl implements MutableParagraph {
 
     @Override
     public boolean hasText() {
-        return !textNodes.isEmpty();
+        return StringUtils.isNotBlank(getText());
     }
 
     @Override

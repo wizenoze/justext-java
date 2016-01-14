@@ -19,6 +19,7 @@
 
 package nl.wizenoze.justext.paragraph;
 
+import java.util.List;
 import java.util.Set;
 
 import nl.wizenoze.justext.Classification;
@@ -77,6 +78,12 @@ public interface Paragraph {
      * @return Concatenated text of nodes.
      */
     String getText();
+
+    /**
+     * Gets words.
+     * @return words
+     */
+    List<String> getWords();
 
     /**
      * Gets word count.
