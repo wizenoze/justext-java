@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import nl.wizenoze.justext.paragraph.Paragraph;
+import nl.wizenoze.justext.paragraph.MutableParagraph;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -48,7 +48,7 @@ public final class Classifier {
      * @param paragraphs List of paragraphs.
      * @param stopWords Set of stop words.
      */
-    public static void classifyParagraphs(List<Paragraph> paragraphs, Set<String> stopWords) {
+    public static void classifyParagraphs(List<MutableParagraph> paragraphs, Set<String> stopWords) {
         classifyParagraphs(paragraphs, stopWords, CLASSIFIER_PROPERTIES_DEFAULT);
     }
 
@@ -60,7 +60,7 @@ public final class Classifier {
      * @param classifierProperties Properties.
      */
     public static void classifyParagraphs(
-            List<Paragraph> paragraphs, Set<String> stopWords, ClassifierProperties classifierProperties) {
+            List<MutableParagraph> paragraphs, Set<String> stopWords, ClassifierProperties classifierProperties) {
 
         Set<String> lowerCaseStopWords = new HashSet<>(stopWords.size());
 
@@ -68,7 +68,7 @@ public final class Classifier {
             lowerCaseStopWords.add(stopWord.toLowerCase());
         }
 
-        for (Paragraph paragraph : paragraphs) {
+        for (MutableParagraph paragraph : paragraphs) {
             Classification classification = classify(paragraph, stopWords, classifierProperties);
 
             paragraph.setClassification(classification);
@@ -81,7 +81,7 @@ public final class Classifier {
      *
      * @param paragraphs List of paragraphs.
      */
-    public static void reviseParagraphs(List<Paragraph> paragraphs) {
+    public static void reviseParagraphs(List<MutableParagraph> paragraphs) {
         reviseParagraphs(paragraphs, CLASSIFIER_PROPERTIES_DEFAULT);
     }
 
@@ -92,12 +92,12 @@ public final class Classifier {
      * @param paragraphs List of paragraphs.
      * @param classifierProperties Properties.
      */
-    public static void reviseParagraphs(List<Paragraph> paragraphs, ClassifierProperties classifierProperties) {
+    public static void reviseParagraphs(List<MutableParagraph> paragraphs, ClassifierProperties classifierProperties) {
 
     }
 
     private static Classification classify(
-            Paragraph paragraph, Set<String> stopWords, ClassifierProperties classifierProperties) {
+            MutableParagraph paragraph, Set<String> stopWords, ClassifierProperties classifierProperties) {
 
         int length = paragraph.length();
         float linkDensity = paragraph.getLinkDensity();

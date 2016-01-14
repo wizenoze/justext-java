@@ -18,6 +18,6 @@
  */
 
 /**
- * Paragraph extraction from cleaned HTML.
+ * MutableParagraph extraction from cleaned HTML.
  */
 package nl.wizenoze.justext.paragraph;

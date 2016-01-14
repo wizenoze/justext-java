@@ -49,13 +49,13 @@ public class ParagraphMaker {
 
     private static final Set<String> TEXTUAL_TAGS;
 
-    private final List<Paragraph> paragraphs;
+    private final List<MutableParagraph> paragraphs;
     private final PathInfo pathInfo;
     private final XMLStreamReader streamReader;
 
     private boolean isLink = false;
     private boolean isBreak = false;
-    private Paragraph lastParagraph;
+    private MutableParagraph lastParagraph;
 
     static {
         Stream<String> textualTagsStream = Arrays.stream(TextualTag.values()).map(Enum::name);
@@ -80,7 +80,7 @@ public class ParagraphMaker {
      * @return list of paragraphs.
      * @throws Exception upon error.
      */
-    public final List<Paragraph> traverse() throws Exception {
+    public final List<MutableParagraph> traverse() throws Exception {
         if (!streamReader.hasNext()) {
             return Collections.unmodifiableList(paragraphs);
         }
@@ -162,7 +162,7 @@ public class ParagraphMaker {
             paragraphs.add(lastParagraph);
         }
 
-        lastParagraph = new Paragraph(pathInfo);
+        lastParagraph = new MutableParagraph(pathInfo);
     }
 
 }

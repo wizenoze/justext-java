@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Created by lcsontos on 1/8/16.
  */
-public final class Paragraph {
+public final class MutableParagraph {
 
     private int charsInLinksCount = 0;
     private Classification classification;
@@ -49,7 +49,7 @@ public final class Paragraph {
      * Creates an empty paragraph with the given path info.
      * @param pathInfo path info.
      */
-    public Paragraph(PathInfo pathInfo) {
+    public MutableParagraph(PathInfo pathInfo) {
         this(pathInfo, null, 0, 0);
     }
 
@@ -60,7 +60,7 @@ public final class Paragraph {
      * @param charsInLinksCount character count in links
      * @param tagsCount tags count
      */
-    public Paragraph(PathInfo pathInfo, List<String> textNodes, int charsInLinksCount, int tagsCount) {
+    public MutableParagraph(PathInfo pathInfo, List<String> textNodes, int charsInLinksCount, int tagsCount) {
         if (pathInfo != null) {
             domPath = pathInfo.dom();
             xpath = pathInfo.xpath();
@@ -80,7 +80,7 @@ public final class Paragraph {
      * Creates a paragraph with the given text nodes.
      * @param textNodes text nodes.
      */
-    public Paragraph(List<String> textNodes) {
+    public MutableParagraph(List<String> textNodes) {
         this(null, textNodes, 0, 0);
     }
 
@@ -89,11 +89,11 @@ public final class Paragraph {
      * @param textNodes text nodes.
      * @param charsInLinksCount count of characters in links.
      */
-    public Paragraph(List<String> textNodes, int charsInLinksCount) {
+    public MutableParagraph(List<String> textNodes, int charsInLinksCount) {
         this(null, textNodes, charsInLinksCount, 0);
     }
 
-    Paragraph(Classification classification) {
+    MutableParagraph(Classification classification) {
         this(null, null, 0, 0);
         this.classification = classification;
     }

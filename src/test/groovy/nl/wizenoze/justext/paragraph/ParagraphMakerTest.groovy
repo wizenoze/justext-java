@@ -12,7 +12,7 @@ class ParagraphMakerTest extends Specification {
     private final HtmlBeautifier htmlBeautifier = new HtmlBeautifier()
 
     void assertParagraphEqual(
-            Paragraph paragraph, String text, int wordsCount, int tagsCount, Integer charsInLinksCount=null) {
+            MutableParagraph paragraph, String text, int wordsCount, int tagsCount, Integer charsInLinksCount=null) {
         assert paragraph.text == text
         assert paragraph.wordsCount == wordsCount
         assert paragraph.tagsCount == tagsCount
