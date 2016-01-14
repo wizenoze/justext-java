@@ -92,6 +92,11 @@ public final class Paragraph {
         this(null, textNodes, charsInLinksCount, 0);
     }
 
+    Paragraph(Classification classification) {
+        this(null, null, 0, 0);
+        this.classification = classification;
+    }
+
     /**
      * Add the given text to the existing text nodes.
      * @param text text to be added.

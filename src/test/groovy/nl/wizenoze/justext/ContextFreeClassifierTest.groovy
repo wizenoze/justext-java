@@ -10,7 +10,7 @@ import static nl.wizenoze.justext.Classification.SHORT
 /**
  * Created by lcsontos on 1/8/16.
  */
-class ClassifierTest extends Specification {
+class ContextFreeClassifierTest extends Specification {
 
     def testLengthLow() {
         def paragraphs = [
