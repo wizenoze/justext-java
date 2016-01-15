@@ -35,6 +35,9 @@ import static nl.wizenoze.justext.Classification.GOOD;
 import static nl.wizenoze.justext.Classification.NEAR_GOOD;
 import static nl.wizenoze.justext.Classification.SHORT;
 
+import static nl.wizenoze.justext.util.StringPool.COPYRIGHT_CHAR;
+import static nl.wizenoze.justext.util.StringPool.COPYRIGHT_CODE;
+
 /**
  * This is the implementation of the following context free classification algorithm.
  *
@@ -47,8 +50,6 @@ public final class Classifier {
     private static final Set<Classification> BAD_GOOD_SET = EnumSet.of(BAD, GOOD);
     private static final Set<Classification> BAD_GOOD_NEAR_GOOD_SET = EnumSet.of(BAD, GOOD, NEAR_GOOD);
     private static final Set<Classification> GOOD_SET = EnumSet.of(GOOD);
-    private static final char COPYRIGHT_CHAR = '\u00a9';
-    private static final String COPYRIGHT_CODE = "&copy;";
     private static final ClassifierProperties CLASSIFIER_PROPERTIES_DEFAULT = ClassifierProperties.getDefault();
 
     private Classifier() {

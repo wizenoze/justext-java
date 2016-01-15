@@ -1,6 +1,7 @@
 package nl.wizenoze.justext
 
 import nl.wizenoze.justext.paragraph.MutableParagraphImpl
+import nl.wizenoze.justext.paragraph.PathInfo
 
 import spock.lang.Specification
 
@@ -9,10 +10,27 @@ import static nl.wizenoze.justext.Classification.GOOD
 import static nl.wizenoze.justext.Classification.NEAR_GOOD
 import static nl.wizenoze.justext.Classification.SHORT
 
+import static nl.wizenoze.justext.util.StringPool.COPYRIGHT_CHAR;
+import static nl.wizenoze.justext.util.StringPool.COPYRIGHT_CODE;
+
 /**
  * Created by lcsontos on 1/8/16.
  */
 class ContextFreeClassifierTest extends Specification {
+
+    def testCopyrightSymbol() {
+        def paragraphs = [
+                new MutableParagraphImpl(["blah blah ${COPYRIGHT_CHAR} blah blah"]),
+                new MutableParagraphImpl(["blah blah ${COPYRIGHT_CODE} blah blah"]),
+        ]
+
+        when:
+        Classifier.classifyParagraphs(paragraphs, [] as Set)
+
+        then:
+        paragraphs[0].classification.equals(BAD)
+        paragraphs[1].classification.equals(BAD)
+    }
 
     def testLengthLow() {
         def paragraphs = [
@@ -53,6 +71,21 @@ class ContextFreeClassifierTest extends Specification {
         paragraphs[2].classification.equals(BAD)
         paragraphs[3].classification.equals(BAD)
         paragraphs[4].classification.equals(BAD)
+    }
+
+    def testSelectTag() {
+        def paragraphs = [
+                new MutableParagraphImpl(
+                        new PathInfo().append("html").append("body").append("select").append("option")),
+                new MutableParagraphImpl(new PathInfo().append("select")),
+        ]
+
+        when:
+        Classifier.classifyParagraphs(paragraphs, [] as Set)
+
+        then:
+        paragraphs[0].classification.equals(BAD)
+        paragraphs[1].classification.equals(BAD)
     }
 
     def testStopwordsHigh() {

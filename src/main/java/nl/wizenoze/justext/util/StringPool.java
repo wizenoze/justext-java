@@ -45,6 +45,16 @@ public final class StringPool {
     public static final String CARRIAGE_RETURN = "\r";
 
     /**
+     * Copyright character.
+     */
+    public static final char COPYRIGHT_CHAR = '\u00a9';
+
+    /**
+     * Copyright code.
+     */
+    public static final String COPYRIGHT_CODE = "&copy;";
+
+    /**
      * Empty string.
      */
     public static final String EMPTY = "";
