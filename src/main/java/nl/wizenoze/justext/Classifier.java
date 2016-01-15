@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import nl.wizenoze.justext.paragraph.MutableParagraph;
 import nl.wizenoze.justext.paragraph.Paragraph;
@@ -52,7 +51,6 @@ public final class Classifier {
     private static final Set<Classification> BAD_GOOD_NEAR_GOOD_SET = EnumSet.of(BAD, GOOD, NEAR_GOOD);
     private static final Set<Classification> GOOD_SET = EnumSet.of(GOOD);
     private static final ClassifierProperties CLASSIFIER_PROPERTIES_DEFAULT = ClassifierProperties.getDefault();
-    private static final Pattern SELECT_PATTERN = Pattern.compile("^select|\\.select");
 
     private Classifier() {
     }
@@ -189,7 +187,6 @@ public final class Classifier {
     private static Classification classify(
             Paragraph paragraph, Set<String> stopWords, ClassifierProperties classifierProperties) {
 
-        String domPath = paragraph.getDomPath();
         int length = paragraph.length();
         float linkDensity = paragraph.getLinkDensity();
         float stopWordsDensity = paragraph.getStopWordsDensity(stopWords);
@@ -201,7 +198,7 @@ public final class Classifier {
             classification = BAD;
         } else if (StringUtils.contains(text, COPYRIGHT_CHAR) || StringUtils.contains(text, COPYRIGHT_CODE)) {
             classification = BAD;
-        } else if (StringUtils.isNotEmpty(domPath) && SELECT_PATTERN.matcher(domPath).find()) {
+        } else if (paragraph.isSelect()) {
             classification = BAD;
         } else if (length < classifierProperties.getLengthLow()) {
             if (paragraph.getCharsInLinksCount() > 0) {

@@ -117,6 +117,12 @@ public interface Paragraph {
     boolean isHeading();
 
     /**
+     * Returns if this paragraph is within a SELECT element.
+     * @return true if it's within a SELECT, false otherwise.
+     */
+    boolean isSelect();
+
+    /**
      * Returns the full length of this paragraph.
      * @return length of this paragraph.
      */

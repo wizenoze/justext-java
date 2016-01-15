@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import nl.wizenoze.justext.Classification;
 import nl.wizenoze.justext.util.StringPool;
@@ -36,16 +38,18 @@ import org.apache.commons.lang3.StringUtils;
  */
 final class MutableParagraphImpl extends BaseParagraph implements MutableParagraph {
 
+    private static final Pattern HEADER_PATTERN = Pattern.compile("\\bh\\d\\b");
+    private static final Pattern SELECT_PATTERN = Pattern.compile("^select|\\.select");
+
     private int charsInLinksCount = 0;
     private Classification classification;
-    private String domPath;
+    private Optional<String> domPath;
     private boolean isBoilerplace = false;
-    private boolean isHeading = false;
     private int tagsCount = 0;
     private String text;
     private List<String> textNodes;
     private String[] words;
-    private String xpath;
+    private Optional<String> xpath;
 
     /**
      * Creates an empty paragraph with the given path info.
@@ -64,8 +68,11 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
      */
     MutableParagraphImpl(PathInfo pathInfo, List<String> textNodes, int charsInLinksCount, int tagsCount) {
         if (pathInfo != null) {
-            domPath = pathInfo.dom();
-            xpath = pathInfo.xpath();
+            setDomPath(pathInfo.dom());
+            setXpath(pathInfo.xpath());
+        } else {
+            domPath = Optional.empty();
+            xpath = Optional.empty();
         }
 
         this.charsInLinksCount = charsInLinksCount;
@@ -128,7 +135,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
 
     @Override
     public String getDomPath() {
-        return domPath;
+        return domPath.orElse(StringPool.EMPTY);
     }
 
     @Override
@@ -184,7 +191,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
 
     @Override
     public String getXpath() {
-        return xpath;
+        return xpath.orElse(StringPool.EMPTY);
     }
 
     @Override
@@ -209,7 +216,12 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
 
     @Override
     public boolean isHeading() {
-        return isHeading;
+        return HEADER_PATTERN.matcher(getDomPath()).find();
+    }
+
+    @Override
+    public boolean isSelect() {
+        return SELECT_PATTERN.matcher(getDomPath()).find();
     }
 
     @Override
@@ -235,7 +247,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
      * @param domPath DOM path.
      */
     public void setDomPath(String domPath) {
-        this.domPath = domPath;
+        this.domPath = Optional.of(domPath);
     }
 
     /**
@@ -244,14 +256,6 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
      */
     public void setIsBoilerplace(boolean isBoilerplace) {
         this.isBoilerplace = isBoilerplace;
-    }
-
-    /**
-     * Sets if this paragraph is heading.
-     * @param isHeading true if heading, false otherwise.
-     */
-    public void setIsHeading(boolean isHeading) {
-        this.isHeading = isHeading;
     }
 
     /**
@@ -277,7 +281,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
      * @param xpath xpath.
      */
     public void setXpath(String xpath) {
-        this.xpath = xpath;
+        this.xpath = Optional.of(xpath);
     }
 
     private void reset() {
