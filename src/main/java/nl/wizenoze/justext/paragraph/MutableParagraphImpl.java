@@ -125,6 +125,11 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
     }
 
     @Override
+    public Paragraph freeze() {
+        return new ImmutableParagraphImpl(this);
+    }
+
+    @Override
     public int getCharsInLinksCount() {
         return charsInLinksCount;
     }

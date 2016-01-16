@@ -41,6 +41,12 @@ public interface MutableParagraph extends Paragraph {
     void decrementTagsCount();
 
     /**
+     * Creates an immutable copy of this paragraph.
+     * @return an immutable copy of this paragraph.
+     */
+    Paragraph freeze();
+
+    /**
      * Gets text nodes.
      * @return text nodes.
      */
