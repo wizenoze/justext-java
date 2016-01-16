@@ -33,6 +33,8 @@ import nl.wizenoze.justext.util.TextUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
+import static nl.wizenoze.justext.Classification.GOOD;
+
 /**
  * Created by lcsontos on 1/8/16.
  */
@@ -44,7 +46,6 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
     private int charsInLinksCount = 0;
     private Classification classification;
     private Optional<String> domPath;
-    private boolean isBoilerplace = false;
     private int tagsCount = 0;
     private String text;
     private List<String> textNodes;
@@ -210,8 +211,8 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
     }
 
     @Override
-    public boolean isBoilerplace() {
-        return isBoilerplace;
+    public boolean isBoilerplate() {
+        return !GOOD.equals(classification);
     }
 
     @Override
@@ -248,14 +249,6 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
      */
     public void setDomPath(String domPath) {
         this.domPath = Optional.of(domPath);
-    }
-
-    /**
-     * Sets if this paragraph is boilerplate.
-     * @param isBoilerplace true if boilerplate, false otherwise.
-     */
-    public void setIsBoilerplace(boolean isBoilerplace) {
-        this.isBoilerplace = isBoilerplace;
     }
 
     /**

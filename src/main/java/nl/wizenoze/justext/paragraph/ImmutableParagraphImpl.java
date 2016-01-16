@@ -33,7 +33,7 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
     private final Classification classification;
     private final String domPath;
     private final boolean hasText;
-    private final boolean isBoilerplace;
+    private final boolean isBoilerplate;
     private final boolean isHeading;
     private final boolean isSelect;
     private final int length;
@@ -52,7 +52,7 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
         charsInLinksCount = paragraph.getCharsInLinksCount();
         classification = paragraph.getClassification();
         domPath = paragraph.getDomPath();
-        isBoilerplace = paragraph.isBoilerplace();
+        isBoilerplate = paragraph.isBoilerplate();
         isHeading = paragraph.isHeading();
         isSelect = paragraph.isSelect();
         linkDensity = paragraph.getLinkDensity();
@@ -130,8 +130,8 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
     }
 
     @Override
-    public boolean isBoilerplace() {
-        return isBoilerplace;
+    public boolean isBoilerplate() {
+        return isBoilerplate;
     }
 
     @Override

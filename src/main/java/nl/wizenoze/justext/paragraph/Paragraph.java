@@ -108,7 +108,7 @@ public interface Paragraph {
      * Returns if this paragraph is boilerplate.
      * @return true if boilerplate, false otherwise.
      */
-    boolean isBoilerplace();
+    boolean isBoilerplate();
 
     /**
      * Returns if this paragraph is heading.
