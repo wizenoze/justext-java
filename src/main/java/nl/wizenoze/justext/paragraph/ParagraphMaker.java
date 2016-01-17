@@ -20,6 +20,7 @@
 package nl.wizenoze.justext.paragraph;
 
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,8 +30,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
+
+import nl.wizenoze.justext.exception.JusTextParseException;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -67,12 +71,26 @@ public class ParagraphMaker {
      * @param reader XML document reader.
      * @throws Exception upon error.
      */
-    public ParagraphMaker(Reader reader) throws Exception {
+    public ParagraphMaker(Reader reader) {
         paragraphs = new ArrayList<>();
         pathInfo = new PathInfo();
 
         XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-        streamReader = inputFactory.createXMLStreamReader(new StreamSource(reader));
+
+        try {
+            streamReader = inputFactory.createXMLStreamReader(new StreamSource(reader));
+        } catch (Exception e) {
+            throw new JusTextParseException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Create a paragraph maker.
+     * @param xml XML document.
+     * @throws Exception upon error.
+     */
+    public ParagraphMaker(String xml) {
+        this(new StringReader(xml));
     }
 
     /**
@@ -80,7 +98,15 @@ public class ParagraphMaker {
      * @return list of paragraphs.
      * @throws Exception upon error.
      */
-    public final List<MutableParagraph> traverse() throws Exception {
+    public final List<MutableParagraph> traverse() {
+        try {
+            return doTraverse();
+        } catch (Exception e) {
+            throw new JusTextParseException(e.getMessage(), e);
+        }
+    }
+
+    private List<MutableParagraph> doTraverse() throws XMLStreamException {
         if (!streamReader.hasNext()) {
             return Collections.unmodifiableList(paragraphs);
         }

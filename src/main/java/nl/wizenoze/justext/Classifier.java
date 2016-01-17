@@ -46,11 +46,15 @@ import static nl.wizenoze.justext.util.StringPool.COPYRIGHT_CODE;
  */
 public final class Classifier {
 
+    /**
+     * Default classifier properties.
+     */
+    public static final ClassifierProperties CLASSIFIER_PROPERTIES_DEFAULT = ClassifierProperties.getDefault();
+
     private static final Set<Classification> BAD_SET = EnumSet.of(BAD);
     private static final Set<Classification> BAD_GOOD_SET = EnumSet.of(BAD, GOOD);
     private static final Set<Classification> BAD_GOOD_NEAR_GOOD_SET = EnumSet.of(BAD, GOOD, NEAR_GOOD);
     private static final Set<Classification> GOOD_SET = EnumSet.of(GOOD);
-    private static final ClassifierProperties CLASSIFIER_PROPERTIES_DEFAULT = ClassifierProperties.getDefault();
 
     private Classifier() {
     }
