@@ -37,7 +37,7 @@ import static nl.wizenoze.justext.Classifier.CLASSIFIER_PROPERTIES_DEFAULT;
  */
 public final class JusText {
 
-    private static final boolean IGNORE_BOILERPLATE_DEFAULT = false;
+    private static final boolean IGNORE_BOILERPLATE_DEFAULT = true;
     private static final Set<String> STOP_WORDS_DEFAULT = Collections.emptySet();
 
     private final ClassifierProperties classifierProperties;
@@ -79,7 +79,20 @@ public final class JusText {
      * @return list of extracted paragraphs.
      */
     public List<Paragraph> extract(String html) {
-        return doExtract(html, stopWords, IGNORE_BOILERPLATE_DEFAULT);
+        String cleanedHtml = htmlBeautifier.cleanHtml(html);
+        return doExtract(cleanedHtml, stopWords, IGNORE_BOILERPLATE_DEFAULT);
+    }
+
+    /**
+     * Extracts paragraphs from the given HTML.
+     *
+     * @param html HTML to extract from.
+     * @param ignoreBoilerplate omit boilerplate paragraphs from the output.
+     * @return list of extracted paragraphs.
+     */
+    public List<Paragraph> extract(String html, boolean ignoreBoilerplate) {
+        String cleanedHtml = htmlBeautifier.cleanHtml(html);
+        return doExtract(cleanedHtml, stopWords, ignoreBoilerplate);
     }
 
     /**
@@ -153,7 +166,12 @@ public final class JusText {
         // Freeze paragraphs
 
         List<Paragraph> frozenParagraphs = new ArrayList<>(paragraphs.size());
-        paragraphs.forEach((MutableParagraph paragraph) -> frozenParagraphs.add(paragraph.freeze()));
+
+        paragraphs.forEach((MutableParagraph paragraph) -> {
+            if (!paragraph.isBoilerplate() || !ignoreBoilerplate) {
+                frozenParagraphs.add(paragraph.freeze());
+            }
+        });
 
         return frozenParagraphs;
     }
