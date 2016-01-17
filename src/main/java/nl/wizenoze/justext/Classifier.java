@@ -30,6 +30,9 @@ import nl.wizenoze.justext.paragraph.Paragraph;
 
 import org.apache.commons.lang3.StringUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static nl.wizenoze.justext.Classification.BAD;
 import static nl.wizenoze.justext.Classification.GOOD;
 import static nl.wizenoze.justext.Classification.NEAR_GOOD;
@@ -50,6 +53,8 @@ public final class Classifier {
      * Default classifier properties.
      */
     public static final ClassifierProperties CLASSIFIER_PROPERTIES_DEFAULT = ClassifierProperties.getDefault();
+
+    private static final Logger LOG = LoggerFactory.getLogger(Classifier.class);
 
     private static final Set<Classification> BAD_SET = EnumSet.of(BAD);
     private static final Set<Classification> BAD_GOOD_SET = EnumSet.of(BAD, GOOD);
@@ -155,6 +160,12 @@ public final class Classifier {
                 }
             }
 
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(
+                        "Classified context-sensitive {} --> from {} to {}",
+                        paragraph.getText(), paragraph.getClassification(), newClassification);
+            }
+
             paragraph.setClassification(newClassification);
         }
 
@@ -182,6 +193,12 @@ public final class Classifier {
                 newClassification = BAD;
             } else {
                 newClassification = GOOD;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(
+                        "Classified context-sensitive {} --> from {} to {}",
+                        paragraph.getText(), paragraph.getClassification(), newClassification);
             }
 
             paragraph.setClassification(newClassification);
@@ -220,6 +237,10 @@ public final class Classifier {
             classification = NEAR_GOOD;
         } else {
             classification = BAD;
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Classified context-free {} --> {}", text, classification);
         }
 
         return classification;
