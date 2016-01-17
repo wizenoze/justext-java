@@ -220,13 +220,13 @@ public final class Classifier {
             } else {
                 classification = SHORT;
             }
-        } else if (stopWordsDensity >= classifierProperties.getStopwordsHigh()) {
+        } else if (stopWordsDensity >= classifierProperties.getStopWordsHigh()) {
             if (length > classifierProperties.getLengthHigh()) {
                 classification = GOOD;
             } else {
                 classification = NEAR_GOOD;
             }
-        } else if (stopWordsDensity >= classifierProperties.getStopwordsLow()) {
+        } else if (stopWordsDensity >= classifierProperties.getStopWordsLow()) {
             classification = NEAR_GOOD;
         } else {
             classification = BAD;

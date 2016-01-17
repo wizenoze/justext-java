@@ -56,32 +56,32 @@ public final class ClassifierProperties {
     /**
      * Divide the blocks by the stop words density into medium and high.
      */
-    public static final float STOPWORDS_HIGH_DEFAULT = 0.32f;
+    public static final float STOP_WORDS_HIGH_DEFAULT = 0.32f;
 
     /**
      * Divide the blocks by the stop words density into low and medium.
      */
-    public static final float STOPWORDS_LOW_DEFAULT = 0.30f;
+    public static final float STOP_WORDS_LOW_DEFAULT = 0.30f;
 
     private final int lengthHigh;
     private final int lengthLow;
     private final int maxHeadingDistance;
     private final float maxLinkDensity;
     private final boolean noHeadings;
-    private final float stopwordsHigh;
-    private final float stopwordsLow;
+    private final float stopWordsHigh;
+    private final float stopWordsLow;
 
     private ClassifierProperties(
             int lengthHigh, int lengthLow, int maxHeadingDistance, float maxLinkDensity, boolean noHeadings,
-            float stopwordsHigh, float stopwordsLow) {
+            float stopWordsHigh, float stopWordsLow) {
 
         this.lengthHigh = lengthHigh;
         this.lengthLow = lengthLow;
         this.maxHeadingDistance = maxHeadingDistance;
         this.maxLinkDensity = maxLinkDensity;
         this.noHeadings = noHeadings;
-        this.stopwordsHigh = stopwordsHigh;
-        this.stopwordsLow = stopwordsLow;
+        this.stopWordsHigh = stopWordsHigh;
+        this.stopWordsLow = stopWordsLow;
     }
 
     /**
@@ -136,16 +136,16 @@ public final class ClassifierProperties {
      * Gets stop word's upper threshold.
      * @return stop word's upper threshold.
      */
-    public float getStopwordsHigh() {
-        return stopwordsHigh;
+    public float getStopWordsHigh() {
+        return stopWordsHigh;
     }
 
     /**
      * Gets stop word's lower threshold.
      * @return stop word's lower threshold.
      */
-    public float getStopwordsLow() {
-        return stopwordsLow;
+    public float getStopWordsLow() {
+        return stopWordsLow;
     }
 
     /**
@@ -158,8 +158,8 @@ public final class ClassifierProperties {
         private int maxHeadingDistance;
         private float maxLinkDensity;
         private boolean noHeadings;
-        private float stopwordsHigh;
-        private float stopwordsLow;
+        private float stopWordsHigh;
+        private float stopWordsLow;
 
         /**
          *
@@ -170,8 +170,8 @@ public final class ClassifierProperties {
             maxHeadingDistance = MAX_HEADING_DISTANCE_DEFAULT;
             maxLinkDensity = MAX_LINK_DENSITY_DEFAULT;
             noHeadings = NO_HEADINGS_DEFAULT;
-            stopwordsHigh = STOPWORDS_HIGH_DEFAULT;
-            stopwordsLow = STOPWORDS_LOW_DEFAULT;
+            stopWordsHigh = STOP_WORDS_HIGH_DEFAULT;
+            stopWordsLow = STOP_WORDS_LOW_DEFAULT;
         }
 
         /**
@@ -180,7 +180,7 @@ public final class ClassifierProperties {
          */
         public ClassifierProperties build() {
             return new ClassifierProperties(
-                lengthHigh, lengthLow, maxHeadingDistance, maxLinkDensity, noHeadings, stopwordsHigh, stopwordsLow);
+                lengthHigh, lengthLow, maxHeadingDistance, maxLinkDensity, noHeadings, stopWordsHigh, stopWordsLow);
         }
 
         /**
@@ -235,21 +235,21 @@ public final class ClassifierProperties {
 
         /**
          * Sets stop word's upper threshold.
-         * @param stopwordsHigh stop word's upper threshold.
+         * @param stopWordsHigh stop word's upper threshold.
          * @return builder.
          */
-        public Builder setStopwordsHigh(float stopwordsHigh) {
-            this.stopwordsHigh = stopwordsHigh;
+        public Builder setStopWordsHigh(float stopWordsHigh) {
+            this.stopWordsHigh = stopWordsHigh;
             return this;
         }
 
         /**
          * Sets stop word's lower threshold.
-         * @param stopwordsLow stop word's upper threshold.
+         * @param stopWordsLow stop word's upper threshold.
          * @return builder.
          */
-        public Builder setStopwordsLow(float stopwordsLow) {
-            this.stopwordsLow = stopwordsLow;
+        public Builder setStopWordsLow(float stopWordsLow) {
+            this.stopWordsLow = stopWordsLow;
             return this;
         }
 

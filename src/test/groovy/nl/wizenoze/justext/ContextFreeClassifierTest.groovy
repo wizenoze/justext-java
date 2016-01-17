@@ -98,7 +98,7 @@ class ContextFreeClassifierTest extends Specification {
                 .setMaxLinkDensity(1)
                 .setLengthLow(0)
                 .setLengthHigh(20)
-                .setStopwordsHigh(0)
+                .setStopWordsHigh(0)
                 .build()
 
         when:
@@ -119,8 +119,8 @@ class ContextFreeClassifierTest extends Specification {
         def classifierProperties = new ClassifierProperties.Builder()
                 .setMaxLinkDensity(1)
                 .setLengthLow(0)
-                .setStopwordsLow(0.2)
-                .setStopwordsHigh(1000)
+                .setStopWordsLow(0.2)
+                .setStopWordsHigh(1000)
                 .build()
 
         when:
