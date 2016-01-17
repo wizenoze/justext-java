@@ -64,7 +64,7 @@ public final class JusText {
      * Creates a JusText instance with the given stop words and classifier properties.
      *
      * @param classifierProperties classifier properties.
-     * @param stopWords stop-words.
+     * @param stopWords Set of lower-case stop words to be used by default.
      */
     public JusText(ClassifierProperties classifierProperties, Set<String> stopWords) {
         this.classifierProperties = classifierProperties;
@@ -128,7 +128,7 @@ public final class JusText {
      * Extracts paragraphs from the given HTML.
      *
      * @param html HTML to extract from.
-     * @param stopWords use these stop words.
+     * @param stopWords Set of lower-case stop words.
      * @return list of extracted paragraphs.
      */
     public List<Paragraph> extract(String html, Set<String> stopWords) {
@@ -140,7 +140,7 @@ public final class JusText {
      * Extracts paragraphs from the given HTML.
      *
      * @param html HTML to extract from.
-     * @param stopWords use these stop words.
+     * @param stopWords Set of lower-case stop words.
      * @param ignoreBoilerplate omit boilerplate paragraphs from the output.
      * @return list of extracted paragraphs.
      */

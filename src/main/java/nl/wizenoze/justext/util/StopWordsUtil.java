@@ -59,7 +59,7 @@ public final class StopWordsUtil {
         }
 
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            return bufferedReader.lines().collect(Collectors.toSet());
+            return bufferedReader.lines().map(String::toLowerCase).collect(Collectors.toSet());
         }
     }
 

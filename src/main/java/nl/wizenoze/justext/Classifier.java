@@ -20,7 +20,6 @@
 package nl.wizenoze.justext;
 
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -78,17 +77,11 @@ public final class Classifier {
      * Performs context free classification.
      *
      * @param paragraphs List of paragraphs.
-     * @param stopWords Set of stop words.
+     * @param stopWords Set of lower-case stop words.
      * @param classifierProperties Properties.
      */
     public static void classifyParagraphs(
             List<MutableParagraph> paragraphs, Set<String> stopWords, ClassifierProperties classifierProperties) {
-
-        Set<String> lowerCaseStopWords = new HashSet<>(stopWords.size());
-
-        for (String stopWord : stopWords) {
-            lowerCaseStopWords.add(stopWord.toLowerCase());
-        }
 
         for (MutableParagraph paragraph : paragraphs) {
             Classification classification = classify(paragraph, stopWords, classifierProperties);
