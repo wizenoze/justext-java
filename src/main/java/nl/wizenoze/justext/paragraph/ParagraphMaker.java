@@ -38,6 +38,9 @@ import nl.wizenoze.justext.exception.JusTextParseException;
 
 import org.apache.commons.lang3.StringUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
 import static javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
@@ -50,6 +53,8 @@ import static nl.wizenoze.justext.util.StringPool.BR;
  * Created by lcsontos on 1/11/16.
  */
 public class ParagraphMaker {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ParagraphMaker.class);
 
     private static final Set<String> TEXTUAL_TAGS;
 
@@ -80,6 +85,7 @@ public class ParagraphMaker {
         try {
             streamReader = inputFactory.createXMLStreamReader(new StreamSource(reader));
         } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             throw new JusTextParseException(e.getMessage(), e);
         }
     }
@@ -102,6 +108,7 @@ public class ParagraphMaker {
         try {
             return doTraverse();
         } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             throw new JusTextParseException(e.getMessage(), e);
         }
     }

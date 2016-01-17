@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import javax.xml.parsers.ParserConfigurationException;
 
+import nl.wizenoze.justext.exception.JusTextBeautifierException;
+
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
@@ -80,7 +82,7 @@ public final class HtmlBeautifier {
             return domSerializer.createDOM(tagNode);
         } catch (ParserConfigurationException pce) {
             LOG.error(pce.getMessage(), pce);
-            return null;
+            throw new JusTextBeautifierException(pce.getMessage(), pce);
         }
     }
 
@@ -99,7 +101,7 @@ public final class HtmlBeautifier {
             serializer.write(tagNode, tagNodeWriter, "utf-8");
         } catch (IOException ioe) {
             LOG.error(ioe.getMessage(), ioe);
-            return null;
+            throw new JusTextBeautifierException(ioe.getMessage(), ioe);
         }
 
         String cleanHtml = tagNodeWriter.toString();
