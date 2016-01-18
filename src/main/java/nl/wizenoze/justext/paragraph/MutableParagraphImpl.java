@@ -31,8 +31,6 @@ import nl.wizenoze.justext.Classification;
 import nl.wizenoze.justext.util.StringPool;
 import nl.wizenoze.justext.util.StringUtil;
 
-import org.apache.commons.lang3.StringUtils;
-
 import static nl.wizenoze.justext.Classification.GOOD;
 
 /**
@@ -173,7 +171,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
     @Override
     public String getText() {
         if (text == null) {
-            text = StringUtils.join(textNodes, StringPool.EMPTY);
+            text = String.join(StringPool.EMPTY, textNodes);
             text = StringUtil.normalizeWhiteSpaces(text.trim());
         }
 
@@ -202,7 +200,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
 
     @Override
     public boolean hasText() {
-        return StringUtils.isNotBlank(getText());
+        return StringUtil.isNotBlank(getText());
     }
 
     @Override
@@ -289,7 +287,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
 
     private String[] words() {
         if (words == null) {
-            words = StringUtils.split(getText());
+            words = getText().split("\\s");
         }
 
         return words;

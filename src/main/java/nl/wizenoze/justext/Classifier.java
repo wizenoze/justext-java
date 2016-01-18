@@ -26,8 +26,7 @@ import java.util.Set;
 
 import nl.wizenoze.justext.paragraph.MutableParagraph;
 import nl.wizenoze.justext.paragraph.Paragraph;
-
-import org.apache.commons.lang3.StringUtils;
+import nl.wizenoze.justext.util.StringUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -210,7 +209,7 @@ public final class Classifier {
 
         if (linkDensity > classifierProperties.getMaxLinkDensity()) {
             classification = BAD;
-        } else if (StringUtils.contains(text, COPYRIGHT_CHAR) || StringUtils.contains(text, COPYRIGHT_CODE)) {
+        } else if (StringUtil.contains(text, COPYRIGHT_CHAR) || StringUtil.contains(text, COPYRIGHT_CODE)) {
             classification = BAD;
         } else if (paragraph.isSelect()) {
             classification = BAD;

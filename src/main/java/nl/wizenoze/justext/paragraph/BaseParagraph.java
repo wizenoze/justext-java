@@ -22,7 +22,7 @@ package nl.wizenoze.justext.paragraph;
 import java.util.Objects;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
+import nl.wizenoze.justext.util.StringUtil;
 
 /**
  * Created by lcsontos on 1/14/16.
@@ -80,7 +80,7 @@ abstract class BaseParagraph implements Paragraph {
     }
 
     boolean hasText(String text) {
-        return StringUtils.isNotBlank(text);
+        return StringUtil.isNotBlank(text);
     }
 
 }

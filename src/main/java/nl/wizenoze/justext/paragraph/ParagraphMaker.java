@@ -35,8 +35,7 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 
 import nl.wizenoze.justext.exception.JusTextParseException;
-
-import org.apache.commons.lang3.StringUtils;
+import nl.wizenoze.justext.util.StringUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,7 +170,7 @@ public class ParagraphMaker {
                 case CHARACTERS:
                     String text = streamReader.getText();
 
-                    if (StringUtils.isNotBlank(text)) {
+                    if (StringUtil.isNotBlank(text)) {
                         text = lastParagraph.appendText(text);
 
                         if (isLink) {
