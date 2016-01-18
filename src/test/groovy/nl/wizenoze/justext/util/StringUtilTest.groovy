@@ -5,14 +5,14 @@ import spock.lang.Specification
 /**
  * Created by lcsontos on 1/12/16.
  */
-class TextUtilTest extends Specification {
+class StringUtilTest extends Specification {
 
     def testNormalizeNoChange() {
         when:
         def string = "a b c d e f g h i j k l m n o p q r s ..."
 
         then:
-        TextUtil.normalizeWhiteSpaces(string) == string
+        StringUtil.normalizeWhiteSpaces(string) == string
     }
 
     def testNormalizeDontTrim() {
@@ -20,7 +20,7 @@ class TextUtilTest extends Specification {
         def expected = " a b c d e f g h i j k l m n o p q r s ... "
 
         when:
-        def normalized = TextUtil.normalizeWhiteSpaces(string)
+        def normalized = StringUtil.normalizeWhiteSpaces(string)
 
         then:
         expected == normalized
@@ -31,7 +31,7 @@ class TextUtilTest extends Specification {
         def expected = "123\n456\n"
 
         when:
-        def normalized = TextUtil.normalizeWhiteSpaces(string)
+        def normalized = StringUtil.normalizeWhiteSpaces(string)
 
         then:
         expected == normalized
@@ -42,7 +42,7 @@ class TextUtilTest extends Specification {
         def expected = " € "
 
         when:
-        def normalized = TextUtil.normalizeWhiteSpaces(string)
+        def normalized = StringUtil.normalizeWhiteSpaces(string)
 
         then:
         expected == normalized

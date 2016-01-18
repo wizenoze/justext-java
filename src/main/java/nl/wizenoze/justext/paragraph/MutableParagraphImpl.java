@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 
 import nl.wizenoze.justext.Classification;
 import nl.wizenoze.justext.util.StringPool;
-import nl.wizenoze.justext.util.TextUtil;
+import nl.wizenoze.justext.util.StringUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -112,7 +112,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
     public String appendText(String text) {
         reset();
 
-        text = TextUtil.normalizeWhiteSpaces(text);
+        text = StringUtil.normalizeWhiteSpaces(text);
 
         textNodes.add(text);
 
@@ -174,7 +174,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
     public String getText() {
         if (text == null) {
             text = StringUtils.join(textNodes, StringPool.EMPTY);
-            text = TextUtil.normalizeWhiteSpaces(text.trim());
+            text = StringUtil.normalizeWhiteSpaces(text.trim());
         }
 
         return text;

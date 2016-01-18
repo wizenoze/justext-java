@@ -33,11 +33,11 @@ import static nl.wizenoze.justext.util.StringPool.SPACE;
 /**
  * @author László Csontos
  */
-public final class TextUtil {
+public final class StringUtil {
 
     private static final Pattern MULTIPLE_WHITESPACE_PATTERN = Pattern.compile("\\s+", UNICODE_CHARACTER_CLASS);
 
-    private TextUtil() {
+    private StringUtil() {
     }
 
     /**
