@@ -26,7 +26,7 @@ package nl.wizenoze.justext.exception;
 public class JusTextParseException extends JusTextException {
 
     /**
-     * @see RuntimeException#RuntimeException().
+     * @see RuntimeException#RuntimeException()
      */
     public JusTextParseException() {
         super();
@@ -34,7 +34,7 @@ public class JusTextParseException extends JusTextException {
 
     /**
      * @param cause Cause.
-     * @see RuntimeException#RuntimeException(Throwable).
+     * @see RuntimeException#RuntimeException(Throwable)
      */
     public JusTextParseException(Throwable cause) {
         super(cause);
@@ -42,7 +42,7 @@ public class JusTextParseException extends JusTextException {
 
     /**
      * @param message Message.
-     * @see RuntimeException#RuntimeException(String).
+     * @see RuntimeException#RuntimeException(String)
      */
     public JusTextParseException(String message) {
         super(message);
@@ -51,7 +51,7 @@ public class JusTextParseException extends JusTextException {
     /**
      * @param message Message.
      * @param cause Cause.
-     * @see RuntimeException#RuntimeException(String, Throwable).
+     * @see RuntimeException#RuntimeException(String, Throwable)
      */
     public JusTextParseException(String message, Throwable cause) {
         super(message, cause);

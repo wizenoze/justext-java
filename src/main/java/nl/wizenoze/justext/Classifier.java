@@ -43,7 +43,7 @@ import static nl.wizenoze.justext.util.StringPool.COPYRIGHT_CODE;
  * This is the implementation of the following context free classification algorithm.
  *
  * @author László Csontos
- * @see http://corpus.tools/wiki/Justext/Algorithm
+ * @see <a href="http://corpus.tools/wiki/Justext/Algorithm">Justext algorithm</a>
  */
 public final class Classifier {
 

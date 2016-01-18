@@ -25,7 +25,7 @@ package nl.wizenoze.justext.exception;
 public class JusTextBeautifierException extends JusTextException {
 
     /**
-     * @see RuntimeException#RuntimeException().
+     * @see RuntimeException#RuntimeException()
      */
     public JusTextBeautifierException() {
         super();
@@ -33,7 +33,7 @@ public class JusTextBeautifierException extends JusTextException {
 
     /**
      * @param cause Cause.
-     * @see RuntimeException#RuntimeException(Throwable).
+     * @see RuntimeException#RuntimeException(Throwable)
      */
     public JusTextBeautifierException(Throwable cause) {
         super(cause);
@@ -41,7 +41,7 @@ public class JusTextBeautifierException extends JusTextException {
 
     /**
      * @param message Message.
-     * @see RuntimeException#RuntimeException(String).
+     * @see RuntimeException#RuntimeException(String)
      */
     public JusTextBeautifierException(String message) {
         super(message);
@@ -50,7 +50,7 @@ public class JusTextBeautifierException extends JusTextException {
     /**
      * @param message Message.
      * @param cause Cause.
-     * @see RuntimeException#RuntimeException(String, Throwable).
+     * @see RuntimeException#RuntimeException(String, Throwable)
      */
     public JusTextBeautifierException(String message, Throwable cause) {
         super(message, cause);

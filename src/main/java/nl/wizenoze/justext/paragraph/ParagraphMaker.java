@@ -73,7 +73,6 @@ public class ParagraphMaker {
     /**
      * Create a paragraph maker.
      * @param reader XML document reader.
-     * @throws Exception upon error.
      */
     public ParagraphMaker(Reader reader) {
         paragraphs = new ArrayList<>();
@@ -92,7 +91,6 @@ public class ParagraphMaker {
     /**
      * Create a paragraph maker.
      * @param xml XML document.
-     * @throws Exception upon error.
      */
     public ParagraphMaker(String xml) {
         this(new StringReader(xml));
@@ -101,7 +99,6 @@ public class ParagraphMaker {
     /**
      * Traverses the document hierarchy.
      * @return list of paragraphs.
-     * @throws Exception upon error.
      */
     public final List<MutableParagraph> traverse() {
         try {
