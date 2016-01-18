@@ -14,20 +14,6 @@ class HtmlBeautifierTest extends Specification {
 
     private final HtmlBeautifier htmlBeautifier = new HtmlBeautifier();
 
-    def testCleanDom() {
-        def dirtyHtml = "<html><!-- comment --><body><h1>Header</h1><!-- comment --> text<p>footer</body></html>"
-        def xpath = XPathFactory.newInstance().newXPath()
-
-        when:
-        def cleanedDom = htmlBeautifier.cleanDom(dirtyHtml);
-        def nodes = xpath.evaluate("/html/body/h1/text()", cleanedDom.documentElement, XPathConstants.NODESET)
-
-        then:
-        nodes.length == 1
-        nodes.item(0).nodeType == TEXT_NODE
-        nodes.item(0).textContent == "Header"
-    }
-
     def testRemoveComments() {
         def dirtyHtml = "<html><!-- comment --><body><h1>Header</h1><!-- comment --> text<p>footer</body></html>"
 

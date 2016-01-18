@@ -21,20 +21,16 @@ package nl.wizenoze.justext.html;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import javax.xml.parsers.ParserConfigurationException;
 
 import nl.wizenoze.justext.exception.JusTextBeautifierException;
 
 import org.htmlcleaner.CleanerProperties;
-import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.Serializer;
 import org.htmlcleaner.TagNode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.w3c.dom.Document;
 
 /**
  * Created by lcsontos on 1/7/16.
@@ -65,25 +61,6 @@ public final class HtmlBeautifier {
     public TagNode clean(String html) {
         return htmlCleaner.clean(html);
 
-    }
-
-    /**
-     * Cleans the given HTML document.
-     *
-     * @param html HTML document to clean.
-     * @return Cleaned HTML document as a DOM {@link Document}.
-     */
-    public Document cleanDom(String html) {
-        TagNode tagNode = clean(html);
-
-        DomSerializer domSerializer = new DomSerializer(cleanerProperties);
-
-        try {
-            return domSerializer.createDOM(tagNode);
-        } catch (ParserConfigurationException pce) {
-            LOG.error(pce.getMessage(), pce);
-            throw new JusTextBeautifierException(pce.getMessage(), pce);
-        }
     }
 
     /**
