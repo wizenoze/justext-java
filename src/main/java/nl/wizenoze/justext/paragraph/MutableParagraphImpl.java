@@ -43,6 +43,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
 
     private int charsInLinksCount = 0;
     private Classification classification;
+    private Classification firstClassification;
     private Optional<String> domPath;
     private int tagsCount = 0;
     private String text;
@@ -103,7 +104,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
 
     MutableParagraphImpl(Classification classification) {
         this(null, null, 0, 0);
-        this.classification = classification;
+        setClassification(classification);
     }
 
     @Override
@@ -130,6 +131,11 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
     @Override
     public int getCharsInLinksCount() {
         return charsInLinksCount;
+    }
+
+    @Override
+    public Classification getFirstClassification() {
+        return firstClassification;
     }
 
     @Override
@@ -243,6 +249,10 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
 
     @Override
     public void setClassification(Classification classification) {
+        if (firstClassification != null) {
+            firstClassification = classification;
+        }
+
         this.classification = classification;
     }
 

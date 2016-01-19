@@ -31,6 +31,7 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
 
     private final int charsInLinksCount;
     private final Classification classification;
+    private final Classification firstClassification;
     private final String domPath;
     private final boolean hasText;
     private final boolean isBoilerplate;
@@ -50,7 +51,10 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
      */
     public ImmutableParagraphImpl(Paragraph paragraph) {
         charsInLinksCount = paragraph.getCharsInLinksCount();
+
         classification = paragraph.getClassification();
+        firstClassification = paragraph.getFirstClassification();
+
         domPath = paragraph.getDomPath();
         isBoilerplate = paragraph.isBoilerplate();
         isHeading = paragraph.isHeading();
@@ -70,6 +74,11 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
     @Override
     public int getCharsInLinksCount() {
         return charsInLinksCount;
+    }
+
+    @Override
+    public Classification getFirstClassification() {
+        return firstClassification;
     }
 
     @Override

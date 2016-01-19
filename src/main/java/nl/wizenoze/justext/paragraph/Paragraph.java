@@ -36,10 +36,20 @@ public interface Paragraph {
     int getCharsInLinksCount();
 
     /**
-     * Gets classification.
+     * Gets that classification with which {@link MutableParagraph#setClassification(Classification)} was called for the
+     * last time.
+     *
      * @return classification.
      */
     Classification getClassification();
+
+    /**
+     * Gets that classification with which {@link MutableParagraph#setClassification(Classification)} was called for the
+     * first time.
+     *
+     * @return classification.
+     */
+    Classification getFirstClassification();
 
     /**
      * Gets DOM path.

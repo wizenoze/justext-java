@@ -118,7 +118,9 @@ public final class Classifier {
         while (paragraphIterator.hasNext()) {
             MutableParagraph paragraph = paragraphIterator.next();
 
-            if (!SHORT.equals(paragraph.getClassification())) {
+            Classification classification = paragraph.getClassification();
+
+            if (!SHORT.equals(classification)) {
                 continue;
             }
 
@@ -155,7 +157,7 @@ public final class Classifier {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
                         "Classified context-sensitive {} --> from {} to {}",
-                        paragraph.getText(), paragraph.getClassification(), newClassification);
+                        paragraph.getText(), classification, newClassification);
             }
 
             paragraph.setClassification(newClassification);
@@ -168,7 +170,9 @@ public final class Classifier {
         while (paragraphIterator.hasNext()) {
             MutableParagraph paragraph = paragraphIterator.next();
 
-            if (!NEAR_GOOD.equals(paragraph.getClassification())) {
+            Classification classification = paragraph.getClassification();
+
+            if (!NEAR_GOOD.equals(classification)) {
                 continue;
             }
 
@@ -190,7 +194,7 @@ public final class Classifier {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
                         "Classified context-sensitive {} --> from {} to {}",
-                        paragraph.getText(), paragraph.getClassification(), newClassification);
+                        paragraph.getText(), classification, newClassification);
             }
 
             paragraph.setClassification(newClassification);
