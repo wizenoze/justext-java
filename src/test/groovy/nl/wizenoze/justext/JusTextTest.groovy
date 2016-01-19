@@ -15,6 +15,20 @@ class JusTextTest extends Specification {
     }
 
     /*
+     * http://www.aardgasindeklas.nl/allesoveraardgas/aardgasbijjouthuis/
+     */
+    def testAardgas() {
+        String html = loadHtml("aardgas.html")
+
+        when:
+        List<Paragraph> paragraphs = jusText.extract(html, "nl")
+
+        then:
+        !paragraphs.isEmpty()
+        paragraphs[0].text == "Aardgas bij jou thuis"
+    }
+
+    /*
      * http://www.cosmos4kids.com/files/galaxy_intro.html
      */
     def testCosmos() {
