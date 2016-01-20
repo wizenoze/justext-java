@@ -20,6 +20,7 @@
 package nl.wizenoze.justext;
 
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -58,6 +59,11 @@ public final class Classifier {
     private static final Set<Classification> BAD_GOOD_SET = EnumSet.of(BAD, GOOD);
     private static final Set<Classification> BAD_GOOD_NEAR_GOOD_SET = EnumSet.of(BAD, GOOD, NEAR_GOOD);
     private static final Set<Classification> GOOD_SET = EnumSet.of(GOOD);
+
+    /*
+     * Classification sets can never have more than two elements (GOOD/BAD, BAD/NEAR_GOOD, GOOD/NEAR_GOOD).
+     */
+    private static final int CLASSIFICATION_SET_MAX_SIZE = 2;
 
     private Classifier() {
     }
@@ -132,32 +138,19 @@ public final class Classifier {
 
             int nextIndex = paragraphIterator.nextIndex();
 
-            Classification previousBoundaryClassification = findPrevBoundaryClassification(
-                    createListIterator(paragraphs, nextIndex), true);
-            Classification nextBoundaryClassification = findNextBoundaryClassification(
-                    createListIterator(paragraphs, nextIndex), true);
-
-            Set<Classification> neighbourClassifications = EnumSet.of(
-                    previousBoundaryClassification, nextBoundaryClassification);
+            MergedClassifications mergedBoundaryClassifications = mergeBoundaryClassifications(paragraphs, nextIndex);
+            Set<Classification> neighbourClassifications = mergedBoundaryClassifications.getMergedClassifications();
 
             Classification newClassification = null;
 
+            // For BAD/BAD and GOOD/GOOD, it's an easy decision.
             if (GOOD_SET.equals(neighbourClassifications)) {
                 newClassification = GOOD;
             } else if (BAD_SET.equals(neighbourClassifications)) {
                 newClassification = BAD;
             } else {
-                if (BAD.equals(previousBoundaryClassification)) {
-                    previousBoundaryClassification = findPrevBoundaryClassification(
-                            createListIterator(paragraphs, nextIndex), false);
-                }
-
-                if (BAD.equals(nextBoundaryClassification)) {
-                    nextBoundaryClassification = findNextBoundaryClassification(
-                            createListIterator(paragraphs, nextIndex), false);
-                }
-
-                if (NEAR_GOOD.equals(previousBoundaryClassification) || NEAR_GOOD.equals(nextBoundaryClassification)) {
+                // Classification set must be BAD/GOOD, take NEAR_GOOD into account in this case.
+                if (mergedBoundaryClassifications.isNearGoodRemoved()) {
                     newClassification = GOOD;
                 } else {
                     newClassification = BAD;
@@ -188,14 +181,12 @@ public final class Classifier {
 
             int nextIndex = paragraphIterator.nextIndex();
 
-            Classification previousNeighbourClassification = findPrevBoundaryClassification(
-                    createListIterator(paragraphs, nextIndex), true);
-            Classification nextNeighbourClassification = findNextBoundaryClassification(
-                    createListIterator(paragraphs, nextIndex), true);
+            MergedClassifications mergedBoundaryClassifications = mergeBoundaryClassifications(paragraphs, nextIndex);
+            Set<Classification> neighbourClassifications = mergedBoundaryClassifications.getMergedClassifications();
 
             Classification newClassification = null;
 
-            if (BAD.equals(previousNeighbourClassification) && BAD.equals(nextNeighbourClassification)) {
+            if (BAD_SET.equals(neighbourClassifications)) {
                 newClassification = BAD;
             } else {
                 newClassification = GOOD;
@@ -267,18 +258,14 @@ public final class Classifier {
         return BAD;
     }
 
-    private static Classification findBoundaryClassification(
-            ListIterator<MutableParagraph> paragraphIterator, boolean forward, boolean ignoreNearGood) {
+    private static Set<Classification> findBoundaryClassifications(
+            ListIterator<MutableParagraph> paragraphIterator, boolean forward) {
 
         if (paragraphIterator == null) {
-            return BAD;
+            return BAD_SET;
         }
 
-        Set<Classification> classificationSet = BAD_GOOD_NEAR_GOOD_SET;
-
-        if (ignoreNearGood) {
-            classificationSet = BAD_GOOD_SET;
-        }
+        Set<Classification> classificationSet = new HashSet<>(CLASSIFICATION_SET_MAX_SIZE);
 
         while ((forward && paragraphIterator.hasNext()) || (!forward && paragraphIterator.hasPrevious())) {
             MutableParagraph paragraph = null;
@@ -291,24 +278,77 @@ public final class Classifier {
 
             Classification classification = paragraph.getClassification();
 
-            if (classificationSet.contains(classification)) {
-                return classification;
+            if (!BAD_GOOD_NEAR_GOOD_SET.contains(classification)) {
+                continue;
+            }
+
+            classificationSet.add(classification);
+
+            if (BAD_GOOD_SET.contains(classification)) {
+                return classificationSet;
             }
         }
 
-        return BAD;
+        return BAD_SET;
     }
 
-    private static Classification findNextBoundaryClassification(
-            ListIterator<MutableParagraph> paragraphIterator, boolean ignoreNearGood) {
+    private static MergedClassifications mergeBoundaryClassifications(
+            List<MutableParagraph> paragraphs, int startIndex) {
 
-        return findBoundaryClassification(paragraphIterator, true, ignoreNearGood);
+        // Find boundary classifications
+        Set<Classification> nextClassifications = findBoundaryClassifications(
+                createListIterator(paragraphs, startIndex), true);
+
+        Set<Classification> prevClassifications = findBoundaryClassifications(
+                createListIterator(paragraphs, startIndex), false);
+
+        // Remove NEAR_GOOD from the final output either way.
+        boolean nearGoodRemovedFromNext = nextClassifications.remove(NEAR_GOOD);
+        boolean nearGoodRemovedFromPrev = prevClassifications.remove(NEAR_GOOD);
+
+        // For good classifications we don't need NEAR_GOOD.
+        if (GOOD_SET.equals(nextClassifications)) {
+            nearGoodRemovedFromNext = false;
+        }
+
+        if (GOOD_SET.equals(prevClassifications)) {
+            nearGoodRemovedFromPrev = false;
+        }
+
+        // Merge classifications.
+        Set<Classification> mergedClassifications = new HashSet<>(CLASSIFICATION_SET_MAX_SIZE);
+        mergedClassifications.addAll(nextClassifications);
+        mergedClassifications.addAll(prevClassifications);
+
+        boolean nearGoodRemoved = (nearGoodRemovedFromNext || nearGoodRemovedFromPrev);
+
+        // If the resulting classification set isn't a BAD/GOOD combination, we don't take NEAR_GOOD classifications
+        // into account.
+        if (!BAD_GOOD_SET.equals(mergedClassifications)) {
+            nearGoodRemoved = false;
+        }
+
+        return new MergedClassifications(mergedClassifications, nearGoodRemoved);
     }
 
-    private static Classification findPrevBoundaryClassification(
-            ListIterator<MutableParagraph> paragraphIterator, boolean ignoreNearGood) {
+    private static class MergedClassifications {
 
-        return findBoundaryClassification(paragraphIterator, false, ignoreNearGood);
+        private final Set<Classification> mergedClassifications;
+        private final boolean nearGoodRemoved;
+
+        MergedClassifications(Set<Classification> mergedClassifications, boolean nearGoodRemoved) {
+            this.mergedClassifications = mergedClassifications;
+            this.nearGoodRemoved = nearGoodRemoved;
+        }
+
+        public Set<Classification> getMergedClassifications() {
+            return mergedClassifications;
+        }
+
+        public boolean isNearGoodRemoved() {
+            return nearGoodRemoved;
+        }
+
     }
 
 }
