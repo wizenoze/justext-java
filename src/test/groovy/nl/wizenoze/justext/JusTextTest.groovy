@@ -38,8 +38,9 @@ class JusTextTest extends Specification {
         List<Paragraph> paragraphs = jusText.extract(html, "en")
 
         then:
-        paragraphs.size() == 5
-        paragraphs[0].text == "We've already covered the universe. Let's focus on something smaller, a galaxy. Right " +
+        paragraphs.size() == 6
+        paragraphs[0].text == "Looking At Galaxies"
+        paragraphs[1].text == "We've already covered the universe. Let's focus on something smaller, a galaxy. Right " +
                 "now, you're sitting on a planet that orbits a star in the Milky Way galaxy. As you know, there are " +
                 "loads of galaxies in the universe. Each is different from the other, like fingerprints. We're going " +
                 "to talk about a few of the common traits of galaxies and how you can look up in the sky and look " +
