@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,7 @@ public final class StopWordsUtil {
      */
     public static Set<String> getStopWords(String languageCode) {
         try {
-            return stopWords(languageCode);
+            return Collections.unmodifiableSet(stopWords(languageCode));
         } catch (IOException ioe) {
             throw new JusTextStopWordsException(ioe.getMessage(), ioe);
         }
