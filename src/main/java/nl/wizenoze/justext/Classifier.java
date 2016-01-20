@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+import java.util.function.Function;
 
 import nl.wizenoze.justext.paragraph.MutableParagraph;
 import nl.wizenoze.justext.paragraph.Paragraph;
@@ -123,85 +124,39 @@ public final class Classifier {
             return;
         }
 
-        ListIterator<MutableParagraph> paragraphIterator = paragraphs.listIterator();
-
-        // Classify short paragraphs
-
-        while (paragraphIterator.hasNext()) {
-            MutableParagraph paragraph = paragraphIterator.next();
-
-            Classification classification = paragraph.getClassification();
-
-            if (!SHORT.equals(classification)) {
-                continue;
-            }
-
-            int nextIndex = paragraphIterator.nextIndex();
-
-            MergedBoundaryClassifications mergedBoundaryClassifications = mergeBoundaryClassifications(
-                    paragraph, paragraphs, nextIndex);
+        // Classify SHORT paragraphs
+        reviseParagraphs(paragraphs, SHORT, (MergedBoundaryClassifications mergedBoundaryClassifications) -> {
             Set<Classification> neighbourClassifications = mergedBoundaryClassifications.getMergedClassifications();
 
-            Classification newClassification = null;
-
-            // For BAD/BAD and GOOD/GOOD, it's an easy decision.
+            // SHORT between GOOD/GOOD sections is GOOD.
             if (GOOD_SET.equals(neighbourClassifications)) {
-                newClassification = GOOD;
-            } else if (BAD_SET.equals(neighbourClassifications)) {
-                newClassification = BAD;
-            } else {
-                // Classification set must be BAD/GOOD, take NEAR_GOOD into account in this case.
-                if (mergedBoundaryClassifications.isNearGoodRemoved()) {
-                    newClassification = GOOD;
-                } else {
-                    newClassification = BAD;
-                }
+                return GOOD;
             }
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(
-                        "Classified context-sensitive {} --> from {} to {}",
-                        paragraph.getText(), classification, newClassification);
+            // SHORT between BAD/BAD sections is BAD.
+            if (BAD_SET.equals(neighbourClassifications)) {
+                return BAD;
             }
 
-            paragraph.setClassification(newClassification);
-        }
-
-        // Classify near good paragraphs
-
-        paragraphIterator = paragraphs.listIterator();
-
-        while (paragraphIterator.hasNext()) {
-            MutableParagraph paragraph = paragraphIterator.next();
-
-            Classification classification = paragraph.getClassification();
-
-            if (!NEAR_GOOD.equals(classification)) {
-                continue;
+            // SHORTs between GOOD/BAD or BAD/GOOD sections are GOOD until that NEAR_GOOD section which is the closest
+            // one to the BAD section.
+            if (mergedBoundaryClassifications.isNearGoodRemoved()) {
+                return GOOD;
             }
 
-            int nextIndex = paragraphIterator.nextIndex();
+            return BAD;
+        });
 
-            MergedBoundaryClassifications mergedBoundaryClassifications = mergeBoundaryClassifications(
-                    paragraph, paragraphs, nextIndex);
+        // Classify NEAR_GOOD paragraphs
+        reviseParagraphs(paragraphs, NEAR_GOOD, (MergedBoundaryClassifications mergedBoundaryClassifications) -> {
             Set<Classification> neighbourClassifications = mergedBoundaryClassifications.getMergedClassifications();
-
-            Classification newClassification = null;
 
             if (BAD_SET.equals(neighbourClassifications)) {
-                newClassification = BAD;
-            } else {
-                newClassification = GOOD;
+                return BAD;
             }
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(
-                        "Classified context-sensitive {} --> from {} to {}",
-                        paragraph.getText(), classification, newClassification);
-            }
-
-            paragraph.setClassification(newClassification);
-        }
+            return GOOD;
+        });
     }
 
     private static <P extends Paragraph> ListIterator<P> createListIterator(List<P> paragraphs, int startIndex) {
@@ -331,6 +286,40 @@ public final class Classifier {
         }
 
         return new MergedBoundaryClassifications(paragraph, mergedClassifications, nearGoodRemoved);
+    }
+
+    private static void reviseParagraphs(
+        List<MutableParagraph> paragraphs, Classification targetClassification,
+        Function<MergedBoundaryClassifications, Classification> classifier) {
+
+        ListIterator<MutableParagraph> paragraphIterator = paragraphs.listIterator();
+
+        // Classify short paragraphs
+
+        while (paragraphIterator.hasNext()) {
+            MutableParagraph paragraph = paragraphIterator.next();
+
+            Classification classification = paragraph.getClassification();
+
+            if (!classification.equals(targetClassification)) {
+                continue;
+            }
+
+            int nextIndex = paragraphIterator.nextIndex();
+
+            MergedBoundaryClassifications mergedBoundaryClassifications = mergeBoundaryClassifications(
+                    paragraph, paragraphs, nextIndex);
+
+            Classification newClassification = classifier.apply(mergedBoundaryClassifications);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(
+                        "Classified context-sensitive {} --> from {} to {}",
+                        paragraph.getText(), classification, newClassification);
+            }
+
+            paragraph.setClassification(newClassification);
+        }
     }
 
     /*
