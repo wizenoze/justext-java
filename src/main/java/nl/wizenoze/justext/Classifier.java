@@ -93,9 +93,7 @@ public final class Classifier {
         for (MutableParagraph paragraph : paragraphs) {
             Classification classification = doClassifyContextFree(paragraph, stopWords, classifierProperties);
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Classified context-free {} as {}", paragraph.getText(), classification);
-            }
+            logClassificationChange(paragraph, "context-free", null, classification);
 
             paragraph.setClassification(classification);
         }
@@ -268,6 +266,25 @@ public final class Classifier {
         return BAD_SET;
     }
 
+    private static void logClassificationChange(
+            Paragraph paragraph, String changeType, Classification oldClassification,
+            Classification newClassification) {
+
+        if (!LOG.isDebugEnabled()) {
+            return;
+        }
+
+        String shortText = StringUtil.shorten(paragraph.getText());
+
+        if (oldClassification == null) {
+            LOG.debug(
+                    "Classified {}: \"{}\" as {}", changeType, shortText, newClassification);
+        } else {
+            LOG.debug(
+                    "Classified {}: \"{}\" from {} as {}", changeType, shortText, oldClassification, newClassification);
+        }
+    }
+
     private static MergedBoundaryClassifications mergeBoundaryClassifications(
             MutableParagraph paragraph, List<MutableParagraph> paragraphs, int startIndex) {
 
@@ -334,11 +351,9 @@ public final class Classifier {
                 MutableParagraph paragraph = paragraphIterator.next();
 
                 if (GOOD.equals(paragraph.getClassification())) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug(
-                                "Classified heading context-sensitive {} --> from {} to {}",
-                                headingParagraph.getText(), headingParagraph.getClassification(), newClassification);
-                    }
+                    logClassificationChange(
+                            headingParagraph, "heading", headingParagraph.getClassification(),
+                            newClassification);
 
                     headingParagraph.setClassification(newClassification);
 
@@ -374,11 +389,7 @@ public final class Classifier {
 
             Classification newClassification = classifier.apply(mergedBoundaryClassifications);
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(
-                        "Classified context-sensitive {} --> from {} to {}",
-                        paragraph.getText(), classification, newClassification);
-            }
+            logClassificationChange(paragraph, "context-sensitive", paragraph.getClassification(), newClassification);
 
             paragraph.setClassification(newClassification);
         }
