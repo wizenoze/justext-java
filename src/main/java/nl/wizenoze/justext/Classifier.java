@@ -138,7 +138,8 @@ public final class Classifier {
 
             int nextIndex = paragraphIterator.nextIndex();
 
-            MergedClassifications mergedBoundaryClassifications = mergeBoundaryClassifications(paragraphs, nextIndex);
+            MergedBoundaryClassifications mergedBoundaryClassifications = mergeBoundaryClassifications(
+                    paragraph, paragraphs, nextIndex);
             Set<Classification> neighbourClassifications = mergedBoundaryClassifications.getMergedClassifications();
 
             Classification newClassification = null;
@@ -181,7 +182,8 @@ public final class Classifier {
 
             int nextIndex = paragraphIterator.nextIndex();
 
-            MergedClassifications mergedBoundaryClassifications = mergeBoundaryClassifications(paragraphs, nextIndex);
+            MergedBoundaryClassifications mergedBoundaryClassifications = mergeBoundaryClassifications(
+                    paragraph, paragraphs, nextIndex);
             Set<Classification> neighbourClassifications = mergedBoundaryClassifications.getMergedClassifications();
 
             Classification newClassification = null;
@@ -292,8 +294,8 @@ public final class Classifier {
         return BAD_SET;
     }
 
-    private static MergedClassifications mergeBoundaryClassifications(
-            List<MutableParagraph> paragraphs, int startIndex) {
+    private static MergedBoundaryClassifications mergeBoundaryClassifications(
+            MutableParagraph paragraph, List<MutableParagraph> paragraphs, int startIndex) {
 
         // Find boundary classifications
         Set<Classification> nextClassifications = findBoundaryClassifications(
@@ -328,15 +330,22 @@ public final class Classifier {
             nearGoodRemoved = false;
         }
 
-        return new MergedClassifications(mergedClassifications, nearGoodRemoved);
+        return new MergedBoundaryClassifications(paragraph, mergedClassifications, nearGoodRemoved);
     }
 
-    private static class MergedClassifications {
+    /*
+     * Internal class representing the merged neighbour classifications of a paragraph.
+     */
+    private static class MergedBoundaryClassifications {
 
         private final Set<Classification> mergedClassifications;
         private final boolean nearGoodRemoved;
+        private final MutableParagraph paragraph;
 
-        MergedClassifications(Set<Classification> mergedClassifications, boolean nearGoodRemoved) {
+        MergedBoundaryClassifications(
+                MutableParagraph paragraph, Set<Classification> mergedClassifications, boolean nearGoodRemoved) {
+
+            this.paragraph = paragraph;
             this.mergedClassifications = mergedClassifications;
             this.nearGoodRemoved = nearGoodRemoved;
         }
@@ -347,6 +356,10 @@ public final class Classifier {
 
         public boolean isNearGoodRemoved() {
             return nearGoodRemoved;
+        }
+
+        public MutableParagraph getParagraph() {
+            return paragraph;
         }
 
     }
