@@ -165,7 +165,7 @@ public final class JusText {
 
         // Freeze paragraphs
 
-        List<Paragraph> frozenParagraphs = new ArrayList<>(paragraphs.size());
+        List<Paragraph> frozenParagraphs = new ArrayList<>();
 
         paragraphs.forEach((MutableParagraph paragraph) -> {
             if (!paragraph.isBoilerplate() || !ignoreBoilerplate) {
@@ -173,7 +173,7 @@ public final class JusText {
             }
         });
 
-        return frozenParagraphs;
+        return Collections.unmodifiableList(frozenParagraphs);
     }
 
 }
