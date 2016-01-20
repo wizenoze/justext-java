@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import nl.wizenoze.justext.paragraph.MutableParagraph;
 import nl.wizenoze.justext.paragraph.Paragraph;
@@ -124,6 +125,13 @@ public final class Classifier {
             return;
         }
 
+        // Change the classification of headings from SHORT to NEAR_GOOD.
+        if (!classifierProperties.getNoHeadings()) {
+            reviseHeadings(
+                    paragraphs, (paragraph) -> { return SHORT.equals(paragraph.getClassification()); }, NEAR_GOOD,
+                    classifierProperties.getMaxHeadingDistance());
+        }
+
         // Classify SHORT paragraphs
         reviseParagraphs(paragraphs, SHORT, (MergedBoundaryClassifications mergedBoundaryClassifications) -> {
             Set<Classification> neighbourClassifications = mergedBoundaryClassifications.getMergedClassifications();
@@ -157,6 +165,17 @@ public final class Classifier {
 
             return GOOD;
         });
+
+        // Change the classification of headings from BAD to GOOD if they're followed by a GOOD paragraph and if their
+        // original (context-free) classification wasn't BAD.
+        if (!classifierProperties.getNoHeadings()) {
+            reviseHeadings(
+                    paragraphs,
+                    (paragraph) -> {
+                        return BAD.equals(paragraph.getClassification())
+                                && !BAD.equals(paragraph.getFirstClassification());
+                    }, GOOD, classifierProperties.getMaxHeadingDistance());
+        }
     }
 
     private static <P extends Paragraph> ListIterator<P> createListIterator(List<P> paragraphs, int startIndex) {
@@ -286,6 +305,51 @@ public final class Classifier {
         }
 
         return new MergedBoundaryClassifications(paragraph, mergedClassifications, nearGoodRemoved);
+    }
+
+    private static void reviseHeadings(
+            List<MutableParagraph> paragraphs, Predicate<MutableParagraph> headingsPredicate,
+            Classification newClassification, int maxHeadingDistance) {
+
+        ListIterator<MutableParagraph> headingsIterator = paragraphs.listIterator();
+
+        while (headingsIterator.hasNext()) {
+            MutableParagraph headingParagraph = headingsIterator.next();
+
+            if (!headingParagraph.isHeading() || !headingsPredicate.test(headingParagraph)) {
+                continue;
+            }
+
+            int nextIndex = headingsIterator.nextIndex();
+
+            ListIterator<MutableParagraph> paragraphIterator = createListIterator(paragraphs, nextIndex);
+
+            if (paragraphIterator == null) {
+                continue;
+            }
+
+            int distance = 0;
+
+            while (paragraphIterator.hasNext() && distance <= maxHeadingDistance) {
+                MutableParagraph paragraph = paragraphIterator.next();
+
+                Classification classification = paragraph.getClassification();
+
+                if (GOOD.equals(classification)) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(
+                                "Classified heading context-sensitive {} --> from {} to {}",
+                                paragraph.getText(), classification, newClassification);
+                    }
+
+                    headingParagraph.setClassification(newClassification);
+
+                    break;
+                }
+
+                distance += paragraph.length();
+            }
+        }
     }
 
     private static void reviseParagraphs(
