@@ -32,12 +32,12 @@ public final class StringPool {
     /**
      * Represents the A element.
      */
-    public static final String A = "A";
+    public static final String A = "a";
 
     /**
      * Represents the BR element.
      */
-    public static final String BR = "BR";
+    public static final String BR = "br";
 
     /**
      * Carriage return.

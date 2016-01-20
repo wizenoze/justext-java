@@ -66,7 +66,7 @@ public class ParagraphMaker {
     private MutableParagraph lastParagraph;
 
     static {
-        Stream<String> textualTagsStream = Arrays.stream(TextualTag.values()).map(Enum::name);
+        Stream<String> textualTagsStream = Arrays.stream(TextualTag.values()).map(Enum::name).map(String::toLowerCase);
         TEXTUAL_TAGS = textualTagsStream.collect(Collectors.toSet());
     }
 
@@ -121,7 +121,7 @@ public class ParagraphMaker {
 
             switch (event) {
                 case START_ELEMENT:
-                    tagName = streamReader.getLocalName().toUpperCase();
+                    tagName = streamReader.getLocalName().toLowerCase();
 
                     pathInfo.append(tagName);
 
@@ -151,7 +151,7 @@ public class ParagraphMaker {
 
                     break;
                 case END_ELEMENT:
-                    tagName = streamReader.getLocalName().toUpperCase();
+                    tagName = streamReader.getLocalName().toLowerCase();
 
                     pathInfo.pop();
 
