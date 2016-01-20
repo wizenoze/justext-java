@@ -83,7 +83,11 @@ public final class Classifier {
             List<MutableParagraph> paragraphs, Set<String> stopWords, ClassifierProperties classifierProperties) {
 
         for (MutableParagraph paragraph : paragraphs) {
-            Classification classification = classify(paragraph, stopWords, classifierProperties);
+            Classification classification = doClassifyContextFree(paragraph, stopWords, classifierProperties);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Classified context-free {} as {}", paragraph.getText(), classification);
+            }
 
             paragraph.setClassification(classification);
         }
@@ -203,45 +207,48 @@ public final class Classifier {
         }
     }
 
-    private static Classification classify(
+    private static Classification doClassifyContextFree(
             Paragraph paragraph, Set<String> stopWords, ClassifierProperties classifierProperties) {
 
-        int length = paragraph.length();
-        float linkDensity = paragraph.getLinkDensity();
-        float stopWordsDensity = paragraph.getStopWordsDensity(stopWords);
+        if (paragraph.getLinkDensity() > classifierProperties.getMaxLinkDensity()) {
+            return BAD;
+        }
+
         String text = paragraph.getText();
 
-        Classification classification = null;
+        if (StringUtil.contains(text, COPYRIGHT_CHAR) || StringUtil.contains(text, COPYRIGHT_CODE)) {
+            return BAD;
+        }
 
-        if (linkDensity > classifierProperties.getMaxLinkDensity()) {
-            classification = BAD;
-        } else if (StringUtil.contains(text, COPYRIGHT_CHAR) || StringUtil.contains(text, COPYRIGHT_CODE)) {
-            classification = BAD;
-        } else if (paragraph.isSelect()) {
-            classification = BAD;
-        } else if (length < classifierProperties.getLengthLow()) {
+        if (paragraph.isSelect()) {
+            return BAD;
+        }
+
+        int length = paragraph.length();
+
+        if (length < classifierProperties.getLengthLow()) {
             if (paragraph.getCharsInLinksCount() > 0) {
-                classification = BAD;
-            } else {
-                classification = SHORT;
+                return BAD;
             }
-        } else if (stopWordsDensity >= classifierProperties.getStopWordsHigh()) {
+
+            return SHORT;
+        }
+
+        float stopWordsDensity = paragraph.getStopWordsDensity(stopWords);
+
+        if (stopWordsDensity >= classifierProperties.getStopWordsHigh()) {
             if (length > classifierProperties.getLengthHigh()) {
-                classification = GOOD;
-            } else {
-                classification = NEAR_GOOD;
+                return GOOD;
             }
-        } else if (stopWordsDensity >= classifierProperties.getStopWordsLow()) {
-            classification = NEAR_GOOD;
-        } else {
-            classification = BAD;
+
+            return NEAR_GOOD;
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Classified context-free {} --> {}", text, classification);
+        if (stopWordsDensity >= classifierProperties.getStopWordsLow()) {
+            return NEAR_GOOD;
         }
 
-        return classification;
+        return BAD;
     }
 
     private static Classification getBoundaryClassification(
