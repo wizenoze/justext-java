@@ -85,7 +85,7 @@ class StringUtilTest extends Specification {
         expected == normalized
     }
 
-    def test_normalize_non_break_spaces() {
+    def testNormalizeNonBreakSpaces() {
         def string = "\u00A0\t €\u202F \t"
         def expected = " € "
 
