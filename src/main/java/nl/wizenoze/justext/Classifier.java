@@ -333,13 +333,11 @@ public final class Classifier {
             while (paragraphIterator.hasNext() && distance <= maxHeadingDistance) {
                 MutableParagraph paragraph = paragraphIterator.next();
 
-                Classification classification = paragraph.getClassification();
-
-                if (GOOD.equals(classification)) {
+                if (GOOD.equals(paragraph.getClassification())) {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug(
                                 "Classified heading context-sensitive {} --> from {} to {}",
-                                paragraph.getText(), classification, newClassification);
+                                headingParagraph.getText(), headingParagraph.getClassification(), newClassification);
                     }
 
                     headingParagraph.setClassification(newClassification);
