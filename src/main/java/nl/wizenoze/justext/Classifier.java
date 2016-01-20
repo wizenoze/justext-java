@@ -132,9 +132,9 @@ public final class Classifier {
 
             int nextIndex = paragraphIterator.nextIndex();
 
-            Classification previousBoundaryClassification = getPrevBoundaryClassification(
+            Classification previousBoundaryClassification = findPrevBoundaryClassification(
                     createListIterator(paragraphs, nextIndex), true);
-            Classification nextBoundaryClassification = getNextBoundaryClassification(
+            Classification nextBoundaryClassification = findNextBoundaryClassification(
                     createListIterator(paragraphs, nextIndex), true);
 
             Set<Classification> neighbourClassifications = EnumSet.of(
@@ -148,12 +148,12 @@ public final class Classifier {
                 newClassification = BAD;
             } else {
                 if (BAD.equals(previousBoundaryClassification)) {
-                    previousBoundaryClassification = getPrevBoundaryClassification(
+                    previousBoundaryClassification = findPrevBoundaryClassification(
                             createListIterator(paragraphs, nextIndex), false);
                 }
 
                 if (BAD.equals(nextBoundaryClassification)) {
-                    nextBoundaryClassification = getNextBoundaryClassification(
+                    nextBoundaryClassification = findNextBoundaryClassification(
                             createListIterator(paragraphs, nextIndex), false);
                 }
 
@@ -188,9 +188,9 @@ public final class Classifier {
 
             int nextIndex = paragraphIterator.nextIndex();
 
-            Classification previousNeighbourClassification = getPrevBoundaryClassification(
+            Classification previousNeighbourClassification = findPrevBoundaryClassification(
                     createListIterator(paragraphs, nextIndex), true);
-            Classification nextNeighbourClassification = getNextBoundaryClassification(
+            Classification nextNeighbourClassification = findNextBoundaryClassification(
                     createListIterator(paragraphs, nextIndex), true);
 
             Classification newClassification = null;
@@ -267,7 +267,7 @@ public final class Classifier {
         return BAD;
     }
 
-    private static Classification getBoundaryClassification(
+    private static Classification findBoundaryClassification(
             ListIterator<MutableParagraph> paragraphIterator, boolean forward, boolean ignoreNearGood) {
 
         if (paragraphIterator == null) {
@@ -299,16 +299,16 @@ public final class Classifier {
         return BAD;
     }
 
-    private static Classification getNextBoundaryClassification(
+    private static Classification findNextBoundaryClassification(
             ListIterator<MutableParagraph> paragraphIterator, boolean ignoreNearGood) {
 
-        return getBoundaryClassification(paragraphIterator, true, ignoreNearGood);
+        return findBoundaryClassification(paragraphIterator, true, ignoreNearGood);
     }
 
-    private static Classification getPrevBoundaryClassification(
+    private static Classification findPrevBoundaryClassification(
             ListIterator<MutableParagraph> paragraphIterator, boolean ignoreNearGood) {
 
-        return getBoundaryClassification(paragraphIterator, false, ignoreNearGood);
+        return findBoundaryClassification(paragraphIterator, false, ignoreNearGood);
     }
 
 }
