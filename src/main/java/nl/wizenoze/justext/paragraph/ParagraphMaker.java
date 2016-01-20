@@ -45,8 +45,8 @@ import static javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
-import static nl.wizenoze.justext.util.StringPool.A;
-import static nl.wizenoze.justext.util.StringPool.BR;
+import static nl.wizenoze.justext.util.StringPool.TAG_A;
+import static nl.wizenoze.justext.util.StringPool.TAG_BR;
 
 /**
  * Created by lcsontos on 1/11/16.
@@ -125,7 +125,7 @@ public class ParagraphMaker {
 
                     pathInfo.append(tagName);
 
-                    boolean tagNameIsBR = BR.equals(tagName);
+                    boolean tagNameIsBR = TAG_BR.equals(tagName);
 
                     if (TEXTUAL_TAGS.contains(tagName) || (tagNameIsBR && isBreak)) {
                         if (tagNameIsBR) {
@@ -136,7 +136,7 @@ public class ParagraphMaker {
                     } else {
                         isBreak = tagNameIsBR;
 
-                        if (A.equals(tagName)) {
+                        if (TAG_A.equals(tagName)) {
                             isLink = true;
                         }
 
@@ -159,7 +159,7 @@ public class ParagraphMaker {
                         startNewParagraph();
                     }
 
-                    if (A.equals(tagName)) {
+                    if (TAG_A.equals(tagName)) {
                         isLink = false;
                     }
 

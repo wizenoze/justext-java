@@ -30,16 +30,6 @@ public final class StringPool {
     }
 
     /**
-     * Represents the A element.
-     */
-    public static final String A = "a";
-
-    /**
-     * Represents the BR element.
-     */
-    public static final String BR = "br";
-
-    /**
      * Carriage return.
      */
     public static final String CARRIAGE_RETURN = "\r";
@@ -88,5 +78,15 @@ public final class StringPool {
      * Space.
      */
     public static final String SPACE = " ";
+
+    /**
+     * Represents an <code>A</code> tag.
+     */
+    public static final String TAG_A = "a";
+
+    /**
+     * Represents a <code>BR</code> tag.
+     */
+    public static final String TAG_BR = "br";
 
 }
