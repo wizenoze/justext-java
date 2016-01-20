@@ -31,8 +31,8 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
 
     private final int charsInLinksCount;
     private final Classification classification;
-    private final Classification firstClassification;
     private final String domPath;
+    private final Classification firstClassification;
     private final boolean hasText;
     private final boolean isBoilerplate;
     private final boolean isHeading;
@@ -77,11 +77,6 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
     }
 
     @Override
-    public Classification getFirstClassification() {
-        return firstClassification;
-    }
-
-    @Override
     public Classification getClassification() {
         return classification;
     }
@@ -89,6 +84,11 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
     @Override
     public String getDomPath() {
         return domPath;
+    }
+
+    @Override
+    public Classification getFirstClassification() {
+        return firstClassification;
     }
 
     @Override

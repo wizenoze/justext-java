@@ -44,18 +44,18 @@ public interface Paragraph {
     Classification getClassification();
 
     /**
+     * Gets DOM path.
+     * @return DOM path.
+     */
+    String getDomPath();
+
+    /**
      * Gets that classification with which {@link MutableParagraph#setClassification(Classification)} was called for the
      * first time.
      *
      * @return classification.
      */
     Classification getFirstClassification();
-
-    /**
-     * Gets DOM path.
-     * @return DOM path.
-     */
-    String getDomPath();
 
     /**
      * Gets link density.
