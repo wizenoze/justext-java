@@ -36,6 +36,7 @@ import static nl.wizenoze.justext.util.StringPool.SPACE;
 public final class StringUtil {
 
     private static final Pattern MULTIPLE_WHITESPACE_PATTERN = Pattern.compile("\\s+", UNICODE_CHARACTER_CLASS);
+    private static final int SHORTEN_LENGTH_DEFAULT = 20;
     private static final Set<Character> UNICODE_WHITESPACE_CHARACTERS = new HashSet<>(17);
 
     static {
@@ -108,7 +109,7 @@ public final class StringUtil {
         for (int index = 0; index < string.length(); index++) {
             char codePoint = string.charAt(index);
 
-            if (UNICODE_WHITESPACE_CHARACTERS.contains(codePoint) || Character.isWhitespace(codePoint)) {
+            if (isWhitespace(codePoint)) {
                 continue;
             }
 
@@ -204,12 +205,12 @@ public final class StringUtil {
      * </pre>
      * </p>
      *
-     * @param  s the original string
+     * @param  string the original string
      * @return a string representing the original string shortened to 20
      *         characters, with suffix "..." appended to it
      */
-    public static String shorten(String s) {
-        return shorten(s, 20);
+    public static String shorten(String string) {
+        return shorten(string, SHORTEN_LENGTH_DEFAULT);
     }
 
     /**
@@ -239,13 +240,13 @@ public final class StringUtil {
      * </pre>
      * </p>
      *
-     * @param  s the original string
+     * @param  string the original string
      * @param  length the number of characters to limit from the original string
      * @return a string representing the original string shortened to the
      *         specified length, with suffix "..." appended to it
      */
-    public static String shorten(String s, int length) {
-        return shorten(s, length, "...");
+    public static String shorten(String string, int length) {
+        return shorten(string, length, "...");
     }
 
     /**
@@ -275,29 +276,29 @@ public final class StringUtil {
      * </pre>
      * </p>
      *
-     * @param  s the original string
+     * @param  string the original string
      * @param  length the number of characters to limit from the original string
      * @param  suffix the suffix to append
      * @return a string representing the original string shortened to the
      *         specified length, with the specified suffix appended to it
      */
-    public static String shorten(String s, int length, String suffix) {
-        if ((s == null) || (suffix == null)) {
+    public static String shorten(String string, int length, String suffix) {
+        if ((string == null) || (suffix == null)) {
             return null;
         }
 
-        if (s.length() <= length) {
-            return s;
+        if (string.length() <= length) {
+            return string;
         }
 
         if (length < suffix.length()) {
-            return s.substring(0, length);
+            return string.substring(0, length);
         }
 
         int curLength = length;
 
         for (int j = (curLength - suffix.length()); j >= 0; j--) {
-            if (Character.isWhitespace(s.charAt(j))) {
+            if (isWhitespace(string.charAt(j))) {
                 curLength = j;
 
                 break;
@@ -308,7 +309,7 @@ public final class StringUtil {
             curLength = length - suffix.length();
         }
 
-        String temp = s.substring(0, curLength);
+        String temp = string.substring(0, curLength);
 
         return temp.concat(suffix);
     }
@@ -339,13 +340,17 @@ public final class StringUtil {
      * </pre>
      * </p>
      *
-     * @param  s the original string
+     * @param  string the original string
      * @param  suffix the suffix to append
      * @return a string representing the original string shortened to 20
      *         characters, with the specified suffix appended to it
      */
-    public static String shorten(String s, String suffix) {
-        return shorten(s, 20, suffix);
+    public static String shorten(String string, String suffix) {
+        return shorten(string, SHORTEN_LENGTH_DEFAULT, suffix);
+    }
+
+    private static boolean isWhitespace(char codePoint) {
+        return (UNICODE_WHITESPACE_CHARACTERS.contains(codePoint) || Character.isWhitespace(codePoint));
     }
 
 }
