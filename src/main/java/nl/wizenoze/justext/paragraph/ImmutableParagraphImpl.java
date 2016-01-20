@@ -25,7 +25,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by lcsontos on 1/14/16.
+ * Immutable copy of an already classified paragraph object. There are typically created by
+ * {@link MutableParagraph#freeze()}.
+ *
+ * @author László Csontos
  */
 public final class ImmutableParagraphImpl extends BaseParagraph {
 

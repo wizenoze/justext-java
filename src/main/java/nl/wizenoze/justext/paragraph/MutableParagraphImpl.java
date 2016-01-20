@@ -34,7 +34,9 @@ import nl.wizenoze.justext.util.StringUtil;
 import static nl.wizenoze.justext.Classification.GOOD;
 
 /**
- * Created by lcsontos on 1/8/16.
+ * Implementation of {@link MutableParagraphImpl}.
+ *
+ * @author László Csontos
  */
 final class MutableParagraphImpl extends BaseParagraph implements MutableParagraph {
 

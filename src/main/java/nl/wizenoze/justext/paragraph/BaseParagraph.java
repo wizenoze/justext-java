@@ -25,7 +25,7 @@ import java.util.Set;
 import nl.wizenoze.justext.util.StringUtil;
 
 /**
- * Created by lcsontos on 1/14/16.
+ * @author László Csontos
  */
 abstract class BaseParagraph implements Paragraph {
 

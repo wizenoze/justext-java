@@ -49,7 +49,9 @@ import static nl.wizenoze.justext.util.StringPool.TAG_A;
 import static nl.wizenoze.justext.util.StringPool.TAG_BR;
 
 /**
- * Created by lcsontos on 1/11/16.
+ * Traverses the given XML document and constructs a list of {@link MutableParagraph} objects.
+ *
+ * @author László Csontos
  */
 public class ParagraphMaker {
 

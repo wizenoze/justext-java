@@ -24,7 +24,10 @@ import java.util.List;
 import nl.wizenoze.justext.Classification;
 
 /**
- * Created by lcsontos on 1/14/16.
+ * Mutable instance of a paragraph. These are created by {@link ParagraphMaker} and processed by
+ * {@link nl.wizenoze.justext.Classifier}.
+ *
+ * @author László Csontos
  */
 public interface MutableParagraph extends Paragraph {
 

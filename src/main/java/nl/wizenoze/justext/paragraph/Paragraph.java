@@ -25,7 +25,9 @@ import java.util.Set;
 import nl.wizenoze.justext.Classification;
 
 /**
- * Created by lcsontos on 1/14/16.
+ * Represents peaces of text extracted from textual ({@link TextualTag}) HTML elements.
+ *
+ * @author László Csontos
  */
 public interface Paragraph {
 
