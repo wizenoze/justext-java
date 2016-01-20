@@ -157,11 +157,11 @@ public final class JusText {
 
         // Context-free classification
 
-        Classifier.classifyParagraphs(paragraphs, stopWords, classifierProperties);
+        Classifier.classifyContextFree(paragraphs, stopWords, classifierProperties);
 
         // Context-sensitive classification
 
-        Classifier.reviseParagraphs(paragraphs, classifierProperties);
+        Classifier.classifyContextSensitive(paragraphs, classifierProperties);
 
         // Freeze paragraphs
 

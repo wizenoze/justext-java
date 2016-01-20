@@ -36,7 +36,7 @@ class ContextSensitiveClassifierTest extends Specification {
         ]
 
         when:
-        Classifier.reviseParagraphs(paragraphs)
+        Classifier.classifyContextSensitive(paragraphs)
 
         then:
         assertClassification(paragraphs[0], BAD)
@@ -64,7 +64,7 @@ class ContextSensitiveClassifierTest extends Specification {
         ]
 
         when:
-        Classifier.reviseParagraphs(paragraphs)
+        Classifier.classifyContextSensitive(paragraphs)
 
         then:
         assertClassification(paragraphs[0], BAD)
@@ -86,7 +86,7 @@ class ContextSensitiveClassifierTest extends Specification {
         ]
 
         when:
-        Classifier.reviseParagraphs(paragraphs)
+        Classifier.classifyContextSensitive(paragraphs)
 
         then:
         assertClassification(paragraphs[0], GOOD)
@@ -106,7 +106,7 @@ class ContextSensitiveClassifierTest extends Specification {
         ]
 
         when:
-        Classifier.reviseParagraphs(paragraphs)
+        Classifier.classifyContextSensitive(paragraphs)
 
         then:
         assertClassification(paragraphs[0], BAD)
@@ -124,7 +124,7 @@ class ContextSensitiveClassifierTest extends Specification {
         ]
 
         when:
-        Classifier.reviseParagraphs(paragraphs)
+        Classifier.classifyContextSensitive(paragraphs)
 
         then:
         assertClassification(paragraphs[0], GOOD)
@@ -157,7 +157,7 @@ class ContextSensitiveClassifierTest extends Specification {
         ]
 
         when:
-        Classifier.reviseParagraphs(paragraphs)
+        Classifier.classifyContextSensitive(paragraphs)
 
         then:
         assertClassification(paragraphs[0], BAD)
@@ -182,7 +182,7 @@ class ContextSensitiveClassifierTest extends Specification {
         def paragraphs = []
 
         when:
-        Classifier.reviseParagraphs(paragraphs)
+        Classifier.classifyContextSensitive(paragraphs)
 
         then:
         paragraphs.isEmpty()

@@ -25,7 +25,7 @@ class ContextFreeClassifierTest extends Specification {
         ]
 
         when:
-        Classifier.classifyParagraphs(paragraphs, [] as Set)
+        Classifier.classifyContextFree(paragraphs, [] as Set)
 
         then:
         paragraphs[0].classification.equals(BAD)
@@ -44,7 +44,7 @@ class ContextFreeClassifierTest extends Specification {
                 .build()
 
         when:
-        Classifier.classifyParagraphs(paragraphs, [] as Set, classifierProperties)
+        Classifier.classifyContextFree(paragraphs, [] as Set, classifierProperties)
 
         then:
         paragraphs[0].classification.equals(SHORT)
@@ -63,7 +63,7 @@ class ContextFreeClassifierTest extends Specification {
         def classifierProperties = new ClassifierProperties.Builder().setMaxLinkDensity(0.5).build()
 
         when:
-        Classifier.classifyParagraphs(paragraphs, [] as Set, classifierProperties)
+        Classifier.classifyContextFree(paragraphs, [] as Set, classifierProperties)
 
         then:
         paragraphs[0].classification.equals(SHORT)
@@ -81,7 +81,7 @@ class ContextFreeClassifierTest extends Specification {
         ]
 
         when:
-        Classifier.classifyParagraphs(paragraphs, [] as Set)
+        Classifier.classifyContextFree(paragraphs, [] as Set)
 
         then:
         paragraphs[0].classification.equals(BAD)
@@ -102,7 +102,7 @@ class ContextFreeClassifierTest extends Specification {
                 .build()
 
         when:
-        Classifier.classifyParagraphs(paragraphs, ["0"] as Set, classifierProperties)
+        Classifier.classifyContextFree(paragraphs, ["0"] as Set, classifierProperties)
 
         then:
         paragraphs[0].classification.equals(NEAR_GOOD)
@@ -124,7 +124,7 @@ class ContextFreeClassifierTest extends Specification {
                 .build()
 
         when:
-        Classifier.classifyParagraphs(paragraphs, ["0", "1"] as Set, classifierProperties)
+        Classifier.classifyContextFree(paragraphs, ["0", "1"] as Set, classifierProperties)
 
         then:
         paragraphs[0].classification.equals(NEAR_GOOD)

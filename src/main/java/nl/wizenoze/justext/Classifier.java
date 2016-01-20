@@ -68,8 +68,8 @@ public final class Classifier {
      * @param paragraphs List of paragraphs.
      * @param stopWords Set of stop words.
      */
-    public static void classifyParagraphs(List<MutableParagraph> paragraphs, Set<String> stopWords) {
-        classifyParagraphs(paragraphs, stopWords, CLASSIFIER_PROPERTIES_DEFAULT);
+    public static void classifyContextFree(List<MutableParagraph> paragraphs, Set<String> stopWords) {
+        classifyContextFree(paragraphs, stopWords, CLASSIFIER_PROPERTIES_DEFAULT);
     }
 
     /**
@@ -79,7 +79,7 @@ public final class Classifier {
      * @param stopWords Set of lower-case stop words.
      * @param classifierProperties Properties.
      */
-    public static void classifyParagraphs(
+    public static void classifyContextFree(
             List<MutableParagraph> paragraphs, Set<String> stopWords, ClassifierProperties classifierProperties) {
 
         for (MutableParagraph paragraph : paragraphs) {
@@ -90,23 +90,25 @@ public final class Classifier {
     }
 
     /**
-     * Performs context sensitive classification. Assumes that {@link #classifyParagraphs(List, Set)} has already been
+     * Performs context sensitive classification. Assumes that {@link #classifyContextFree(List, Set)} has already been
      * called.
      *
      * @param paragraphs List of paragraphs.
      */
-    public static void reviseParagraphs(List<MutableParagraph> paragraphs) {
-        reviseParagraphs(paragraphs, CLASSIFIER_PROPERTIES_DEFAULT);
+    public static void classifyContextSensitive(List<MutableParagraph> paragraphs) {
+        classifyContextSensitive(paragraphs, CLASSIFIER_PROPERTIES_DEFAULT);
     }
 
     /**
-     * Performs context sensitive classification. Assumes that {@link #classifyParagraphs(List, Set)} has already been
+     * Performs context sensitive classification. Assumes that {@link #classifyContextFree(List, Set)} has already been
      * called.
      *
      * @param paragraphs List of paragraphs.
      * @param classifierProperties Properties.
      */
-    public static void reviseParagraphs(List<MutableParagraph> paragraphs, ClassifierProperties classifierProperties) {
+    public static void classifyContextSensitive(
+            List<MutableParagraph> paragraphs, ClassifierProperties classifierProperties) {
+
         if (paragraphs.isEmpty()) {
             return;
         }
