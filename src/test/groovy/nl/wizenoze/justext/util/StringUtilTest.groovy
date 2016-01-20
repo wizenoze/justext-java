@@ -96,4 +96,13 @@ class StringUtilTest extends Specification {
         expected == normalized
     }
 
+    def testShorten() {
+        expect:
+        StringUtil.shorten("12345678901234567890xyz") == "12345678901234567..."
+        StringUtil.shorten("1 345678901234567890xyz") == "1 345678901234567..."
+        StringUtil.shorten(" 2345678901234567890xyz") == " 2345678901234567..."
+        StringUtil.shorten("12345678901234567890") == "12345678901234567890"
+        StringUtil.shorten(" 2345678901234567890") == " 2345678901234567890"
+    }
+
 }
