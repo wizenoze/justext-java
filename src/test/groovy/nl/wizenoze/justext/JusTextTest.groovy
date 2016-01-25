@@ -29,6 +29,20 @@ class JusTextTest extends Specification {
     }
 
     /*
+     * http://www.bbc.co.uk/education/guides/zt2hpv4/revision/1
+     */
+    def testBitesize() {
+        String html = loadHtml("bbc_bitesize.html")
+
+        when:
+        List<Paragraph> paragraphs = jusText.extract(html, "en")
+        println(paragraphs.collect({ "\"${it.text}\"\n" }))
+
+        then:
+        !paragraphs.isEmpty()
+    }
+
+    /*
      * http://www.cosmos4kids.com/files/galaxy_intro.html
      */
     def testCosmos() {
@@ -62,6 +76,20 @@ class JusTextTest extends Specification {
                 "across millions of square miles, or kilometers. These biomes are marked by sparse trees and " +
                 "extensive grasses as well as a variety of small and large animals. Some of the largest land animals " +
                 "on Earth live in grasslands, including American bison, elephants, giraffes, and so forth."
+    }
+
+    /*
+     * http://www.askaboutireland.ie/learning-zone/primary-students/5th-+-6th-class/history/history-the-full-story/ireland-the-early-20th-ce/leaders-of-the-1916-risin/patrick-pearse/
+     */
+    def testPatrickPearse() {
+        String html = loadHtml("Patrick_Pearse.html")
+
+        when:
+        List<Paragraph> paragraphs = jusText.extract(html, "en")
+        println(paragraphs.collect({ "\"${it.text}\"\n" }))
+
+        then:
+        !paragraphs.isEmpty()
     }
 
 }
