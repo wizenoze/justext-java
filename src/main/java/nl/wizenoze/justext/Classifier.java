@@ -191,7 +191,7 @@ public final class Classifier {
     private static Classification doClassifyContextFree(
             Paragraph paragraph, Set<String> stopWords, ClassifierProperties classifierProperties) {
 
-        if (paragraph.getLinkDensity() > classifierProperties.getMaxLinkDensity()) {
+        if (paragraph.getLinkDensity() > classifierProperties.getMaxLinkDensity().floatValue()) {
             return BAD;
         }
 
@@ -217,7 +217,7 @@ public final class Classifier {
 
         float stopWordsDensity = paragraph.getStopWordsDensity(stopWords);
 
-        if (stopWordsDensity >= classifierProperties.getStopWordsHigh()) {
+        if (stopWordsDensity >= classifierProperties.getStopWordsHigh().floatValue()) {
             if (length > classifierProperties.getLengthHigh()) {
                 return GOOD;
             }
@@ -225,7 +225,7 @@ public final class Classifier {
             return NEAR_GOOD;
         }
 
-        if (stopWordsDensity >= classifierProperties.getStopWordsLow()) {
+        if (stopWordsDensity >= classifierProperties.getStopWordsLow().floatValue()) {
             return NEAR_GOOD;
         }
 

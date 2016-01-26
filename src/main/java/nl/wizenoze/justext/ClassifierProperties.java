@@ -19,6 +19,8 @@
 
 package nl.wizenoze.justext;
 
+import java.math.BigDecimal;
+
 /**
  * Property holder for the context free classifier algorithm.
  *
@@ -46,7 +48,7 @@ public final class ClassifierProperties {
      * The link density is defined as the proportion of characters inside <code>&lt;a&gt;</code> tags. If it's greater
      * than {@link #MAX_LINK_DENSITY_DEFAULT} text block is classified as {@link Classification#BAD}.
      */
-    public static final float MAX_LINK_DENSITY_DEFAULT = 0.2f;
+    public static final BigDecimal MAX_LINK_DENSITY_DEFAULT = new BigDecimal("0.2");
 
     /**
      * Take headings into account by default.
@@ -56,24 +58,24 @@ public final class ClassifierProperties {
     /**
      * Divide the blocks by the stop words density into medium and high.
      */
-    public static final float STOP_WORDS_HIGH_DEFAULT = 0.32f;
+    public static final BigDecimal STOP_WORDS_HIGH_DEFAULT = new BigDecimal("0.32");
 
     /**
      * Divide the blocks by the stop words density into low and medium.
      */
-    public static final float STOP_WORDS_LOW_DEFAULT = 0.30f;
+    public static final BigDecimal STOP_WORDS_LOW_DEFAULT = new BigDecimal("0.30");
 
     private final int lengthHigh;
     private final int lengthLow;
     private final int maxHeadingDistance;
-    private final float maxLinkDensity;
+    private final BigDecimal maxLinkDensity;
     private final boolean noHeadings;
-    private final float stopWordsHigh;
-    private final float stopWordsLow;
+    private final BigDecimal stopWordsHigh;
+    private final BigDecimal stopWordsLow;
 
     private ClassifierProperties(
-            int lengthHigh, int lengthLow, int maxHeadingDistance, float maxLinkDensity, boolean noHeadings,
-            float stopWordsHigh, float stopWordsLow) {
+            int lengthHigh, int lengthLow, int maxHeadingDistance, BigDecimal maxLinkDensity, boolean noHeadings,
+            BigDecimal stopWordsHigh, BigDecimal stopWordsLow) {
 
         this.lengthHigh = lengthHigh;
         this.lengthLow = lengthLow;
@@ -120,7 +122,7 @@ public final class ClassifierProperties {
      * Gets maximum link density.
      * @return maximum link density.
      */
-    public float getMaxLinkDensity() {
+    public BigDecimal getMaxLinkDensity() {
         return maxLinkDensity;
     }
 
@@ -136,7 +138,7 @@ public final class ClassifierProperties {
      * Gets stop word's upper threshold.
      * @return stop word's upper threshold.
      */
-    public float getStopWordsHigh() {
+    public BigDecimal getStopWordsHigh() {
         return stopWordsHigh;
     }
 
@@ -144,7 +146,7 @@ public final class ClassifierProperties {
      * Gets stop word's lower threshold.
      * @return stop word's lower threshold.
      */
-    public float getStopWordsLow() {
+    public BigDecimal getStopWordsLow() {
         return stopWordsLow;
     }
 
@@ -156,10 +158,10 @@ public final class ClassifierProperties {
         private int lengthHigh;
         private int lengthLow;
         private int maxHeadingDistance;
-        private float maxLinkDensity;
+        private BigDecimal maxLinkDensity;
         private boolean noHeadings;
-        private float stopWordsHigh;
-        private float stopWordsLow;
+        private BigDecimal stopWordsHigh;
+        private BigDecimal stopWordsLow;
 
         /**
          *
@@ -218,7 +220,7 @@ public final class ClassifierProperties {
          * @param  maxLinkDensity maximum link density.
          * @return builder.
          */
-        public Builder setMaxLinkDensity(float maxLinkDensity) {
+        public Builder setMaxLinkDensity(BigDecimal maxLinkDensity) {
             this.maxLinkDensity = maxLinkDensity;
             return this;
         }
@@ -238,7 +240,7 @@ public final class ClassifierProperties {
          * @param stopWordsHigh stop word's upper threshold.
          * @return builder.
          */
-        public Builder setStopWordsHigh(float stopWordsHigh) {
+        public Builder setStopWordsHigh(BigDecimal stopWordsHigh) {
             this.stopWordsHigh = stopWordsHigh;
             return this;
         }
@@ -248,7 +250,7 @@ public final class ClassifierProperties {
          * @param stopWordsLow stop word's upper threshold.
          * @return builder.
          */
-        public Builder setStopWordsLow(float stopWordsLow) {
+        public Builder setStopWordsLow(BigDecimal stopWordsLow) {
             this.stopWordsLow = stopWordsLow;
             return this;
         }
