@@ -20,6 +20,7 @@
 package nl.wizenoze.justext;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Property holder for the context free classifier algorithm.
@@ -92,6 +93,33 @@ public final class ClassifierProperties {
      */
     public static ClassifierProperties getDefault() {
         return new Builder().build();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj == null || !(obj instanceof ClassifierProperties)) {
+            return false;
+        }
+
+        ClassifierProperties classifierProperties = (ClassifierProperties) obj;
+
+        return Objects.equals(lengthHigh, classifierProperties.lengthHigh)
+                && Objects.equals(lengthLow, classifierProperties.lengthLow)
+                && Objects.equals(maxHeadingDistance, classifierProperties.maxHeadingDistance)
+                && Objects.equals(maxLinkDensity, classifierProperties.maxLinkDensity)
+                && Objects.equals(noHeadings, classifierProperties.noHeadings)
+                && Objects.equals(stopWordsHigh, classifierProperties.stopWordsHigh)
+                && Objects.equals(stopWordsLow, classifierProperties.stopWordsLow);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                lengthHigh, lengthLow, maxHeadingDistance, maxLinkDensity, noHeadings, stopWordsHigh, stopWordsLow);
     }
 
     /**
