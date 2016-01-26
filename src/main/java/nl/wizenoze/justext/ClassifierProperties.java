@@ -209,6 +209,14 @@ public final class ClassifierProperties {
          * @return an instance of {@link ClassifierProperties}.
          */
         public ClassifierProperties build() {
+            if (lengthHigh < lengthLow) {
+                throw new IllegalStateException("lengthHigh < lengthLow");
+            }
+
+            if (stopWordsHigh.compareTo(stopWordsLow) < 0) {
+                throw new IllegalStateException("stopWordsHigh < stopWordsLow");
+            }
+
             return new ClassifierProperties(
                 lengthHigh, lengthLow, maxHeadingDistance, maxLinkDensity, noHeadings, stopWordsHigh, stopWordsLow);
         }
