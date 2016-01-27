@@ -41,6 +41,7 @@ import static nl.wizenoze.justext.Classification.GOOD;
 final class MutableParagraphImpl extends BaseParagraph implements MutableParagraph {
 
     private static final Pattern HEADER_PATTERN = Pattern.compile("\\bh\\d\\b");
+    private static final Pattern IMAGE_PATTERN = Pattern.compile("\\bimg\\b");
     private static final Pattern SELECT_PATTERN = Pattern.compile("^select|\\.select");
 
     private int charsInLinksCount = 0;
@@ -50,6 +51,7 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
     private int tagsCount = 0;
     private String text;
     private List<String> textNodes;
+    private String url;
     private String[] words;
     private Optional<String> xpath;
 
@@ -192,6 +194,11 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
     }
 
     @Override
+    public String getUrl() {
+        return url;
+    }
+
+    @Override
     public List<String> getWords() {
         return Collections.unmodifiableList(Arrays.asList(words()));
     }
@@ -229,6 +236,11 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
     @Override
     public boolean isHeading() {
         return HEADER_PATTERN.matcher(getDomPath()).find();
+    }
+
+    @Override
+    public boolean isImage() {
+        return IMAGE_PATTERN.matcher(getDomPath()).find();
     }
 
     @Override
@@ -282,6 +294,11 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
         reset();
 
         this.textNodes = textNodes;
+    }
+
+    @Override
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     /**

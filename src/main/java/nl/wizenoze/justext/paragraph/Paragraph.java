@@ -92,6 +92,14 @@ public interface Paragraph {
     String getText();
 
     /**
+     * Returns the value of the <code>src</code> attribute of that <code>img</code> tag from which this paragraph was
+     * extracted.
+     *
+     * @return the value of the <code>src</code> attribute of the corresponding <code>img</code> tag.
+     */
+    String getUrl();
+
+    /**
      * Gets words.
      * @return words
      */
@@ -127,6 +135,13 @@ public interface Paragraph {
      * @return true if heading, false otherwise.
      */
     boolean isHeading();
+
+    /**
+     * Returns if this paragraph represents text extracted from the <code>alt</code> attribute of an <code>img</code>
+     * tag.
+     * @return true if image, false otherwise.
+     */
+    boolean isImage();
 
     /**
      * Returns if this paragraph is within a SELECT element.

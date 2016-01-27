@@ -39,11 +39,13 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
     private final boolean hasText;
     private final boolean isBoilerplate;
     private final boolean isHeading;
+    private final boolean isImage;
     private final boolean isSelect;
     private final int length;
     private final float linkDensity;
     private final int tagsCount;
     private final String text;
+    private final String url;
     private final List<String> words;
     private final int wordsCount;
     private final String xpath;
@@ -61,6 +63,7 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
         domPath = paragraph.getDomPath();
         isBoilerplate = paragraph.isBoilerplate();
         isHeading = paragraph.isHeading();
+        isImage = paragraph.isImage();
         isSelect = paragraph.isSelect();
         linkDensity = paragraph.getLinkDensity();
         tagsCount = paragraph.getTagsCount();
@@ -70,6 +73,7 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
         hasText = hasText(text);
         length = text.length();
 
+        url = paragraph.getUrl();
         words = paragraph.getWords();
         wordsCount = words.size();
     }
@@ -122,6 +126,11 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
     }
 
     @Override
+    public String getUrl() {
+        return url;
+    }
+
+    @Override
     public List<String> getWords() {
         return words;
     }
@@ -149,6 +158,11 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
     @Override
     public boolean isHeading() {
         return isHeading;
+    }
+
+    @Override
+    public boolean isImage() {
+        return isImage;
     }
 
     @Override

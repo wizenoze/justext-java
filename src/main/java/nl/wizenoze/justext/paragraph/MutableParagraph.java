@@ -72,4 +72,12 @@ public interface MutableParagraph extends Paragraph {
      */
     void setClassification(Classification classification);
 
+    /**
+     * Sets the value of the <code>src</code> attribute of that <code>img</code> tag from which this paragraph was
+     * extracted.
+     *
+     * @param url the value of the <code>src</code> attribute of the corresponding <code>img</code> tag.
+     */
+    void setUrl(String url);
+
 }
