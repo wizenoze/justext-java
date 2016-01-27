@@ -68,7 +68,8 @@ public class ParagraphMaker {
     private MutableParagraph lastParagraph;
 
     static {
-        Stream<String> textualTagsStream = Arrays.stream(TextualTag.values()).map(Enum::name).map(String::toLowerCase);
+        Stream<String> textualTagsStream = Arrays.stream(
+                ParagraphTag.values()).map(Enum::name).map(String::toLowerCase);
         TEXTUAL_TAGS = textualTagsStream.collect(Collectors.toSet());
     }
 

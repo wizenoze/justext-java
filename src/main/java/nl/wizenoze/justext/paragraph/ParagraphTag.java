@@ -26,7 +26,7 @@ package nl.wizenoze.justext.paragraph;
  * @author László Csontos
  *
  */
-public enum TextualTag {
+public enum ParagraphTag {
 
     /**
      *
