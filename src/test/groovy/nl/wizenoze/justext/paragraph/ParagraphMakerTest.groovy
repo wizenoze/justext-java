@@ -2,6 +2,7 @@ package nl.wizenoze.justext.paragraph
 
 import nl.wizenoze.justext.html.HtmlBeautifier
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
@@ -12,13 +13,19 @@ class ParagraphMakerTest extends Specification {
     private final HtmlBeautifier htmlBeautifier = new HtmlBeautifier()
 
     void assertParagraphEqual(
-            MutableParagraph paragraph, String text, int wordsCount, int tagsCount, Integer charsInLinksCount=null) {
+            MutableParagraph paragraph, String text, int wordsCount, int tagsCount, Integer charsInLinksCount=null,
+            String url=null) {
+
         assert paragraph.text == text
         assert paragraph.wordsCount == wordsCount
         assert paragraph.tagsCount == tagsCount
 
         if (charsInLinksCount != null) {
             assert paragraph.charsInLinksCount == charsInLinksCount
+        }
+
+        if (url != null) {
+            assert paragraph.url == url
         }
     }
 
@@ -95,6 +102,32 @@ class ParagraphMakerTest extends Specification {
         assertParagraphEqual(paragraphs[0], "normal text", 2, 0)
         assertParagraphEqual(paragraphs[1], "another text", 2, 0)
 
+    }
+
+    @Ignore
+    def testImage() {
+        def html = [
+                '<html><body>',
+                '<sup>I am <strong>top</strong>-inline\n\n\n\n and I am happy \n</sup>',
+                '<p>normal text</p>',
+                '<img src="someImage" alt="caption">this does not make sense</img>',
+                '<p>blah blah<br><img src="someOtherImage" alt="caption 2"/></p>',
+                '<p>blah blah blah<br><img src="img3" alt="caption 3"/></p>',
+                '</body></html>'
+        ].join()
+
+        when:
+        def paragraphs = createParagraphs(html)
+
+        then:
+        paragraphs.size() == 7
+        assertParagraphEqual(paragraphs[0], "I am top-inline\nand I am happy", 7, 2)
+        assertParagraphEqual(paragraphs[1], "normal text", 2, 0)
+        assertParagraphEqual(paragraphs[2], "caption", 1, 0, "someImage")
+        assertParagraphEqual(paragraphs[3], "blah blah", 2, 0)
+        assertParagraphEqual(paragraphs[4], "caption 2", 2, 0, "someOtherImage")
+        assertParagraphEqual(paragraphs[5], "blah blah blah", 3, 0)
+        assertParagraphEqual(paragraphs[6], "caption 3", 2, 0, "img3")
     }
 
     def testInlineTextInBody() {
