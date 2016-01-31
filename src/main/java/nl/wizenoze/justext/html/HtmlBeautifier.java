@@ -92,7 +92,7 @@ public final class HtmlBeautifier {
         newCleanerProperties.addHtmlModificationListener(new HtmlBeautificationLogger());
 
         newCleanerProperties.setAllowHtmlInsideAttributes(false);
-        newCleanerProperties.setAllowMultiWordAttributes(false);
+        newCleanerProperties.setAllowMultiWordAttributes(true);
         newCleanerProperties.setAddNewlineToHeadAndBody(false);
         newCleanerProperties.setKeepWhitespaceAndCommentsInHead(false);
         newCleanerProperties.setNamespacesAware(true);

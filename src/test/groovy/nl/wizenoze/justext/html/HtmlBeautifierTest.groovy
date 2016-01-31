@@ -14,6 +14,31 @@ class HtmlBeautifierTest extends Specification {
 
     private final HtmlBeautifier htmlBeautifier = new HtmlBeautifier();
 
+    def testAttributes() {
+        def dirtyHtml = [
+                '<?xml version="1.0" encoding="windows-1250"?>',
+                '<!DOCTYPE html>',
+                '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sk" lang="sk">',
+                '<body id="index">',
+                '<img src="someImage" alt="this is the description of the image">',
+                '</body>',
+                '</html>'
+        ].join()
+
+        when:
+        def cleanedHtml = htmlBeautifier.cleanHtml(dirtyHtml)
+        println(cleanedHtml)
+
+        then:
+        cleanedHtml.equals([
+                '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sk" lang="sk">',
+                '<body id="index">',
+                '<img src="someImage" alt="this is the description of the image" />',
+                '</body>',
+                '</html>'
+        ].join())
+    }
+
     def testRemoveComments() {
         def dirtyHtml = "<html><!-- comment --><body><h1>Header</h1><!-- comment --> text<p>footer</body></html>"
 
