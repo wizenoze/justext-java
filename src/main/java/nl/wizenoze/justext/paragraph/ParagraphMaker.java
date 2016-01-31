@@ -19,6 +19,7 @@
 
 package nl.wizenoze.justext.paragraph;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -29,10 +30,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import nl.wizenoze.justext.exception.JusTextParseException;
 import nl.wizenoze.justext.util.StringUtil;
@@ -40,10 +39,10 @@ import nl.wizenoze.justext.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
-import static javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
-import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
-import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import static nl.wizenoze.justext.util.StringPool.TAG_A;
 import static nl.wizenoze.justext.util.StringPool.TAG_BR;
@@ -59,9 +58,11 @@ public class ParagraphMaker {
 
     private static final Set<String> TEXTUAL_TAGS;
 
+    private final DefaultHandler paragraphHandler;
     private final List<MutableParagraph> paragraphs;
+    private final SAXParser parser;
     private final PathInfo pathInfo;
-    private final XMLStreamReader streamReader;
+    private final InputSource source;
 
     private boolean isLink = false;
     private boolean isBreak = false;
@@ -78,17 +79,7 @@ public class ParagraphMaker {
      * @param reader XML document reader.
      */
     public ParagraphMaker(Reader reader) {
-        paragraphs = new ArrayList<>();
-        pathInfo = new PathInfo();
-
-        XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-
-        try {
-            streamReader = inputFactory.createXMLStreamReader(new StreamSource(reader));
-        } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
-            throw new JusTextParseException(e.getMessage(), e);
-        }
+        this(new InputSource(reader));
     }
 
     /**
@@ -96,7 +87,24 @@ public class ParagraphMaker {
      * @param xml XML document.
      */
     public ParagraphMaker(String xml) {
-        this(new StringReader(xml));
+        this(new InputSource(new StringReader(xml)));
+    }
+
+    ParagraphMaker(InputSource source) {
+        this.source = source;
+
+        paragraphHandler = new ParagraphHandler();
+        paragraphs = new ArrayList<>();
+        pathInfo = new PathInfo();
+
+        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+
+        try {
+            parser = parserFactory.newSAXParser();
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            throw new JusTextParseException(e.getMessage(), e);
+        }
     }
 
     /**
@@ -112,79 +120,8 @@ public class ParagraphMaker {
         }
     }
 
-    private List<MutableParagraph> doTraverse() throws XMLStreamException {
-        if (!streamReader.hasNext()) {
-            return Collections.unmodifiableList(paragraphs);
-        }
-
-        while (streamReader.hasNext()) {
-            int event = streamReader.next();
-
-            String tagName = null;
-
-            switch (event) {
-                case START_ELEMENT:
-                    tagName = streamReader.getLocalName().toLowerCase();
-
-                    pathInfo.append(tagName);
-
-                    boolean tagNameIsBR = TAG_BR.equals(tagName);
-
-                    if (TEXTUAL_TAGS.contains(tagName) || (tagNameIsBR && isBreak)) {
-                        if (tagNameIsBR) {
-                            lastParagraph.decrementTagsCount();
-                        }
-
-                        startNewParagraph();
-                    } else {
-                        isBreak = tagNameIsBR;
-
-                        if (TAG_A.equals(tagName)) {
-                            isLink = true;
-                        }
-
-                        if (lastParagraph != null) {
-                            lastParagraph.incrementTagsCount();
-                        }
-                    }
-
-                    break;
-                case END_DOCUMENT:
-                    startNewParagraph();
-
-                    break;
-                case END_ELEMENT:
-                    tagName = streamReader.getLocalName().toLowerCase();
-
-                    pathInfo.pop();
-
-                    if (TEXTUAL_TAGS.contains(tagName)) {
-                        startNewParagraph();
-                    }
-
-                    if (TAG_A.equals(tagName)) {
-                        isLink = false;
-                    }
-
-                    break;
-                case CHARACTERS:
-                    String text = streamReader.getText();
-
-                    if (StringUtil.isNotBlank(text)) {
-                        text = lastParagraph.appendText(text);
-
-                        if (isLink) {
-                            lastParagraph.incrementCharsInLinksCount(text.length());
-                        }
-
-                        isBreak = false;
-                    }
-
-                    break;
-                default:
-                    // Ignore other XML stream events.
-            }
-        }
+    private List<MutableParagraph> doTraverse() throws IOException, SAXException {
+        parser.parse(source, paragraphHandler);
 
         return Collections.unmodifiableList(paragraphs);
     }
@@ -195,6 +132,85 @@ public class ParagraphMaker {
         }
 
         lastParagraph = new MutableParagraphImpl(pathInfo);
+    }
+
+    private class ParagraphHandler extends DefaultHandler {
+
+        @Override
+        public void characters(char[] ch, int start, int length) throws SAXException {
+            String text = String.valueOf(ch, start, length);
+
+            if (StringUtil.isNotBlank(text)) {
+                text = lastParagraph.appendText(text);
+
+                if (isLink) {
+                    lastParagraph.incrementCharsInLinksCount(text.length());
+                }
+
+                isBreak = false;
+            }
+        }
+
+        @Override
+        public void endDocument() throws SAXException {
+            startNewParagraph();
+        }
+
+        @Override
+        public void endElement(String uri, String localName, String qName) throws SAXException {
+            String tagName = getTagName(localName, qName);
+
+            pathInfo.pop();
+
+            if (TEXTUAL_TAGS.contains(tagName)) {
+                startNewParagraph();
+            }
+
+            if (TAG_A.equals(tagName)) {
+                isLink = false;
+            }
+        }
+
+        @Override
+        public void startElement(
+                String uri, String localName, String qName, Attributes attributes)
+            throws SAXException {
+
+            String tagName = getTagName(localName, qName);
+
+            pathInfo.append(tagName);
+
+            boolean tagNameIsBR = TAG_BR.equals(tagName);
+
+            if (TEXTUAL_TAGS.contains(tagName) || (tagNameIsBR && isBreak)) {
+                if (tagNameIsBR) {
+                    lastParagraph.decrementTagsCount();
+                }
+
+                startNewParagraph();
+            } else {
+                isBreak = tagNameIsBR;
+
+                if (TAG_A.equals(tagName)) {
+                    isLink = true;
+                }
+
+                if (lastParagraph != null) {
+                    lastParagraph.incrementTagsCount();
+                }
+            }
+        }
+
+        private String getTagName(String localName, String qName) {
+            String tagName = qName;
+
+            if (StringUtil.isNotEmpty(localName)) {
+                tagName = localName;
+            }
+
+            return tagName.toLowerCase();
+        }
+
     }
 
 }
