@@ -5,7 +5,7 @@
 
     <groupId>nl.wizenoze</groupId>
     <artifactId>justext</artifactId>
-    <version>0.1.99-SNAPSHOT</version>
+    <version>0.2.0-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>justext</name>
