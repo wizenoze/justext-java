@@ -127,7 +127,7 @@ public final class Classifier {
         if (!classifierProperties.getNoHeadings()) {
             reviseHeadingsAndImages(
                     paragraphs, (paragraph) -> {
-                        return SHORT.equals(paragraph.getClassification());
+                        return paragraph.isHeading() && SHORT.equals(paragraph.getClassification());
                     }, NEAR_GOOD,
                     classifierProperties.getMaxHeadingDistance());
         }
@@ -172,7 +172,7 @@ public final class Classifier {
             reviseHeadingsAndImages(
                     paragraphs,
                     (paragraph) -> {
-                        return BAD.equals(paragraph.getClassification())
+                        return paragraph.isHeading() && BAD.equals(paragraph.getClassification())
                                 && !BAD.equals(paragraph.getFirstClassification());
                     }, GOOD, classifierProperties.getMaxHeadingDistance());
         }
@@ -339,9 +339,7 @@ public final class Classifier {
         while (headingsIterator.hasNext()) {
             MutableParagraph headingParagraph = headingsIterator.next();
 
-            if (!(headingParagraph.isHeading() || headingParagraph.isImage())
-                    || !headingsPredicate.test(headingParagraph)) {
-
+            if (!headingsPredicate.test(headingParagraph)) {
                 continue;
             }
 
