@@ -176,6 +176,17 @@ public final class Classifier {
                                 && !BAD.equals(paragraph.getFirstClassification());
                     }, GOOD, classifierProperties.getMaxHeadingDistance());
         }
+
+        // Change the classification of image from BAD to GOOD if they're followed by a GOOD paragraph and if their
+        // original (context-free) classification wasn't BAD.
+        if (!classifierProperties.getNoImages()) {
+            reviseHeadingsAndImages(
+                    paragraphs,
+                    (paragraph) -> {
+                        return paragraph.isImage() && BAD.equals(paragraph.getClassification())
+                                && !BAD.equals(paragraph.getFirstClassification());
+                    }, GOOD, classifierProperties.getMaxHeadingDistance());
+        }
     }
 
     private static <P extends Paragraph> ListIterator<P> createListIterator(List<P> paragraphs, int startIndex) {
