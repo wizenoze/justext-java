@@ -8,7 +8,8 @@ import spock.lang.Specification
  */
 class JusTextTest extends Specification {
 
-    final JusText jusText = new JusText();
+    final JusText jusTextDefault = new JusText();
+    final JusText jusTextWithImages = new JusText(new ClassifierProperties.Builder().setNoImages(false).build());
 
     def loadHtml(String name) {
         return getClass().getResource("/html/${name}").text;
@@ -21,11 +22,13 @@ class JusTextTest extends Specification {
         String html = loadHtml("aardgas.html")
 
         when:
-        List<Paragraph> paragraphs = jusText.extract(html, "nl")
-
+        List<Paragraph> paragraphs = jusTextWithImages.extract(html, "nl")
+        println(paragraphs)
         then:
         !paragraphs.isEmpty()
         paragraphs[0].text == "Aardgas bij jou thuis"
+        paragraphs[1].text == "Koken"
+        paragraphs[1].isImage()
     }
 
     /*
@@ -35,7 +38,7 @@ class JusTextTest extends Specification {
         String html = loadHtml("bbc_bitesize.html")
 
         when:
-        List<Paragraph> paragraphs = jusText.extract(html, "en")
+        List<Paragraph> paragraphs = jusTextDefault.extract(html, "en")
         println(paragraphs.collect({ "\"${it.text}\"\n" }))
 
         then:
@@ -49,7 +52,7 @@ class JusTextTest extends Specification {
         String html = loadHtml("cosmos.html")
 
         when:
-        List<Paragraph> paragraphs = jusText.extract(html, "en")
+        List<Paragraph> paragraphs = jusTextDefault.extract(html, "en")
 
         then:
         paragraphs.size() == 6
@@ -68,11 +71,14 @@ class JusTextTest extends Specification {
         String html = loadHtml("grassland.html")
 
         when:
-        List<Paragraph> paragraphs = jusText.extract(html, "en")
+        List<Paragraph> paragraphs = jusTextWithImages.extract(html, "en")
 
         then:
-        paragraphs.size() == 1
-        paragraphs[0].text == "Grassland biomes exist throughout the Earth, and in many cases can be vast, expanding " +
+        paragraphs.size() == 2
+        paragraphs[0].text == "Grasslands"
+        paragraphs[0].url == "/images/grassland-biome.jpg"
+        paragraphs[0].isImage()
+        paragraphs[1].text == "Grassland biomes exist throughout the Earth, and in many cases can be vast, expanding " +
                 "across millions of square miles, or kilometers. These biomes are marked by sparse trees and " +
                 "extensive grasses as well as a variety of small and large animals. Some of the largest land animals " +
                 "on Earth live in grasslands, including American bison, elephants, giraffes, and so forth."
@@ -85,11 +91,14 @@ class JusTextTest extends Specification {
         String html = loadHtml("Patrick_Pearse.html")
 
         when:
-        List<Paragraph> paragraphs = jusText.extract(html, "en")
-        println(paragraphs.collect({ "\"${it.text}\"\n" }))
+        List<Paragraph> paragraphs = jusTextWithImages.extract(html, "en")
 
         then:
         !paragraphs.isEmpty()
+        paragraphs[20].isImage()
+        paragraphs[20].url == "/_internal/cimg!0/rftwihwcfe4nagiq4fjdln5hyn0v2y6"
+        paragraphs[21].isImage()
+        paragraphs[21].url == "/_internal/cimg!0/3rgm1dvgctkxewdg6qh2f6rzt8sn3jc"
     }
 
 }

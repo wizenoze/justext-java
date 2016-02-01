@@ -131,7 +131,7 @@ public class ParagraphMaker {
     }
 
     private void startNewParagraph() {
-        if ((lastParagraph != null) && lastParagraph.hasText()) {
+        if ((lastParagraph != null) && (lastParagraph.hasText() || lastParagraph.isImage())) {
             paragraphs.add(lastParagraph);
         }
 

@@ -112,6 +112,7 @@ class ParagraphMakerTest extends Specification {
                 '<img src="someImage" alt="caption"></img>',
                 '<p>blah blah<br><img src="someOtherImage" alt="caption 2"/></p>',
                 '<p>blah blah blah<img src="img3" alt="caption 3"/></p>',
+                '<img alt="" border="0" height="287" src="a.png" width="210">',
                 '</body></html>'
         ].join()
 
@@ -119,7 +120,7 @@ class ParagraphMakerTest extends Specification {
         def paragraphs = createParagraphs(html)
 
         then:
-        paragraphs.size() == 7
+        paragraphs.size() == 8
         assertParagraphEqual(paragraphs[0], "I am top-inline\nand I am happy", 7, 2)
         assertParagraphEqual(paragraphs[1], "normal text", 2, 0)
         assertParagraphEqual(paragraphs[2], "caption", 1, 0, null, "someImage")
@@ -127,6 +128,7 @@ class ParagraphMakerTest extends Specification {
         assertParagraphEqual(paragraphs[4], "caption 2", 2, 0, null, "someOtherImage")
         assertParagraphEqual(paragraphs[5], "blah blah blah", 3, 0)
         assertParagraphEqual(paragraphs[6], "caption 3", 2, 0, null, "img3")
+        assertParagraphEqual(paragraphs[7], "", 1, 0, null, "a.png")
     }
 
     def testInlineTextInBody() {
