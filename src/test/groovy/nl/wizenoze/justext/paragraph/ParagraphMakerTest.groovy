@@ -104,15 +104,14 @@ class ParagraphMakerTest extends Specification {
 
     }
 
-    @Ignore
     def testImage() {
         def html = [
                 '<html><body>',
                 '<sup>I am <strong>top</strong>-inline\n\n\n\n and I am happy \n</sup>',
-                '<p>normal text</p>',
-                '<img src="someImage" alt="caption">this does not make sense</img>',
+                '<p class="aaa">normal text</p>',
+                '<img src="someImage" alt="caption"></img>',
                 '<p>blah blah<br><img src="someOtherImage" alt="caption 2"/></p>',
-                '<p>blah blah blah<br><img src="img3" alt="caption 3"/></p>',
+                '<p>blah blah blah<img src="img3" alt="caption 3"/></p>',
                 '</body></html>'
         ].join()
 
@@ -123,11 +122,11 @@ class ParagraphMakerTest extends Specification {
         paragraphs.size() == 7
         assertParagraphEqual(paragraphs[0], "I am top-inline\nand I am happy", 7, 2)
         assertParagraphEqual(paragraphs[1], "normal text", 2, 0)
-        assertParagraphEqual(paragraphs[2], "caption", 1, 0, "someImage")
-        assertParagraphEqual(paragraphs[3], "blah blah", 2, 0)
-        assertParagraphEqual(paragraphs[4], "caption 2", 2, 0, "someOtherImage")
+        assertParagraphEqual(paragraphs[2], "caption", 1, 0, null, "someImage")
+        assertParagraphEqual(paragraphs[3], "blah blah", 2, 1)
+        assertParagraphEqual(paragraphs[4], "caption 2", 2, 0, null, "someOtherImage")
         assertParagraphEqual(paragraphs[5], "blah blah blah", 3, 0)
-        assertParagraphEqual(paragraphs[6], "caption 3", 2, 0, "img3")
+        assertParagraphEqual(paragraphs[6], "caption 3", 2, 0, null, "img3")
     }
 
     def testInlineTextInBody() {

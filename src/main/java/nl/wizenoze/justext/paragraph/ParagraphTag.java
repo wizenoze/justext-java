@@ -121,6 +121,11 @@ public enum ParagraphTag {
     /**
      *
      */
+    IMG,
+
+    /**
+     *
+     */
     LEGEND,
 
     /**

@@ -44,8 +44,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import static nl.wizenoze.justext.util.StringPool.ATTRIBUTE_ALT;
+import static nl.wizenoze.justext.util.StringPool.ATTRIBUTE_SRC;
 import static nl.wizenoze.justext.util.StringPool.TAG_A;
 import static nl.wizenoze.justext.util.StringPool.TAG_BR;
+import static nl.wizenoze.justext.util.StringPool.TAG_IMG;
 
 /**
  * Traverses the given XML document and constructs a list of {@link MutableParagraph} objects.
@@ -64,6 +67,7 @@ public class ParagraphMaker {
     private final PathInfo pathInfo;
     private final InputSource source;
 
+    private boolean isImage = false;
     private boolean isLink = false;
     private boolean isBreak = false;
     private MutableParagraph lastParagraph;
@@ -140,6 +144,14 @@ public class ParagraphMaker {
         public void characters(char[] ch, int start, int length) throws SAXException {
             String text = String.valueOf(ch, start, length);
 
+            if (isImage) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Ignoring text \"{}\" within an IMG tag.", StringUtil.shorten(text));
+                }
+
+                return;
+            }
+
             if (StringUtil.isNotBlank(text)) {
                 text = lastParagraph.appendText(text);
 
@@ -158,7 +170,7 @@ public class ParagraphMaker {
 
         @Override
         public void endElement(String uri, String localName, String qName) throws SAXException {
-            String tagName = getTagName(localName, qName);
+            String tagName = getName(localName, qName);
 
             pathInfo.pop();
 
@@ -169,6 +181,10 @@ public class ParagraphMaker {
             if (TAG_A.equals(tagName)) {
                 isLink = false;
             }
+
+            if (TAG_IMG.equals(tagName)) {
+                isImage = false;
+            }
         }
 
         @Override
@@ -176,7 +192,7 @@ public class ParagraphMaker {
                 String uri, String localName, String qName, Attributes attributes)
             throws SAXException {
 
-            String tagName = getTagName(localName, qName);
+            String tagName = getName(localName, qName);
 
             pathInfo.append(tagName);
 
@@ -188,6 +204,30 @@ public class ParagraphMaker {
                 }
 
                 startNewParagraph();
+
+                if (TAG_IMG.equals(tagName)) {
+                    isImage = true;
+
+                    for (int index = 0; index < attributes.getLength(); index++) {
+                        String attributeName = getName(attributes.getLocalName(index), attributes.getQName(index));
+                        String attributeValue = attributes.getValue(index);
+
+                        if (StringUtil.isBlank(attributeValue)) {
+                            continue;
+                        }
+
+                        switch (attributeName) {
+                            case ATTRIBUTE_ALT:
+                                lastParagraph.appendText(attributeValue);
+                                break;
+                            case ATTRIBUTE_SRC:
+                                lastParagraph.setUrl(attributeValue);
+                                break;
+                            default:
+                                // Ignore other attributes
+                        }
+                    }
+                }
             } else {
                 isBreak = tagNameIsBR;
 
@@ -201,7 +241,7 @@ public class ParagraphMaker {
             }
         }
 
-        private String getTagName(String localName, String qName) {
+        private String getName(String localName, String qName) {
             String tagName = qName;
 
             if (StringUtil.isNotEmpty(localName)) {

@@ -30,6 +30,16 @@ public final class StringPool {
     }
 
     /**
+     * Represents the <code>alt</code> attribute of an <code>IMG</code> tag.
+     */
+    public static final String ATTRIBUTE_ALT = "alt";
+
+    /**
+     * Represents the <code>src</code> attribute of an <code>IMG</code> tag.
+     */
+    public static final String ATTRIBUTE_SRC = "src";
+
+    /**
      * Carriage return.
      */
     public static final String CARRIAGE_RETURN = "\r";
@@ -88,5 +98,10 @@ public final class StringPool {
      * Represents a <code>BR</code> tag.
      */
     public static final String TAG_BR = "br";
+
+    /**
+     * Represents a <code>IMG</code> tag.
+     */
+    public static final String TAG_IMG = "img";
 
 }
