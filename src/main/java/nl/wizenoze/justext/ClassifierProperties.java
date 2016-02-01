@@ -57,6 +57,11 @@ public final class ClassifierProperties {
     public static final boolean NO_HEADINGS_DEFAULT = false;
 
     /**
+     * Ignore images by default.
+     */
+    public static final boolean NO_IMAGES_DEFAULT = true;
+
+    /**
      * Divide the blocks by the stop words density into medium and high.
      */
     public static final BigDecimal STOP_WORDS_HIGH_DEFAULT = new BigDecimal("0.32");
@@ -71,18 +76,20 @@ public final class ClassifierProperties {
     private final int maxHeadingDistance;
     private final BigDecimal maxLinkDensity;
     private final boolean noHeadings;
+    private final boolean noImages;
     private final BigDecimal stopWordsHigh;
     private final BigDecimal stopWordsLow;
 
     private ClassifierProperties(
             int lengthHigh, int lengthLow, int maxHeadingDistance, BigDecimal maxLinkDensity, boolean noHeadings,
-            BigDecimal stopWordsHigh, BigDecimal stopWordsLow) {
+            boolean noImages, BigDecimal stopWordsHigh, BigDecimal stopWordsLow) {
 
         this.lengthHigh = lengthHigh;
         this.lengthLow = lengthLow;
         this.maxHeadingDistance = maxHeadingDistance;
         this.maxLinkDensity = maxLinkDensity;
         this.noHeadings = noHeadings;
+        this.noImages = noImages;
         this.stopWordsHigh = stopWordsHigh;
         this.stopWordsLow = stopWordsLow;
     }
@@ -112,6 +119,7 @@ public final class ClassifierProperties {
                 && Objects.equals(maxHeadingDistance, classifierProperties.maxHeadingDistance)
                 && Objects.equals(maxLinkDensity, classifierProperties.maxLinkDensity)
                 && Objects.equals(noHeadings, classifierProperties.noHeadings)
+                && Objects.equals(noImages, classifierProperties.noImages)
                 && Objects.equals(stopWordsHigh, classifierProperties.stopWordsHigh)
                 && Objects.equals(stopWordsLow, classifierProperties.stopWordsLow);
     }
@@ -119,7 +127,8 @@ public final class ClassifierProperties {
     @Override
     public int hashCode() {
         return Objects.hash(
-                lengthHigh, lengthLow, maxHeadingDistance, maxLinkDensity, noHeadings, stopWordsHigh, stopWordsLow);
+                lengthHigh, lengthLow, maxHeadingDistance, maxLinkDensity, noHeadings, noImages, stopWordsHigh,
+                stopWordsLow);
     }
 
     /**
@@ -163,6 +172,14 @@ public final class ClassifierProperties {
     }
 
     /**
+     * Returns if images should be taken into account or not.
+     * @return true if images should be omitted.
+     */
+    public boolean getNoImages() {
+        return noImages;
+    }
+
+    /**
      * Gets stop word's upper threshold.
      * @return stop word's upper threshold.
      */
@@ -188,6 +205,7 @@ public final class ClassifierProperties {
         private int maxHeadingDistance;
         private BigDecimal maxLinkDensity;
         private boolean noHeadings;
+        private boolean noImages;
         private BigDecimal stopWordsHigh;
         private BigDecimal stopWordsLow;
 
@@ -200,6 +218,7 @@ public final class ClassifierProperties {
             maxHeadingDistance = MAX_HEADING_DISTANCE_DEFAULT;
             maxLinkDensity = MAX_LINK_DENSITY_DEFAULT;
             noHeadings = NO_HEADINGS_DEFAULT;
+            noImages = NO_IMAGES_DEFAULT;
             stopWordsHigh = STOP_WORDS_HIGH_DEFAULT;
             stopWordsLow = STOP_WORDS_LOW_DEFAULT;
         }
@@ -218,7 +237,8 @@ public final class ClassifierProperties {
             }
 
             return new ClassifierProperties(
-                lengthHigh, lengthLow, maxHeadingDistance, maxLinkDensity, noHeadings, stopWordsHigh, stopWordsLow);
+                lengthHigh, lengthLow, maxHeadingDistance, maxLinkDensity, noHeadings, noImages, stopWordsHigh,
+                    stopWordsLow);
         }
 
         /**
@@ -268,6 +288,16 @@ public final class ClassifierProperties {
          */
         public Builder setNoHeadings(boolean noHeadings) {
             this.noHeadings = noHeadings;
+            return this;
+        }
+
+        /**
+         * Sets if images should be taken into account or not.
+         * @param noImages true if images should be omitted.
+         * @return builder.
+         */
+        public Builder setNoImages(boolean noImages) {
+            this.noImages = noImages;
             return this;
         }
 

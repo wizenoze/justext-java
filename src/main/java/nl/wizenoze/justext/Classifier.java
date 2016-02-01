@@ -125,8 +125,10 @@ public final class Classifier {
 
         // Change the classification of headings from SHORT to NEAR_GOOD.
         if (!classifierProperties.getNoHeadings()) {
-            reviseHeadings(
-                    paragraphs, (paragraph) -> { return SHORT.equals(paragraph.getClassification()); }, NEAR_GOOD,
+            reviseHeadingsAndImages(
+                    paragraphs, (paragraph) -> {
+                        return SHORT.equals(paragraph.getClassification());
+                    }, NEAR_GOOD,
                     classifierProperties.getMaxHeadingDistance());
         }
 
@@ -167,7 +169,7 @@ public final class Classifier {
         // Change the classification of headings from BAD to GOOD if they're followed by a GOOD paragraph and if their
         // original (context-free) classification wasn't BAD.
         if (!classifierProperties.getNoHeadings()) {
-            reviseHeadings(
+            reviseHeadingsAndImages(
                     paragraphs,
                     (paragraph) -> {
                         return BAD.equals(paragraph.getClassification())
@@ -190,6 +192,10 @@ public final class Classifier {
 
     private static Classification doClassifyContextFree(
             Paragraph paragraph, Set<String> stopWords, ClassifierProperties classifierProperties) {
+
+        if (paragraph.isImage() && classifierProperties.getNoImages()) {
+            return BAD;
+        }
 
         if (paragraph.getLinkDensity() > classifierProperties.getMaxLinkDensity().floatValue()) {
             return BAD;
@@ -324,7 +330,7 @@ public final class Classifier {
         return new MergedBoundaryClassifications(paragraph, mergedClassifications, nearGoodRemoved);
     }
 
-    private static void reviseHeadings(
+    private static void reviseHeadingsAndImages(
             List<MutableParagraph> paragraphs, Predicate<MutableParagraph> headingsPredicate,
             Classification newClassification, int maxHeadingDistance) {
 
@@ -333,7 +339,9 @@ public final class Classifier {
         while (headingsIterator.hasNext()) {
             MutableParagraph headingParagraph = headingsIterator.next();
 
-            if (!headingParagraph.isHeading() || !headingsPredicate.test(headingParagraph)) {
+            if (!(headingParagraph.isHeading() || headingParagraph.isImage())
+                    || !headingsPredicate.test(headingParagraph)) {
+
                 continue;
             }
 

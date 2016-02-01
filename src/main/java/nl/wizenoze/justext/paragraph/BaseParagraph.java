@@ -51,6 +51,11 @@ abstract class BaseParagraph implements Paragraph {
         return Objects.hash(getText(), getXpath());
     }
 
+    @Override
+    public String toString() {
+        return getText();
+    }
+
     boolean doEquals(Paragraph paragraph) {
         return Objects.equals(getText(), paragraph.getText()) && Objects.equals(getXpath(), paragraph.getXpath());
     }
