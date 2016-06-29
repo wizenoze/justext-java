@@ -85,6 +85,26 @@ class JusTextTest extends Specification {
     }
 
     /*
+     * http://www.kidsgeo.com/geography-for-kids/0168-grassland-biomes.php
+     */
+    def testBBCNatureReptile() {
+        String html = loadHtml("BBCNatureReptile.html")
+
+        when:
+        List<Paragraph> paragraphs = jusTextWithImages.extract(html, "en")
+
+        then:
+        paragraphs.size() == 5
+        paragraphs[0].text == "Nature"
+        paragraphs[1].text == "Wildlife"
+        paragraphs[2].text == "Lava lizard basking on the head of a marine iguana"
+        paragraphs[2].url == "http://ichef.bbci.co.uk/naturelibrary/images/ic/credit/640x395/r/re/reptile/reptile_1.jpg"
+        paragraphs[2].isImage()
+        paragraphs[3].text == "Reptiles"
+        paragraphs[4].text == "The reptiles are a class of vertebrates. Charateristically they are cold-blooded, have dry scaly or horny skin and a four-chambered heart. Most reptiles lay eggs with leathery shells, but a few types bear live young. Because they are cold-blooded, reptiles are more common in the tropics than in temperate regions and are not found in polar areas."
+    }
+
+    /*
      * http://www.askaboutireland.ie/learning-zone/primary-students/5th-+-6th-class/history/history-the-full-story/ireland-the-early-20th-ce/leaders-of-the-1916-risin/patrick-pearse/
      */
     def testPatrickPearse() {
