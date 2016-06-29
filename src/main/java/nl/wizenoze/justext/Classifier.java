@@ -19,6 +19,12 @@
 
 package nl.wizenoze.justext;
 
+import nl.wizenoze.justext.paragraph.MutableParagraph;
+import nl.wizenoze.justext.paragraph.Paragraph;
+import nl.wizenoze.justext.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -27,18 +33,10 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import nl.wizenoze.justext.paragraph.MutableParagraph;
-import nl.wizenoze.justext.paragraph.Paragraph;
-import nl.wizenoze.justext.util.StringUtil;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import static nl.wizenoze.justext.Classification.BAD;
 import static nl.wizenoze.justext.Classification.GOOD;
 import static nl.wizenoze.justext.Classification.NEAR_GOOD;
 import static nl.wizenoze.justext.Classification.SHORT;
-
 import static nl.wizenoze.justext.util.StringPool.COPYRIGHT_CHAR;
 import static nl.wizenoze.justext.util.StringPool.COPYRIGHT_CODE;
 
@@ -127,9 +125,19 @@ public final class Classifier {
         if (!classifierProperties.getNoHeadings()) {
             reviseHeadingsAndImages(
                     paragraphs, (paragraph) -> {
-                        return paragraph.isHeading() && SHORT.equals(paragraph.getClassification());
+                        return (paragraph.isHeading() || paragraph.isImage())
+                                && SHORT.equals(paragraph.getClassification());
                     }, NEAR_GOOD,
                     classifierProperties.getMaxHeadingDistance());
+        }
+
+        // Change the classification of images from BAD to NEAR_GOOD if they're followed/ by a GOOD paragraph
+        if (!classifierProperties.getNoImages()) {
+            reviseHeadingsAndImages(
+                    paragraphs,
+                    (paragraph) -> {
+                        return paragraph.isImage();
+                    }, NEAR_GOOD, classifierProperties.getMaxHeadingDistance());
         }
 
         // Classify SHORT paragraphs
@@ -173,17 +181,6 @@ public final class Classifier {
                     paragraphs,
                     (paragraph) -> {
                         return paragraph.isHeading() && BAD.equals(paragraph.getClassification())
-                                && !BAD.equals(paragraph.getFirstClassification());
-                    }, GOOD, classifierProperties.getMaxHeadingDistance());
-        }
-
-        // Change the classification of image from BAD to GOOD if they're followed by a GOOD paragraph and if their
-        // original (context-free) classification wasn't BAD.
-        if (!classifierProperties.getNoImages()) {
-            reviseHeadingsAndImages(
-                    paragraphs,
-                    (paragraph) -> {
-                        return paragraph.isImage() && BAD.equals(paragraph.getClassification())
                                 && !BAD.equals(paragraph.getFirstClassification());
                     }, GOOD, classifierProperties.getMaxHeadingDistance());
         }
