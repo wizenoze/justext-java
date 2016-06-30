@@ -201,7 +201,7 @@ public final class Classifier {
     private static Classification doClassifyContextFree(
             Paragraph paragraph, Set<String> stopWords, ClassifierProperties classifierProperties) {
 
-        if (paragraph.isImage() && classifierProperties.getNoImages()) {
+        if (paragraph.isImage()) {
             return BAD;
         }
 
