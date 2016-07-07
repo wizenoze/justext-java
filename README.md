@@ -32,6 +32,10 @@ List<Paragraph> paragraphs = jusText.extract(rawHtml, stopWords)
 paragraphs.each { println(it.getText()) }
 ```
 
+# Contributing
+
+Please refer to [CONTRIBUTING](https://github.com/wizenoze/justext-java/blob/master/CONTRIBUTING.md)
+
 # License
 
 justext-java is available under the GNU Lesser General Public License v3.0.
