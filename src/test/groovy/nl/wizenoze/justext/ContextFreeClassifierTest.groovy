@@ -32,6 +32,28 @@ class ContextFreeClassifierTest extends Specification {
         paragraphs[1].classification.equals(BAD)
     }
 
+    def testHeadline() {
+        def paragraphs = [
+                new MutableParagraphImpl(
+                        new PathInfo().append("html").append("body").append("h1"), ["0 1 2 3 4 5 6 7 8 9"] * 2, 0, 0),
+                new MutableParagraphImpl(
+                        new PathInfo().append("html").append("body").append("h1"), ["0 1 2 3 4 5 6 7 8 9"] * 2, 20, 0)
+        ]
+
+        def classifierProperties = new ClassifierProperties.Builder()
+                .setMaxLinkDensity(1)
+                .setLengthLow(1000)
+                .setLengthHigh(2000)
+                .build()
+
+        when:
+        Classifier.classifyContextFree(paragraphs, [] as Set, classifierProperties)
+
+        then:
+        paragraphs[0].classification.equals(GOOD)
+        paragraphs[1].classification.equals(GOOD)
+    }
+
     def testLengthLow() {
         def paragraphs = [
                 new MutableParagraphImpl(["0 1 2 3 4 5 6 7 8 9"] * 2, 0),

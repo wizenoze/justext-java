@@ -55,7 +55,7 @@ class JusTextTest extends Specification {
         List<Paragraph> paragraphs = jusTextDefault.extract(html, "en")
 
         then:
-        paragraphs.size() == 6
+        paragraphs.size() == 7
         paragraphs[0].text == "Looking At Galaxies"
         paragraphs[1].text == "We've already covered the universe. Let's focus on something smaller, a galaxy. Right " +
                 "now, you're sitting on a planet that orbits a star in the Milky Way galaxy. As you know, there are " +
@@ -115,10 +115,37 @@ class JusTextTest extends Specification {
 
         then:
         !paragraphs.isEmpty()
-        paragraphs[20].isImage()
-        paragraphs[20].url == "/_internal/cimg!0/rftwihwcfe4nagiq4fjdln5hyn0v2y6"
         paragraphs[21].isImage()
-        paragraphs[21].url == "/_internal/cimg!0/3rgm1dvgctkxewdg6qh2f6rzt8sn3jc"
+        paragraphs[21].url == "/_internal/cimg!0/rftwihwcfe4nagiq4fjdln5hyn0v2y6"
+        paragraphs[22].isImage()
+        paragraphs[22].url == "/_internal/cimg!0/3rgm1dvgctkxewdg6qh2f6rzt8sn3jc"
+    }
+
+    /*
+     * https://www.theguardian.com/us-news/2016/jul/27/bill-clinton-democration-convention-speech-hillary-clinton
+     */
+    def testBillClinton() {
+        String html = loadHtml("Bill_Clinton.html")
+
+        when:
+        List<Paragraph> paragraphs = jusTextWithImages.extract(html, "en")
+
+        then:
+        !paragraphs.isEmpty()
+        paragraphs[0].text.startsWith("Bill Clinton makes")
+    }
+
+    def testTheIceBucketChallenge() {
+        String html = loadHtml("The_ice_bucket_challenge.html")
+
+        when:
+        List<Paragraph> paragraphs = jusTextWithImages.extract(html, "en")
+        paragraphs.each {
+            println(it.text)
+        }
+        then:
+        !paragraphs.isEmpty()
+        paragraphs[0].text.startsWith("Remember the ALS ice bucket challenge?")
     }
 
 }

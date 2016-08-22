@@ -137,6 +137,12 @@ public interface Paragraph {
     boolean isHeading();
 
     /**
+     * Returns if this paragraph is a H1 heading.
+     * @return true if H1 heading, false otherwise.
+     */
+    boolean isHeadline();
+
+    /**
      * Returns if this paragraph represents text extracted from the <code>alt</code> attribute of an <code>img</code>
      * tag.
      * @return true if image, false otherwise.

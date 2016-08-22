@@ -57,6 +57,11 @@ public final class ClassifierProperties {
     public static final boolean NO_HEADINGS_DEFAULT = false;
 
     /**
+     * Take headlines (H1) into account by default.
+     */
+    public static final boolean NO_HEADLINES_DEFAULT = false;
+
+    /**
      * Ignore images by default.
      */
     public static final boolean NO_IMAGES_DEFAULT = true;
@@ -76,19 +81,21 @@ public final class ClassifierProperties {
     private final int maxHeadingDistance;
     private final BigDecimal maxLinkDensity;
     private final boolean noHeadings;
+    private final boolean noHeadlines;
     private final boolean noImages;
     private final BigDecimal stopWordsHigh;
     private final BigDecimal stopWordsLow;
 
     private ClassifierProperties(
             int lengthHigh, int lengthLow, int maxHeadingDistance, BigDecimal maxLinkDensity, boolean noHeadings,
-            boolean noImages, BigDecimal stopWordsHigh, BigDecimal stopWordsLow) {
+            boolean noHeadlines, boolean noImages, BigDecimal stopWordsHigh, BigDecimal stopWordsLow) {
 
         this.lengthHigh = lengthHigh;
         this.lengthLow = lengthLow;
         this.maxHeadingDistance = maxHeadingDistance;
         this.maxLinkDensity = maxLinkDensity;
         this.noHeadings = noHeadings;
+        this.noHeadlines = noHeadlines;
         this.noImages = noImages;
         this.stopWordsHigh = stopWordsHigh;
         this.stopWordsLow = stopWordsLow;
@@ -119,6 +126,7 @@ public final class ClassifierProperties {
                 && Objects.equals(maxHeadingDistance, classifierProperties.maxHeadingDistance)
                 && Objects.equals(maxLinkDensity, classifierProperties.maxLinkDensity)
                 && Objects.equals(noHeadings, classifierProperties.noHeadings)
+                && Objects.equals(noHeadlines, classifierProperties.noHeadlines)
                 && Objects.equals(noImages, classifierProperties.noImages)
                 && Objects.equals(stopWordsHigh, classifierProperties.stopWordsHigh)
                 && Objects.equals(stopWordsLow, classifierProperties.stopWordsLow);
@@ -172,6 +180,14 @@ public final class ClassifierProperties {
     }
 
     /**
+     * Returns if headlines (H1) should be taken into account or not.
+     * @return true if headings should be omitted.
+     */
+    public boolean getNoHeadlines() {
+        return noHeadlines;
+    }
+
+    /**
      * Returns if images should be taken into account or not.
      * @return true if images should be omitted.
      */
@@ -205,6 +221,7 @@ public final class ClassifierProperties {
         private int maxHeadingDistance;
         private BigDecimal maxLinkDensity;
         private boolean noHeadings;
+        private boolean noHeadlines;
         private boolean noImages;
         private BigDecimal stopWordsHigh;
         private BigDecimal stopWordsLow;
@@ -218,6 +235,7 @@ public final class ClassifierProperties {
             maxHeadingDistance = MAX_HEADING_DISTANCE_DEFAULT;
             maxLinkDensity = MAX_LINK_DENSITY_DEFAULT;
             noHeadings = NO_HEADINGS_DEFAULT;
+            noHeadlines = NO_HEADLINES_DEFAULT;
             noImages = NO_IMAGES_DEFAULT;
             stopWordsHigh = STOP_WORDS_HIGH_DEFAULT;
             stopWordsLow = STOP_WORDS_LOW_DEFAULT;
@@ -237,8 +255,8 @@ public final class ClassifierProperties {
             }
 
             return new ClassifierProperties(
-                lengthHigh, lengthLow, maxHeadingDistance, maxLinkDensity, noHeadings, noImages, stopWordsHigh,
-                    stopWordsLow);
+                lengthHigh, lengthLow, maxHeadingDistance, maxLinkDensity, noHeadings, noHeadlines, noImages,
+                    stopWordsHigh, stopWordsLow);
         }
 
         /**
@@ -288,6 +306,16 @@ public final class ClassifierProperties {
          */
         public Builder setNoHeadings(boolean noHeadings) {
             this.noHeadings = noHeadings;
+            return this;
+        }
+
+        /**
+         * Sets if headings should be taken into account or not.
+         * @param noHeadlines true if headings should be omitted.
+         * @return builder.
+         */
+        public Builder setNoHeadlines(boolean noHeadlines) {
+            this.noHeadlines = noHeadlines;
             return this;
         }
 

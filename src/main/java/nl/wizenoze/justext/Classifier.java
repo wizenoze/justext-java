@@ -215,6 +215,10 @@ public final class Classifier {
             return BAD;
         }
 
+        if (!classifierProperties.getNoHeadlines() && paragraph.isHeadline()) {
+            return GOOD;
+        }
+
         if (paragraph.isSelect()) {
             return BAD;
         }

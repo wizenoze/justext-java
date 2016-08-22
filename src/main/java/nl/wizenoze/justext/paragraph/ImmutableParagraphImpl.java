@@ -39,6 +39,7 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
     private final boolean hasText;
     private final boolean isBoilerplate;
     private final boolean isHeading;
+    private final boolean isHeadline;
     private final boolean isImage;
     private final boolean isSelect;
     private final int length;
@@ -63,6 +64,7 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
         domPath = paragraph.getDomPath();
         isBoilerplate = paragraph.isBoilerplate();
         isHeading = paragraph.isHeading();
+        isHeadline = paragraph.isHeadline();
         isImage = paragraph.isImage();
         isSelect = paragraph.isSelect();
         linkDensity = paragraph.getLinkDensity();
@@ -158,6 +160,11 @@ public final class ImmutableParagraphImpl extends BaseParagraph {
     @Override
     public boolean isHeading() {
         return isHeading;
+    }
+
+    @Override
+    public boolean isHeadline() {
+        return isHeadline;
     }
 
     @Override

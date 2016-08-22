@@ -41,6 +41,7 @@ import static nl.wizenoze.justext.Classification.GOOD;
 final class MutableParagraphImpl extends BaseParagraph implements MutableParagraph {
 
     private static final Pattern HEADER_PATTERN = Pattern.compile("\\bh\\d\\b");
+    private static final Pattern HEADLINE_PATTERN = Pattern.compile("\\bh1\\b");
     private static final Pattern IMAGE_PATTERN = Pattern.compile("\\bimg\\b");
     private static final Pattern SELECT_PATTERN = Pattern.compile("^select|\\.select");
 
@@ -236,6 +237,11 @@ final class MutableParagraphImpl extends BaseParagraph implements MutableParagra
     @Override
     public boolean isHeading() {
         return HEADER_PATTERN.matcher(getDomPath()).find();
+    }
+
+    @Override
+    public boolean isHeadline() {
+        return HEADLINE_PATTERN.matcher(getDomPath()).find();
     }
 
     @Override
