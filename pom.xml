@@ -18,7 +18,7 @@
         <groovy.eclipse.compiler.version>2.9.2-01</groovy.eclipse.compiler.version>
         <groovy.eclipse.batch.version>2.4.3-01</groovy.eclipse.batch.version>
         <groovy.version>2.4.3</groovy.version>
-        <htmlcleaner.version>2.16</htmlcleaner.version>
+        <htmlcleaner.version>2.21</htmlcleaner.version>
         <logback.version>1.1.2</logback.version>
         <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
         <maven-compiler-plugin.source.version>1.8</maven-compiler-plugin.source.version>
