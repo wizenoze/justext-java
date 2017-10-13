@@ -119,7 +119,7 @@ public class ParagraphMaker {
         try {
             return doTraverse();
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            LOG.warn(e.getMessage(), e);
             throw new JusTextParseException(e.getMessage(), e);
         }
     }
