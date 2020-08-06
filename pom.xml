@@ -5,7 +5,7 @@
 
     <groupId>nl.wizenoze</groupId>
     <artifactId>justext</artifactId>
-    <version>0.2.5-SNAPSHOT</version>
+    <version>0.2.5-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>justext</name>
@@ -13,79 +13,39 @@
 
     <properties>
         <build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
-        <checkstyle.version>6.14.1</checkstyle.version>
-        <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
-        <groovy.eclipse.compiler.version>2.9.2-01</groovy.eclipse.compiler.version>
-        <groovy.eclipse.batch.version>2.4.3-01</groovy.eclipse.batch.version>
-        <groovy.version>2.4.3</groovy.version>
+        <groovy.version>3.0.5</groovy.version>
         <htmlcleaner.version>2.21</htmlcleaner.version>
         <logback.version>1.1.2</logback.version>
-        <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
-        <maven-compiler-plugin.source.version>1.8</maven-compiler-plugin.source.version>
-        <maven-compiler-plugin.target.version>1.8</maven-compiler-plugin.target.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <slf4j-api.version>1.7.13</slf4j-api.version>
-        <spock-core.version>1.0-groovy-2.4</spock-core.version>
+        <spock-core.version>2.0-M3-groovy-3.0</spock-core.version>
     </properties>
 
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <!-- 2.8.0-01 and later require maven-compiler-plugin 3.0 or higher -->
-                <version>${maven-compiler-plugin.version}</version>
+                <version>3.8.1</version>
                 <configuration>
                     <compilerId>groovy-eclipse-compiler</compilerId>
                     <!-- set verbose to be true if you want lots of uninteresting messages -->
                     <!-- <verbose>true</verbose> -->
-                    <source>${maven-compiler-plugin.source.version}</source>
-                    <target>${maven-compiler-plugin.target.version}</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-compiler</artifactId>
-                        <version>${groovy.eclipse.compiler.version}</version>
+                        <version>3.6.0-03</version>
                     </dependency>
-                    <!-- for 2.8.0-01 and later you must have an explicit dependency on
-                        groovy-eclipse-batch -->
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-batch</artifactId>
-                        <version>${groovy.eclipse.batch.version}</version>
-                        <!-- or choose a different compiler version -->
-                        <!-- <version>1.8.6-01</version> -->
-                        <!-- <version>1.7.10-06</version> -->
+                        <version>3.0.3-01</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${checkstyle.plugin.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>${checkstyle.version}</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>
-                        <configuration>
-                            <configLocation>checkstyle.xml</configLocation>
-                            <encoding>UTF-8</encoding>
-                            <consoleOutput>true</consoleOutput>
-                            <failsOnError>true</failsOnError>
-                        </configuration>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
 
@@ -161,7 +121,7 @@
 
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
+            <artifactId>groovy</artifactId>
             <version>${groovy.version}</version>
             <scope>test</scope>
         </dependency>
