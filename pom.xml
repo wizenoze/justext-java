@@ -15,7 +15,7 @@
         <build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
         <groovy.version>3.0.7</groovy.version>
         <htmlcleaner.version>2.21</htmlcleaner.version>
-        <logback.version>1.1.2</logback.version>
+        <logback.version>1.2.0</logback.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <slf4j-api.version>1.7.13</slf4j-api.version>
